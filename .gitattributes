@@ -1,0 +1,2 @@
+data/raw/mutation/data_mutations.txt filter=lfs diff=lfs merge=lfs -text
+data/raw/expression/data_mrna_seq_fpkm.txt filter=lfs diff=lfs merge=lfs -text
