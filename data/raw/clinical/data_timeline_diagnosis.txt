@@ -1,0 +1,1110 @@
+PATIENT_ID	START_DATE	STOP_DATE	EVENT_TYPE	AGE_AT_DIAGNOSIS	GRADE	METHOD_OF_DIAGNOSIS	MORPHOLOGY	PRIMARY_DIAGNOSIS	STAGE
+TCGA-04-1331	0		Diagnosis	28848	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1331	0		Diagnosis	29307			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1332	0		Diagnosis	25786	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1332	0		Diagnosis	26179			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1335	0		Diagnosis	21963	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1336	0		Diagnosis	20271	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1337	0		Diagnosis	28626	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1338	0		Diagnosis	28789	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1338	0		Diagnosis	29169			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1341	0		Diagnosis	31215	High Grade G3		Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1342	0		Diagnosis	29501	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1343	0		Diagnosis	26428	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1346	0		Diagnosis	26865	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1347	0		Diagnosis	29695	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1348	0		Diagnosis	16236	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1348	0		Diagnosis	16811			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1348	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1349	0		Diagnosis	25213	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1349	0		Diagnosis	25641			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1350	0		Diagnosis	16942	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1350	0		Diagnosis	17053			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1351	0		Diagnosis	28045	Intermediate Grade G2	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1351	0		Diagnosis	29703			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1353	0		Diagnosis	23611			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1356	0		Diagnosis	22855	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1356	0		Diagnosis	23011			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1357	0		Diagnosis	18999	High Grade G3		Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1360	0		Diagnosis	23993	High Grade G3		Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1361	0		Diagnosis	20860	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1361	0		Diagnosis	21787			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1362	0		Diagnosis	21745	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1362	0		Diagnosis	21968			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1364	0		Diagnosis	22294	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1364	0		Diagnosis	22582			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1365	0		Diagnosis	31925	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1365	0		Diagnosis	32872			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1367	0		Diagnosis	18577	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1367	0		Diagnosis	21574			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1369	0		Diagnosis	19571	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1369	0		Diagnosis	19886			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1370	0		Diagnosis	19329	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1371	0		Diagnosis	21243	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1514	0		Diagnosis	16725	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1514	0		Diagnosis	17946			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1514	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1516	0		Diagnosis	17768	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1517	0		Diagnosis	29045	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1517	0		Diagnosis	29394			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1519	0		Diagnosis	17671	High Grade G3		Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1525	0		Diagnosis	17469	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1525	0		Diagnosis	17682			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1530	0		Diagnosis	25013	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1530	0		Diagnosis	25363			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1530	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1536	0		Diagnosis	21939	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1536	0		Diagnosis	22437			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1542	0		Diagnosis	19263	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1542	0		Diagnosis	20283			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1638	0		Diagnosis	20987	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1638	0		Diagnosis	21285			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1644	0		Diagnosis	17725	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1644	0		Diagnosis	18359			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1646	0		Diagnosis	22207	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1646	0		Diagnosis	22715			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1648	0		Diagnosis	21113	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1648	0		Diagnosis	21525			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1649	0		Diagnosis	27165	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1649	0		Diagnosis	28837			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1651	0		Diagnosis	19628	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1651	0		Diagnosis	20618			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1652	0		Diagnosis	28101	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1652	0		Diagnosis	28981			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1654	0		Diagnosis	25387	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1654	0		Diagnosis	26195			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1655	0		Diagnosis	17988	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-04-1655	0		Diagnosis	18807			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0364	0		Diagnosis	29262	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0364	0		Diagnosis	29657			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0365	0		Diagnosis	25703	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0365	0		Diagnosis	25954			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0366	0		Diagnosis	20440	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0366	0		Diagnosis	20630			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0366	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0367	0		Diagnosis	24473	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0369	0		Diagnosis	20705	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0369	0		Diagnosis	20979			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-0369	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1659	0		Diagnosis	18733	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1661	0		Diagnosis	27486	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1662	0		Diagnosis	21246	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1662	0		Diagnosis	22292			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1662	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1664	0		Diagnosis	13739	Low Grade G1	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1665	0		Diagnosis	27010	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1665	0		Diagnosis	27478			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1666	0		Diagnosis	21066	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1666	0		Diagnosis	21546			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1666	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1667	0		Diagnosis	22306	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1667	0		Diagnosis	22766			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1667	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1668	0		Diagnosis	20972	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1669	0		Diagnosis	20052	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1670	0		Diagnosis	21147	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1670	0		Diagnosis	21694			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1672	0		Diagnosis	28556	Low Grade G1	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1673	0		Diagnosis	18599	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1674	0		Diagnosis	28878	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-1675	0		Diagnosis	18596	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2043	0		Diagnosis	25480	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2044	0		Diagnosis	28231	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2045	0		Diagnosis	18285	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2045	0		Diagnosis	18916			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2048	0		Diagnosis	23043	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2049	0		Diagnosis	23410	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2049	0		Diagnosis	24363			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2050	0		Diagnosis	23987	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2051	0		Diagnosis	15650	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2051	0		Diagnosis	16233			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2051	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2053	0		Diagnosis	26433	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2054	0		Diagnosis	21285	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2055	0		Diagnosis	17545	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-09-2056	0		Diagnosis	22864	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0925	0		Diagnosis	21498	Low Grade G1	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0925	0		Diagnosis	22056			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0926	0		Diagnosis	23307	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0926	0		Diagnosis	23594			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0927	0		Diagnosis	23982	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0927	0		Diagnosis	24983			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0928	0		Diagnosis	26066	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0930	0		Diagnosis	25737	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0930	0		Diagnosis	26417			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0931	0		Diagnosis	16262	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0931	0		Diagnosis	16562			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0933	0		Diagnosis	28433	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0933	0		Diagnosis	28789			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0934	0		Diagnosis	18602	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0934	0		Diagnosis	18713			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0934	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0935	0		Diagnosis	25098	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0936	0		Diagnosis	25454	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0937	0		Diagnosis	16222	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0937	0		Diagnosis	16457			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0938	0		Diagnosis	29558	High Grade G3		Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0938	0		Diagnosis	29920			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-10-0938	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0714	0		Diagnosis	20109	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0714	0		Diagnosis	20219			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0717	0		Diagnosis	20042	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0717	0		Diagnosis	20336			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0720	0		Diagnosis	17799	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0720	0		Diagnosis	18091			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0723	0		Diagnosis	23094	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0723	0		Diagnosis	23304			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0724	0		Diagnosis	26342	High Grade G3	Excisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0724	0		Diagnosis	26425			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0725	0		Diagnosis	16086	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0725	0		Diagnosis	16276			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0726	0		Diagnosis	20134		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0726	0		Diagnosis	20526			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0727	0		Diagnosis	26185	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0727	0		Diagnosis	26438			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0730	0		Diagnosis	26086	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0751	0		Diagnosis	16304		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0751	0		Diagnosis	16957			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0755	0		Diagnosis	27438	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0755	0		Diagnosis	27472			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0757	0		Diagnosis	25999	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0757	0		Diagnosis	26292			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0758	0		Diagnosis	22088	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0758	0		Diagnosis	22300			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0760	0		Diagnosis	23036	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0761	0		Diagnosis	18697	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0761	0		Diagnosis	19121			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0761	0		Diagnosis	19121					
+TCGA-13-0762	0		Diagnosis	23960	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0762	0		Diagnosis	24963					
+TCGA-13-0764	0		Diagnosis	22965	High Grade G3		Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0764	0		Diagnosis	23237			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0764	0		Diagnosis	23237					
+TCGA-13-0765	0		Diagnosis	18574	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0765	0		Diagnosis	19242			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0765	0		Diagnosis	19242					
+TCGA-13-0766	0		Diagnosis	15571	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0766	0		Diagnosis	16199			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0766	0		Diagnosis	16199					
+TCGA-13-0768	0		Diagnosis	26999	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0768	0		Diagnosis	27397					
+TCGA-13-0791	0		Diagnosis	21380	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0791	0		Diagnosis	21661			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0791	0		Diagnosis	21661					
+TCGA-13-0792	0		Diagnosis	14729	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0792	0		Diagnosis	15545			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0792	0		Diagnosis	15545					
+TCGA-13-0793	0		Diagnosis	14708	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0793	0		Diagnosis	15059			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0793	0		Diagnosis	15059					
+TCGA-13-0794	0		Diagnosis	21945	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0794	0		Diagnosis	22790			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0794	0		Diagnosis	22790					
+TCGA-13-0795	0		Diagnosis	24403	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0795	0		Diagnosis	24728			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0795	0		Diagnosis	24728					
+TCGA-13-0797	0		Diagnosis	18051	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0797	0		Diagnosis	18576					
+TCGA-13-0799	0		Diagnosis	16171	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0799	0		Diagnosis	17433					
+TCGA-13-0800	0		Diagnosis	19087	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0800	0		Diagnosis	20483					
+TCGA-13-0801	0		Diagnosis	16812	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0801	0		Diagnosis	17157					
+TCGA-13-0802	0		Diagnosis	29075	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0802	0		Diagnosis	29585					
+TCGA-13-0803	0		Diagnosis	29685	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0803	0		Diagnosis	30022			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0804	0		Diagnosis	27021	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0804	0		Diagnosis	27350			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0805	0		Diagnosis	21014	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0805	0		Diagnosis	21191			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0807	0		Diagnosis	19890	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0883	0		Diagnosis	22395	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0883	0		Diagnosis	23214			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0884	0		Diagnosis	14538	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0884	0		Diagnosis	15789			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0885	0		Diagnosis	25763	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0886	0		Diagnosis	24724	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0887	0		Diagnosis	15669	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0887	0		Diagnosis	16183			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0888	0		Diagnosis	28498	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0889	0		Diagnosis	27674		Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0890	0		Diagnosis	20770	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0891	0		Diagnosis	26886	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0891	0		Diagnosis	27648			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0891	0		Diagnosis	27648					
+TCGA-13-0893	0		Diagnosis	17573	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0893	0		Diagnosis	18034			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0894	0		Diagnosis	19466	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0894	0		Diagnosis	20031			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0897	0		Diagnosis	19894	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0897	0		Diagnosis	20448			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0897	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0897	0		Diagnosis	20448					
+TCGA-13-0899	0		Diagnosis	22031	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0899	0		Diagnosis	22578			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0899	0		Diagnosis	22578					
+TCGA-13-0900	0		Diagnosis	21698	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0901	0		Diagnosis	15333	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0901	0		Diagnosis	15723			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0903	0		Diagnosis	15705	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0904	0		Diagnosis	23278	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0904	0		Diagnosis	23608			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0904	0		Diagnosis	23608					
+TCGA-13-0905	0		Diagnosis	18757	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0905	0		Diagnosis	20292					
+TCGA-13-0906	0		Diagnosis	18383	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0908	0		Diagnosis	21422	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0908	0		Diagnosis	21974			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0908	0		Diagnosis	21974					
+TCGA-13-0910	0		Diagnosis	21473	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0910	0		Diagnosis	22685					
+TCGA-13-0911	0		Diagnosis	20276	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0911	0		Diagnosis	20555			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0911	0		Diagnosis	20555					
+TCGA-13-0912	0		Diagnosis	21427	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0912	0		Diagnosis	21896			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0912	0		Diagnosis	21896					
+TCGA-13-0913	0		Diagnosis	19573	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0913	0		Diagnosis	20444			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0913	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0913	0		Diagnosis	20444					
+TCGA-13-0916	0		Diagnosis	18189	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0919	0		Diagnosis	19337	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0920	0		Diagnosis	24064	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0920	0		Diagnosis	24361			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0920	0		Diagnosis	24361					
+TCGA-13-0921	0		Diagnosis	26606	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0923	0		Diagnosis	27081	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0923	0		Diagnosis	28800					
+TCGA-13-0924	0		Diagnosis	16670	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-0924	0		Diagnosis	17632					
+TCGA-13-1403	0		Diagnosis	17697	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1403	0		Diagnosis	18115					
+TCGA-13-1404	0		Diagnosis	17784	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1404	0		Diagnosis	19365					
+TCGA-13-1405	0		Diagnosis	18218	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1405	0		Diagnosis	18446					
+TCGA-13-1407	0		Diagnosis	18896	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1407	0		Diagnosis	20229					
+TCGA-13-1408	0		Diagnosis	21635	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1408	0		Diagnosis	22400					
+TCGA-13-1409	0		Diagnosis	26836	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1409	0		Diagnosis	27526					
+TCGA-13-1410	0		Diagnosis	20950		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1410	0		Diagnosis	21269					
+TCGA-13-1411	0		Diagnosis	29874	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1411	0		Diagnosis	30112					
+TCGA-13-1412	0		Diagnosis	15119	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1412	0		Diagnosis	15528					
+TCGA-13-1477	0		Diagnosis	18111	Intermediate Grade G2	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1477	0		Diagnosis	18346			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1481	0		Diagnosis	27898	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1482	0		Diagnosis	19178	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1482	0		Diagnosis	19780			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1483	0		Diagnosis	22342	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1483	0		Diagnosis	22639			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1484	0		Diagnosis	22698	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1484	0		Diagnosis	23195			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1484	0		Diagnosis	23195					
+TCGA-13-1485	0		Diagnosis	17642	Intermediate Grade G2	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1485	0		Diagnosis	17812			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1487	0		Diagnosis	27176		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1487	0		Diagnosis	27588			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1488	0		Diagnosis	21726	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1488	0		Diagnosis	22077			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1489	0		Diagnosis	25768	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1489	0		Diagnosis	26574			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1489	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1489	0		Diagnosis	26574					
+TCGA-13-1491	0		Diagnosis	20262	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1491	0		Diagnosis	20770			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1491	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1492	0		Diagnosis	24332	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1494	0		Diagnosis	15993	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1494	0		Diagnosis	16686			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1494	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1494	0		Diagnosis	16686					
+TCGA-13-1495	0		Diagnosis	22046	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1495	0		Diagnosis	23023			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1495	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1495	0		Diagnosis	23023					
+TCGA-13-1496	0		Diagnosis	23993	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1497	0		Diagnosis	17528	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1497	0		Diagnosis	18341			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1497	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1497	0		Diagnosis	18341					
+TCGA-13-1498	0		Diagnosis	26820	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1498	0		Diagnosis	27354			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1498	0		Diagnosis	27354					
+TCGA-13-1499	0		Diagnosis	20668	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1499	0		Diagnosis	21251			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1499	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1499	0		Diagnosis	21251					
+TCGA-13-1500	0		Diagnosis	26172	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1500	0		Diagnosis	26425			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1501	0		Diagnosis	18393	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1501	0		Diagnosis	18785			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1501	0		Diagnosis	18785					
+TCGA-13-1504	0		Diagnosis	25008	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1504	0		Diagnosis	25556					
+TCGA-13-1505	0		Diagnosis	23238	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1505	0		Diagnosis	24799					
+TCGA-13-1506	0		Diagnosis	16734	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1506	0		Diagnosis	17400					
+TCGA-13-1507	0		Diagnosis	28445	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1507	0		Diagnosis	28769					
+TCGA-13-1509	0		Diagnosis	23481	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1509	0		Diagnosis	24059					
+TCGA-13-1510	0		Diagnosis	22708	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1510	0		Diagnosis	23897					
+TCGA-13-1511	0		Diagnosis	19258	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1511	0		Diagnosis	19717					
+TCGA-13-1512	0		Diagnosis	18134	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1512	0		Diagnosis	18561					
+TCGA-13-1817	0		Diagnosis	20771	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1817	0		Diagnosis	21312			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1817	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1819	0		Diagnosis	21635	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1819	0		Diagnosis	22064			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1819	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-1819	0		Diagnosis	22064					
+TCGA-13-2057	0		Diagnosis	21554	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-2057	0		Diagnosis	22451					
+TCGA-13-2059	0		Diagnosis	18449	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-2059	0		Diagnosis	19454					
+TCGA-13-2060	0		Diagnosis	18635	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-2060	0		Diagnosis	20110					
+TCGA-13-2061	0		Diagnosis	21543	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-2065	0		Diagnosis	25973	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-2065	0		Diagnosis	26919					
+TCGA-13-2066	0		Diagnosis	18170	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-2066	0		Diagnosis	19198					
+TCGA-13-2071	0		Diagnosis	23367	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-2071	0		Diagnosis	23689					
+TCGA-13-A5FT	0		Diagnosis	24743	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-13-A5FU	0		Diagnosis	22256	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-0987	0		Diagnosis	22287	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-0987	0		Diagnosis	22729			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-0990	0		Diagnosis	27170	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-0990	0		Diagnosis	28041			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-0991	0		Diagnosis	28694	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-0996	0		Diagnosis	21572	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-1682	0		Diagnosis	20583		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-1683	0		Diagnosis	24006	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-1683	0		Diagnosis	24624			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-1684	0		Diagnosis	18755	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-1685	0		Diagnosis	16745	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-1686	0		Diagnosis	27588	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-20-1687	0		Diagnosis	16961	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1021	0		Diagnosis	16484	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1021	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1022	0		Diagnosis	24798	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1022	0		Diagnosis	25248			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1023	0		Diagnosis	23826	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1023	0		Diagnosis	24316			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1023	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1024	0		Diagnosis	19052	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1026	0		Diagnosis	16442	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1026	0		Diagnosis	17239			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1026	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1027	0		Diagnosis	17588	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1027	0		Diagnosis	17702			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1028	0		Diagnosis	16018	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1028	0		Diagnosis	16151			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1028	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1029	0		Diagnosis	16889	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1030	0		Diagnosis	23416	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1030	0		Diagnosis	23960			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1030	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1031	0		Diagnosis	22225	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1032	0		Diagnosis	26715	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1107	0		Diagnosis	21561	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1109	0		Diagnosis	23002	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1109	0		Diagnosis	23989			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1109	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1110	0		Diagnosis	15383	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1110	0		Diagnosis	15709			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1111	0		Diagnosis	23171	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1113	0		Diagnosis	17791	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1114	0		Diagnosis	20409	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1114	0		Diagnosis	21043			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1114	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1116	0		Diagnosis	30464	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1116	0		Diagnosis	30750			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1116	0		Diagnosis	30750					
+TCGA-23-1117	0		Diagnosis	15690	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1117	0		Diagnosis	16108			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1117	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1118	0		Diagnosis	16471	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1119	0		Diagnosis	23686	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1119	0		Diagnosis	27064			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1119	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1120	0		Diagnosis	22148	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1121	0		Diagnosis	18983	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1122	0		Diagnosis	19537	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1122	0		Diagnosis	19984			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1122	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1123	0		Diagnosis	21552	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1124	0		Diagnosis	23005	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1124	0		Diagnosis	23646			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1124	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-1809	0		Diagnosis	23111	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2072	0		Diagnosis	21523	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2072	0		Diagnosis	21999			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2077	0		Diagnosis	16552	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2077	0		Diagnosis	17784			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2077	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2078	0		Diagnosis	24223	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2079	0		Diagnosis	17122	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2079	0		Diagnosis	17405			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2079	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2081	0		Diagnosis	18162	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2081	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2084	0		Diagnosis	16493	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2084	0		Diagnosis	17112			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2084	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2641	0		Diagnosis	31232	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2643	0		Diagnosis	27093	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2645	0		Diagnosis	19758	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2647	0		Diagnosis	18205	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-23-2649	0		Diagnosis	22210	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0966	0		Diagnosis	28529	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0968	0		Diagnosis	21664	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0970	0		Diagnosis	23276	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0970	0		Diagnosis	23556			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0975	0		Diagnosis	21417	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0979	0		Diagnosis	19595	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0979	0		Diagnosis	20023			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0980	0		Diagnosis	19579	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0980	0		Diagnosis	19724			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0982	0		Diagnosis	28201	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-0982	0		Diagnosis	28354			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1103	0		Diagnosis	18583	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1103	0		Diagnosis	19261			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1104	0		Diagnosis	20527	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1104	0		Diagnosis	21486			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1105	0		Diagnosis	13187	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1105	0		Diagnosis	13657			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1413	0		Diagnosis	18846	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1416	0		Diagnosis	12772	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1417	0		Diagnosis	19775	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1418	0		Diagnosis	24842	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1419	0		Diagnosis	22659	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1422	0		Diagnosis	30234	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1423	0		Diagnosis	22281	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1424	0		Diagnosis	24545	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1425	0		Diagnosis	16764	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1426	0		Diagnosis	15949	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1427	0		Diagnosis	21423	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1428	0		Diagnosis	18306	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1428	0		Diagnosis	18754			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1430	0		Diagnosis	24939	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1430	0		Diagnosis	25388			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1431	0		Diagnosis	24758	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1431	0		Diagnosis	24957			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1434	0		Diagnosis	21810	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1434	0		Diagnosis	22147			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1435	0		Diagnosis	21107	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1435	0		Diagnosis	21612			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1436	0		Diagnosis	20881	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1463	0		Diagnosis	25734	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1463	0		Diagnosis	26705			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1464	0		Diagnosis	25874	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1464	0		Diagnosis	26197			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1466	0		Diagnosis	27307	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1466	0		Diagnosis	27798			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1467	0		Diagnosis	18652	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1467	0		Diagnosis	19905			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1467	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1469	0		Diagnosis	25937	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1470	0		Diagnosis	20007	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1471	0		Diagnosis	22081	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1474	0		Diagnosis	20902	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1474	0		Diagnosis	21234			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1544	0		Diagnosis	26141	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1544	0		Diagnosis	26784			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1545	0		Diagnosis	25460	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1545	0		Diagnosis	26321			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1546	0		Diagnosis	17130	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1548	0		Diagnosis	20945	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1548	0		Diagnosis	21152			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1549	0		Diagnosis	21432	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1549	0		Diagnosis	22474			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1549	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1550	0		Diagnosis	18049	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1550	0		Diagnosis	18941			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1550	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1551	0		Diagnosis	19661	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1551	0		Diagnosis	20425			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1552	0		Diagnosis	28129	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1552	0		Diagnosis	28532			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1553	0		Diagnosis	19393	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1553	0		Diagnosis	19946			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1555	0		Diagnosis	18404	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1555	0		Diagnosis	19981			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1556	0		Diagnosis	18517	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1556	0		Diagnosis	19056			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1556	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1557	0		Diagnosis	17943	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1557	0		Diagnosis	18390			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1558	0		Diagnosis	27004	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1558	0		Diagnosis	27277			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1560	0		Diagnosis	18671	Anaplastic	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1560	0		Diagnosis	18814			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1562	0		Diagnosis	24747	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1562	0		Diagnosis	24976			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1563	0		Diagnosis	24274	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1563	0		Diagnosis	24670			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1564	0		Diagnosis	24668	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1564	0		Diagnosis	24889			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1565	0		Diagnosis	27048	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1565	0		Diagnosis	27193			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1567	0		Diagnosis	19843	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1567	0		Diagnosis	20162			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1603	0		Diagnosis	19681	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1603	0		Diagnosis	20673			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1604	0		Diagnosis	24471	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1614	0		Diagnosis	20993	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1614	0		Diagnosis	21637			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1616	0		Diagnosis	20785	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1616	0		Diagnosis	21190			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1842	0		Diagnosis	18227	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1843	0		Diagnosis	24469	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1844	0		Diagnosis	23542	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1845	0		Diagnosis	15599	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1846	0		Diagnosis	16534	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1847	0		Diagnosis	16529	High Grade G3	Excisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1849	0		Diagnosis	29555	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1850	0		Diagnosis	26369	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1852	0		Diagnosis	20390	High Grade G3	Surgical Resection	High grade serous carcinoma	Serous carcinoma, NOS	
+TCGA-24-1852	0		Diagnosis	21399			High grade serous carcinoma	Serous carcinoma, NOS	
+TCGA-24-1852	0		Diagnosis				High grade serous carcinoma	Serous carcinoma, NOS	
+TCGA-24-1920	0		Diagnosis	27042	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1923	0		Diagnosis	18628	High Grade G3	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1923	0		Diagnosis	18971			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1924	0		Diagnosis	23801	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1924	0		Diagnosis	24121			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1927	0		Diagnosis	21719	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1927	0		Diagnosis	22009			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1928	0		Diagnosis	28126	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1928	0		Diagnosis	28196			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1930	0		Diagnosis	19387	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1930	0		Diagnosis	19931			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1930	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-1930	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2019	0		Diagnosis	17009	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2020	0		Diagnosis	24682	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2020	0		Diagnosis	25405			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2023	0		Diagnosis	19901	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2023	0		Diagnosis	20970			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2024	0		Diagnosis	26476	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2024	0		Diagnosis	26897			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2024	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2026	0		Diagnosis	29050	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2027	0		Diagnosis	18835	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2027	0		Diagnosis	19452			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2029	0		Diagnosis	27527	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2029	0		Diagnosis	27899			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2030	0		Diagnosis	31900	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2030	0		Diagnosis	32546			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2033	0		Diagnosis	31977	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2033	0		Diagnosis	32328			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2035	0		Diagnosis	23855	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2035	0		Diagnosis	24142			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2036	0		Diagnosis	18582	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2036	0		Diagnosis	19496			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2036	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2038	0		Diagnosis	24957	Borderline GB	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2038	0		Diagnosis	26126			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2038	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2254	0		Diagnosis	24407	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2254	0		Diagnosis	25013			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2260	0		Diagnosis	27112	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2260	0		Diagnosis	27779			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2261	0		Diagnosis	27897	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2262	0		Diagnosis	20861	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2267	0		Diagnosis	21293	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2267	0		Diagnosis	21805			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2267	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2271	0		Diagnosis	20399	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2271	0		Diagnosis	21226			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2271	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2280	0		Diagnosis	27356	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2280	0		Diagnosis	27891			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2281	0		Diagnosis	25019	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2288	0		Diagnosis	25831	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2289	0		Diagnosis	25191	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2289	0		Diagnosis	25759			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2290	0		Diagnosis	20530	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2290	0		Diagnosis	20854			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2293	0		Diagnosis	17235	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2295	0		Diagnosis	25416	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2295	0		Diagnosis	25697			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2297	0		Diagnosis	20487	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2298	0		Diagnosis	20453	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-24-2298	0		Diagnosis	20922			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1312	0		Diagnosis	25537	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1313	0		Diagnosis	22982	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1313	0		Diagnosis	23376			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1314	0		Diagnosis	15462	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1314	0		Diagnosis	15736			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1314	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1315	0		Diagnosis	18263	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1315	0		Diagnosis	18416			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1315	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1316	0		Diagnosis	20331	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1316	0		Diagnosis	20607			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1317	0		Diagnosis	24199	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1318	0		Diagnosis	19755	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1318	0		Diagnosis	19940			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1318	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1319	0		Diagnosis	26786	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1319	0		Diagnosis	27516			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1320	0		Diagnosis	24018	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1320	0		Diagnosis	24442			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1321	0		Diagnosis	23987	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1321	0		Diagnosis	24441			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1321	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1322	0		Diagnosis	22646	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1323	0		Diagnosis	26602	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1323	0		Diagnosis	26967			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1324	0		Diagnosis	27090	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1325	0		Diagnosis	28183	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1326	0		Diagnosis	22339	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1326	0		Diagnosis	22735			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1328	0		Diagnosis	13911	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1328	0		Diagnosis	14155			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1328	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1329	0		Diagnosis	28093	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1623	0		Diagnosis	26060	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1623	0		Diagnosis	26402			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1625	0		Diagnosis	24298	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1625	0		Diagnosis	24824			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1625	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1626	0		Diagnosis	23932	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1626	0		Diagnosis	24250			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1627	0		Diagnosis	26784	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1628	0		Diagnosis	24488	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1628	0		Diagnosis	24775			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1628	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1630	0		Diagnosis	27006	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1631	0		Diagnosis	26687	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1632	0		Diagnosis	24993	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1632	0		Diagnosis	25530			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1633	0		Diagnosis	23407	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1633	0		Diagnosis	24023			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1634	0		Diagnosis	27749	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1634	0		Diagnosis	28129			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1635	0		Diagnosis	26200	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1635	0		Diagnosis	26814			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1870	0		Diagnosis	21550	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1870	0		Diagnosis	21793			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1870	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1871	0		Diagnosis	25627	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1871	0		Diagnosis	25857			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1871	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1877	0		Diagnosis	29615	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1877	0		Diagnosis	30164			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1878	0		Diagnosis	22035	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-1878	0		Diagnosis	23006			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2042	0		Diagnosis	22127	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2042	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2390	0		Diagnosis	29257			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2391	0		Diagnosis	20939	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2392	0		Diagnosis	27667	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2393	0		Diagnosis	29585	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2393	0		Diagnosis	29890			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2396	0		Diagnosis	26145	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2397	0		Diagnosis	21581	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2398	0		Diagnosis	26267	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2398	0		Diagnosis	26844			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2399	0		Diagnosis	29373	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2399	0		Diagnosis	29616			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2400	0		Diagnosis	27789	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2400	0		Diagnosis	28366			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2401	0		Diagnosis	23711	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2404	0		Diagnosis	14184	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2404	0		Diagnosis	14610			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2408	0		Diagnosis	13606	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2408	0		Diagnosis	13940			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2408	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2409	0		Diagnosis	26267	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-25-2409	0		Diagnosis	26571			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1688	0		Diagnosis	14574	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1688	0		Diagnosis	14758			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1688	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1690	0		Diagnosis	24319	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1691	0		Diagnosis	18664	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1691	0		Diagnosis	19277			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1691	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1692	0		Diagnosis	21193	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1692	0		Diagnosis	21737			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1692	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1693	0		Diagnosis	26300	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1693	0		Diagnosis	26994			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1693	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1694	0		Diagnosis	16523		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1694	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1695	0		Diagnosis	22895	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1696	0		Diagnosis	15818	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1696	0		Diagnosis	16160			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1696	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1697	0		Diagnosis	22933	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1697	0		Diagnosis	23433			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1698	0		Diagnosis	19611	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1698	0		Diagnosis	19792			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1698	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1699	0		Diagnosis	21130	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1701	0		Diagnosis	20737	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1701	0		Diagnosis	21035			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1702	0		Diagnosis	30910	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1702	0		Diagnosis	31196			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1703	0		Diagnosis	20622	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1703	0		Diagnosis	20946			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1704	0		Diagnosis	22511	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1704	0		Diagnosis	23079			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1704	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1705	0		Diagnosis	17530	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1705	0		Diagnosis	17813			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1705	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1707	0		Diagnosis	15017	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1707	0		Diagnosis	16218			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1707	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1710	0		Diagnosis	19969	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1710	0		Diagnosis	20284			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1710	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1711	0		Diagnosis	16485	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1761	0		Diagnosis	29337	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1762	0		Diagnosis	21879	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1762	0		Diagnosis	23254			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1763	0		Diagnosis	16021	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1763	0		Diagnosis	16449			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1763	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1764	0		Diagnosis	18012	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1764	0		Diagnosis	18804			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1766	0		Diagnosis	27359	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1766	0		Diagnosis	28031			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1768	0		Diagnosis	18396	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1768	0		Diagnosis	18943			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1769	0		Diagnosis	14754	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1770	0		Diagnosis	20015	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1770	0		Diagnosis	20392			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1770	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1771	0		Diagnosis	28093	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1771	0		Diagnosis	28688			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1774	0		Diagnosis	29991	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1774	0		Diagnosis	30225			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1775	0		Diagnosis	18943	Intermediate Grade G2	Incisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1775	0		Diagnosis	19284			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1775	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1776	0		Diagnosis	23016	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1777	0		Diagnosis	17356	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1778	0		Diagnosis	28147	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1781	0		Diagnosis	25404	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1783	0		Diagnosis	21284	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1784	0		Diagnosis	20210	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1785	0		Diagnosis	20417	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-1785	0		Diagnosis	20890			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2414	0		Diagnosis	27417	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2414	0		Diagnosis	27969			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2414	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2425	0		Diagnosis	22089	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2425	0		Diagnosis	23666			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2425	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2427	0		Diagnosis	21940	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2427	0		Diagnosis	23522			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2428	0		Diagnosis	21392	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2429	0		Diagnosis	29156	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2431	0		Diagnosis	21833	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2431	0		Diagnosis	22793			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2432	0		Diagnosis	22605	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2432	0		Diagnosis	22779			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2433	0		Diagnosis	22315	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2434	0		Diagnosis	18997	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2435	0		Diagnosis	28779	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-2436	0		Diagnosis	13346	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-29-A5NZ	0		Diagnosis	24161	High Grade G3		Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-29-A5NZ	0		Diagnosis	24865			Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-29-A5NZ	0		Diagnosis	24519			Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-29-A5NZ	0		Diagnosis	25040			Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-29-A5NZ	0		Diagnosis	25040					
+TCGA-29-A5NZ	0		Diagnosis	24858			Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-29-A5NZ	0		Diagnosis	24858					
+TCGA-29-A5NZ	0		Diagnosis	24557			Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-29-A5NZ	0		Diagnosis	24557					
+TCGA-30-1714	0		Diagnosis	25032	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1714	0		Diagnosis	25273			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1718	0		Diagnosis	16400	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1718	0		Diagnosis	17296			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1853	0		Diagnosis	21404	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1853	0		Diagnosis	22038			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1853	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1855	0		Diagnosis	22394	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1856	0		Diagnosis	20626	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1856	0		Diagnosis	20846			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1856	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1857	0		Diagnosis	23689	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1859	0		Diagnosis	20498	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1859	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1860	0		Diagnosis	21406	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1860	0		Diagnosis	21803			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1860	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1861	0		Diagnosis	27103	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1862	0		Diagnosis	23895	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1866	0		Diagnosis	22562	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1866	0		Diagnosis	22847			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1866	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1867	0		Diagnosis	17159		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1869	0		Diagnosis	18398	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1869	0		Diagnosis	19165			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1880	0		Diagnosis	20525	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1880	0		Diagnosis	20873			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1887	0		Diagnosis	24495	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1891	0		Diagnosis	22344	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1891	0		Diagnosis	22525			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1891	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1892	0		Diagnosis	19256	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-30-1892	0		Diagnosis	19509			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1944	0		Diagnosis	17207	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1944	0		Diagnosis	17885			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1944	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1946	0		Diagnosis	11146	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1946	0		Diagnosis	11810			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1950	0		Diagnosis	28100	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1950	0		Diagnosis	28449			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1951	0		Diagnosis	21352	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1951	0		Diagnosis	22011			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1953	0		Diagnosis	19064	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1953	0		Diagnosis	19134			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1955	0		Diagnosis	15926	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1955	0		Diagnosis	16844			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1956	0		Diagnosis	22100	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1956	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-31-1959	0		Diagnosis	18247	Intermediate Grade G2	Excisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1568	0		Diagnosis	19311	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1568	0		Diagnosis	19859			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1569	0		Diagnosis	19151	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1570	0		Diagnosis	17956	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1570	0		Diagnosis	18331			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1571	0		Diagnosis	19608	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1571	0		Diagnosis	19983			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1574	0		Diagnosis	17847	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1574	0		Diagnosis	18495			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1575	0		Diagnosis	30592	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1576	0		Diagnosis	27778	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1576	0		Diagnosis	28595			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1577	0		Diagnosis	15804	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1578	0		Diagnosis	23329	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1578	0		Diagnosis	23639			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1580	0		Diagnosis	29992	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1580	0		Diagnosis	30432			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1581	0		Diagnosis	23272	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-1581	0		Diagnosis	23974			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2529	0		Diagnosis	26092	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2529	0		Diagnosis	26659			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2530	0		Diagnosis	13885	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2530	0		Diagnosis	14515			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2532	0		Diagnosis	22333	High Grade G3	Excisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2533	0		Diagnosis	20187	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2534	0		Diagnosis	26621	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2534	0		Diagnosis	27004			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2537	0		Diagnosis	14595	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2537	0		Diagnosis	15026			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2538	0		Diagnosis	13681	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2538	0		Diagnosis	14204			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2540	0		Diagnosis	9760	Low Grade G1	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2540	0		Diagnosis	10425			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2542	0		Diagnosis	21902	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2543	0		Diagnosis	31211	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2543	0		Diagnosis	31238			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2544	0		Diagnosis	21384	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2544	0		Diagnosis	21709			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2545	0		Diagnosis	15444	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2547	0		Diagnosis	23706	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2548	0		Diagnosis	20897	High Grade G3	Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2548	0		Diagnosis	21292			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2549	0		Diagnosis	20076	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2551	0		Diagnosis	21045	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2551	0		Diagnosis	21383			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-36-2552	0		Diagnosis	23379	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-3P-A9WA	0		Diagnosis	20211	High Grade G3	Dilation and Curettage Procedure	Cystadenocarcinoma, NOS	Cystadenocarcinoma, NOS	
+TCGA-3P-A9WA	0		Diagnosis	20215			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2582	0		Diagnosis	17961	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2582	0		Diagnosis	18577			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2582	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2582	0		Diagnosis	19034			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2582	0		Diagnosis	19034					
+TCGA-42-2582	0		Diagnosis	19140			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2582	0		Diagnosis	19140					
+TCGA-42-2587	0		Diagnosis	27510	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2588	0		Diagnosis	22377	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2588	0		Diagnosis	22489			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2588	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2588	0		Diagnosis	22644			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2589	0		Diagnosis	19852	High Grade G3	Fine Needle Aspiration	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2589	0		Diagnosis	20216			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2589	0		Diagnosis	20880			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2589	0		Diagnosis	20880					
+TCGA-42-2589	0		Diagnosis	21126					
+TCGA-42-2590	0		Diagnosis	20965	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2590	0		Diagnosis	21191			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2591	0		Diagnosis	18654		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-42-2593	0		Diagnosis	24823	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1582	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1583	0		Diagnosis	21167	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1584	0		Diagnosis	17263	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1584	0		Diagnosis	17793			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1584	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1585	0		Diagnosis	20862	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1586	0		Diagnosis	24304	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1586	0		Diagnosis	24563			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1992	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1993	0		Diagnosis	20498	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-57-1994	0		Diagnosis	23062		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2348	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2349	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2350	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2350	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2350	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2351	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2351	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2351	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2352	0		Diagnosis		High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2354	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2354	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2355	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2363	0		Diagnosis		High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-2372	0		Diagnosis		Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-A5PD	0		Diagnosis	20263	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-A5PD	0		Diagnosis	20408			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-59-A5PD	0		Diagnosis	20408					
+TCGA-59-A5PD	0		Diagnosis	20263			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-5X-AA5U	0		Diagnosis	22438		Surgical Resection	Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-5X-AA5U	0		Diagnosis	22437			Papillary carcinoma, NOS	Papillary carcinoma, NOS	
+TCGA-61-1721	0		Diagnosis	13894	Low Grade G1	Excisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1722	0		Diagnosis	32853	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1724	0		Diagnosis	17168	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1724	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1725	0		Diagnosis	14782	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1725	0		Diagnosis	15626			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1727	0		Diagnosis	27203	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1728	0		Diagnosis	21582	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1728	0		Diagnosis	22115			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1728	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1730	0		Diagnosis	28508	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1733	0		Diagnosis	26180	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1733	0		Diagnosis	26355			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1733	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1734	0		Diagnosis	19026	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1736	0		Diagnosis	16613	High Grade G3	Excisional Biopsy	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1736	0		Diagnosis	17377			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1736	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1737	0		Diagnosis	15515	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1738	0		Diagnosis	21965	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1738	0		Diagnosis	22241			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1738	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1740	0		Diagnosis	26169	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1741	0		Diagnosis	27762	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1741	0		Diagnosis	28250			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1743	0		Diagnosis	19365	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1743	0		Diagnosis	20174			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1743	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1895	0		Diagnosis	19060	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1899	0		Diagnosis	29692	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1900	0		Diagnosis	18963	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1901	0		Diagnosis	24042	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1901	0		Diagnosis	24371			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1903	0		Diagnosis	20381	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1904	0		Diagnosis	22009	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1906	0		Diagnosis	20378	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1906	0		Diagnosis	20614			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1907	0		Diagnosis	23204	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1907	0		Diagnosis	23947			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1910	0		Diagnosis	20779	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1911	0		Diagnosis	20144	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1911	0		Diagnosis	20988			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1911	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1913	0		Diagnosis	17575	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1914	0		Diagnosis	23850	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1914	0		Diagnosis	25524			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1914	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1915	0		Diagnosis	18424	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1916	0		Diagnosis	19463	Intermediate Grade G2	Cytology	High grade serous carcinoma	Serous carcinoma, NOS	
+TCGA-61-1916	0		Diagnosis	19789			High grade serous carcinoma	Serous carcinoma, NOS	
+TCGA-61-1916	0		Diagnosis				High grade serous carcinoma	Serous carcinoma, NOS	
+TCGA-61-1917	0		Diagnosis	21972	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1918	0		Diagnosis	16689	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1918	0		Diagnosis	17102			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1919	0		Diagnosis	21199	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1919	0		Diagnosis	21638			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1919	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1995	0		Diagnosis	16016	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-1998	0		Diagnosis	17855	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2000	0		Diagnosis	24723	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2000	0		Diagnosis	25062			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2000	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2002	0		Diagnosis	17115	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2003	0		Diagnosis	19605	Intermediate Grade G2	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2008	0		Diagnosis	14791	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2008	0		Diagnosis	15609			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2008	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2009	0		Diagnosis	23772	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2009	0		Diagnosis	23873			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2009	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2012	0		Diagnosis	29830	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2016	0		Diagnosis	18788	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2017	0		Diagnosis	23509	Low Grade G1	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2017	0		Diagnosis	24515			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2017	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2018	0		Diagnosis	22929	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2087	0		Diagnosis	18182	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2088	0		Diagnosis	18770	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2092	0		Diagnosis	21072	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2094	0		Diagnosis	23273	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2095	0		Diagnosis	19797	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2095	0		Diagnosis	20242			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2095	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2096	0		Diagnosis	20663	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2096	0		Diagnosis	21084			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2097	0		Diagnosis	25961	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2098	0		Diagnosis	22876	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2101	0		Diagnosis	20287	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2102	0		Diagnosis	27256	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2104	0		Diagnosis	19432	Intermediate Grade G2	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2104	0		Diagnosis	21112			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2104	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2109	0		Diagnosis	14900	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2109	0		Diagnosis	15365			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2110	0		Diagnosis	20718		Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2110	0		Diagnosis	20931			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2110	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2111	0		Diagnosis	22517	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2111	0		Diagnosis	24722			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2111	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2113	0		Diagnosis	19722	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2113	0		Diagnosis	20013			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2610	0		Diagnosis	22481	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2610	0		Diagnosis	23005			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2610	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2611	0		Diagnosis	14782	High Grade G3	Cytology	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2611	0		Diagnosis	15165			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2611	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2612	0		Diagnosis	23074	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2612	0		Diagnosis	23253			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2612	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2613	0		Diagnosis	26779	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2613	0		Diagnosis	27137			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2614	0		Diagnosis	26142	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2614	0		Diagnosis	26180			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-61-2614	0		Diagnosis				Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-OY-A56P	0		Diagnosis	17580	High Grade G3	Surgical Resection	Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-OY-A56P	0		Diagnosis	18374			Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-OY-A56P	0		Diagnosis	18374					
+TCGA-OY-A56Q	0		Diagnosis	28623	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-VG-A8LO	0		Diagnosis	20274	Borderline GB	Excisional Biopsy	Intraductal Papillary mucinous neoplasm with an associated invasive carcinoma	Low grade serous carcinoma	
+TCGA-WR-A838	0		Diagnosis	26418	High Grade G3	Surgical Resection	Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-WR-A838	0		Diagnosis	26663			Serous carcinoma, NOS	Serous carcinoma, NOS	
+TCGA-WR-A838	0		Diagnosis	26663					
+TCGA-WR-A838	0		Diagnosis	26663			Serous carcinoma, NOS	Serous carcinoma, NOS	
