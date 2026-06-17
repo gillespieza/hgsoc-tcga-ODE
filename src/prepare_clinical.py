@@ -26,7 +26,7 @@ def main():
     # Check for duplicates in PATIENT_ID
     clinical_clean = clinical_clean[clinical_clean['OS_MONTHS'] > 0].copy()
 
-    print(f"Patients with complete OS data: {len(clinical_clean)}")
+    print(f"\nPatients with complete OS data: {len(clinical_clean)}")
 
     # Encode OS_STATUS as binary event
     os_status_map = {
@@ -37,14 +37,14 @@ def main():
     clinical_clean['OS_EVENT'] = clinical_clean['OS_STATUS'].map(os_status_map)
 
     # Check event rate
-    print(f"OS event rate: {clinical_clean['OS_EVENT'].mean():.2%}")
+    print(f"\nOS event rate: {clinical_clean['OS_EVENT'].mean():.2%}\n")
     print(clinical_clean[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS', 'OS_EVENT']].head(10))
     # %%
 
     # Save the cleaned clinical data to a CSV file
     clinical_clean.to_csv(ROOT / "data" / "processed" / "clinical_clean.csv", index=False)
     
-    print("Saved: data/processed/clinical_clean.csv")
+    #print("Saved: data/processed/clinical_clean.csv")
 
 if __name__ == "__main__":
     main()

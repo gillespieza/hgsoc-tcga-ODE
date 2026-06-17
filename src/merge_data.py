@@ -9,12 +9,12 @@ def main():
 
     merged = clinical_clean.merge(expr_df, on="PATIENT_ID", how="inner")
 
-    print(f"Final merged dataset shape: {merged.shape}")
-    print(f"Event rate: {merged['OS_EVENT'].mean():.2%}")
+    print(f"\nFinal merged dataset shape: {merged.shape}")
+    print(f"\nEvent rate: {merged['OS_EVENT'].mean():.2%}\n")
     print(merged[['PATIENT_ID', 'OS_MONTHS', 'OS_EVENT']].head())
 
     merged.to_csv(ROOT / "data" / "processed" / "tcga_ov_merged.csv", index=False)
-    print("Saved: data/processed/tcga_ov_merged.csv")
+    #print("Saved: data/processed/tcga_ov_merged.csv")
 
 if __name__ == "__main__":
     main()

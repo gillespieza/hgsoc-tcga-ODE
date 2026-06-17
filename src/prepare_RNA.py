@@ -64,7 +64,7 @@ def main():
     expr_ode.index = expr_ode.index.map(entrez_to_symbol)
     expr_ode.index.name = 'gene_symbol'
 
-    print(f"Kept {len(expr_ode)} of 14 ODE genes")
+    print(f"\nKept {len(expr_ode)} of 14 ODE genes\n")
     print(expr_ode.head())
 
     # %%
@@ -78,8 +78,8 @@ def main():
     out_path = ROOT / "data" / "processed" / "gene_id_map.csv"
     gene_id_map.to_csv(out_path, index=False)
 
-    print("Saved:", out_path)
-    print(gene_id_map)
+    #print("Saved:", out_path)
+    #print(gene_id_map)
 
     # %%
     # expr_ode is genes × samples
@@ -91,7 +91,7 @@ def main():
     expr_ode_log.index = expr_ode_log.index.str[:12]
     expr_ode_log.index.name = 'PATIENT_ID'
 
-    print(f"Expression matrix shape: {expr_ode_log.shape}")
+    print(f"\nExpression matrix shape: {expr_ode_log.shape}\n")
     print(expr_ode_log.head())
 
     # Save expression matrix for downstream merge step
@@ -100,7 +100,7 @@ def main():
 
     expr_ode_log.reset_index().to_csv(expr_out, index=False)
 
-    print("Saved:", expr_out)
+    #print("Saved:", expr_out)
 
 if __name__ == "__main__":
     main()

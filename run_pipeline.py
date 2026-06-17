@@ -11,6 +11,10 @@ Runs all preparation scripts in order:
 import sys
 import time
 import logging
+import os
+os.environ["NUMEXPR_MAX_THREADS"] = "16"
+
+import pandas as pd
 from pathlib import Path
 
 # set the root path of the project
@@ -40,10 +44,10 @@ CYAN   = "\u001b[36m"
 
 # Use ASCII text instead of emoji for Windows compatibility
 def success_msg(script_name: str, elapsed: float):
-    return f"[OK] {script_name} completed ({elapsed:.2f}s)"
+    return f"[OK] {script_name} completed ({elapsed:.2f}s)\n"
 
 def fail_msg(script_name: str, elapsed: float):
-    return f"[FAIL] {script_name} failed after {elapsed:.2f}s"
+    return f"[FAIL] {script_name} failed after {elapsed:.2f}s\n"
 
 def run_script(script_name: str):
     logger.info(f"{RESET}{'='*60}{RESET}")
@@ -70,9 +74,9 @@ def run_script(script_name: str):
         raise
 
 def main():
-    logger.info(f"{RESET}{'='*60}{RESET}")
-    logger.info(f"{YELLOW}HGSOC TCGA ODE Survival Pipeline{RESET}")
-    logger.info(f"{RESET}{'='*60}{RESET}")
+    logger.info(f"{CYAN}{'='*60}{RESET}")
+    logger.info(f"{CYAN}HGSOC TCGA ODE Survival Pipeline{RESET}")
+    logger.info(f"{CYAN}{'='*60}{RESET}")
     
     total_start = time.time()
     
