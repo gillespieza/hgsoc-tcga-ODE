@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import mygene
 from pathlib import Path
 
@@ -58,6 +59,9 @@ def main():
     expr_ode.index = expr_ode.index.map(entrez_to_symbol)
     expr_ode.index.name = 'gene_symbol'
 
+    # After loading and filtering to 14 ODE genes
+    expr_ode = np.log2(expr_ode + 0.1)
+
     print(f"\nKept {len(expr_ode)} of 14 ODE genes")
     #print(expr_ode.head())
 
@@ -87,7 +91,7 @@ def main():
     #print(expr_ode_log.head())
 
     # Save expression matrix for downstream merge step
-    expr_out = ROOT / "data" / "processed" / "expression" / "ode_genes_fpkm_subset.csv"
+    expr_out = ROOT / "data" / "processed" / "rna_clean.csv"
     expr_out.parent.mkdir(parents=True, exist_ok=True)
 
     expr_ode_log.reset_index().to_csv(expr_out, index=False)

@@ -52,4 +52,4 @@
 - Final merged dataset: [425] patients × [43] columns
 - OS event rate: [62.21%]
 - BRCA1/2 mutant patients: [28]
-- Output: data/processed/tcga_ov_merged.csv
+- Output: data/processed/hgsoc_tcga_merged.csv

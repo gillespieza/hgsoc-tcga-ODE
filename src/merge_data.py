@@ -5,7 +5,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def main():
     clinical_clean = pd.read_csv(ROOT / "data" / "processed" / "clinical_clean.csv")
-    expr_df = pd.read_csv(ROOT / "data" / "processed" / "expression" / "ode_genes_fpkm_subset.csv")
+    expr_df = pd.read_csv(ROOT / "data" / "processed" / "rna_clean.csv")
 
     merged = clinical_clean.merge(expr_df, on="PATIENT_ID", how="inner")
 
