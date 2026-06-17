@@ -34,3 +34,22 @@
 - ODE models need: real-valued state differences
 
 👉 z-scores are for ML clustering, NOT mechanistic modelling
+
+# Pipeline steps
+- Patients with complete OS data: 583
+- final cleaned set: 426
+- final event rate: 62.21%
+
+## BRCA1/2 mutations
+- 30 mutations, non of them somatic. 
+    - BRCA1/2 mutant patients: 28
+    - BRCA1/2 wildtype patients: 555
+
+## Step 1 — Data Acquisition (completed YYYY-MM-DD)
+- Dataset: hgsoc_tcga_gdc (cBioPortal)
+- Raw patients with OS data: [607]
+- Raw patients with sample data: [603]
+- Final merged dataset: [425] patients × [43] columns
+- OS event rate: [62.21%]
+- BRCA1/2 mutant patients: [28]
+- Output: data/processed/tcga_ov_merged.csv

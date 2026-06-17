@@ -83,6 +83,7 @@ def main():
     steps = [
         "prepare_clinical",
         "prepare_RNA",
+        "prepare_brca1_2_mutation",
         "merge_data",
     ]
     

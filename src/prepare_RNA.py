@@ -1,4 +1,3 @@
-# %%
 import pandas as pd
 import mygene
 from pathlib import Path
@@ -7,10 +6,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 def main():
-
-
-
-    # %%
 
     # Initialize MyGeneInfo - an online gene annotation service
     mg = mygene.MyGeneInfo()
@@ -36,7 +31,6 @@ def main():
     )
     # print(results)
 
-    # %%
     # Create a lookup dictionary from gene symbols to Entrez Gene IDs
     symbol_to_entrez = results['entrezgene'].dropna().astype(str).to_dict()
 
@@ -64,10 +58,9 @@ def main():
     expr_ode.index = expr_ode.index.map(entrez_to_symbol)
     expr_ode.index.name = 'gene_symbol'
 
-    print(f"\nKept {len(expr_ode)} of 14 ODE genes\n")
-    print(expr_ode.head())
+    print(f"\nKept {len(expr_ode)} of 14 ODE genes")
+    #print(expr_ode.head())
 
-    # %%
     # Create mapping DataFrame
     gene_id_map = pd.DataFrame(
         list(entrez_to_symbol.items()),
@@ -81,7 +74,6 @@ def main():
     #print("Saved:", out_path)
     #print(gene_id_map)
 
-    # %%
     # expr_ode is genes × samples
     # Transpose to samples × genes
     expr_ode_log = expr_ode.T
@@ -92,7 +84,7 @@ def main():
     expr_ode_log.index.name = 'PATIENT_ID'
 
     print(f"\nExpression matrix shape: {expr_ode_log.shape}\n")
-    print(expr_ode_log.head())
+    #print(expr_ode_log.head())
 
     # Save expression matrix for downstream merge step
     expr_out = ROOT / "data" / "processed" / "expression" / "ode_genes_fpkm_subset.csv"
@@ -104,4 +96,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-# %%

@@ -15,9 +15,9 @@ def main():
         comment="#"
     )
 
-    print("Shape:", clinical.shape, "\n")
-    print("Columns:", clinical.columns.tolist(), "\n")
-    print(clinical[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS']].head())
+    #print("Shape:", clinical.shape, "\n")
+    #print("Columns:", clinical.columns.tolist(), "\n")
+    #print(clinical[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS']].head())
 
     # %%
     # Filter to patients with complete OS data
@@ -26,7 +26,7 @@ def main():
     # Check for duplicates in PATIENT_ID
     clinical_clean = clinical_clean[clinical_clean['OS_MONTHS'] > 0].copy()
 
-    print(f"\nPatients with complete OS data: {len(clinical_clean)}")
+    print(f"\nPatients with complete OS data: {len(clinical_clean)}\n")
 
     # Encode OS_STATUS as binary event
     os_status_map = {
@@ -37,9 +37,8 @@ def main():
     clinical_clean['OS_EVENT'] = clinical_clean['OS_STATUS'].map(os_status_map)
 
     # Check event rate
-    print(f"\nOS event rate: {clinical_clean['OS_EVENT'].mean():.2%}\n")
-    print(clinical_clean[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS', 'OS_EVENT']].head(10))
-    # %%
+    #print(f"\nOS event rate: {clinical_clean['OS_EVENT'].mean():.2%}\n")
+    #print(clinical_clean[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS', 'OS_EVENT']].head(10))
 
     # Save the cleaned clinical data to a CSV file
     clinical_clean.to_csv(ROOT / "data" / "processed" / "clinical_clean.csv", index=False)
