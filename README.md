@@ -45,7 +45,7 @@
     - BRCA1/2 mutant patients: 28
     - BRCA1/2 wildtype patients: 555
 
-## Step 1 — Data Acquisition (completed YYYY-MM-DD)
+## Step 1 — Data Acquisition (completed 2026-06-17)
 - Dataset: hgsoc_tcga_gdc (cBioPortal)
 - Raw patients with OS data: [607]
 - Raw patients with sample data: [603]
