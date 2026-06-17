@@ -85,6 +85,7 @@ def main():
         "prepare_RNA",
         "prepare_brca1_2_mutation",
         "merge_data",
+        "ode_model",
     ]
     
     for step in steps:

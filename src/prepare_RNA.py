@@ -60,7 +60,7 @@ def main():
     expr_ode.index.name = 'gene_symbol'
 
     # After loading and filtering to 14 ODE genes
-    expr_ode = np.log2(expr_ode + 0.1)
+    expr_ode = np.log2(expr_ode + 1)
 
     print(f"\nKept {len(expr_ode)} of 14 ODE genes")
     #print(expr_ode.head())
