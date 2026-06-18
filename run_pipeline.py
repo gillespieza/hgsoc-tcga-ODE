@@ -110,6 +110,8 @@ def main():
         "prepare_brca1_2_mutation",
         "merge_data",
         "ode_model",
+        #"ode_validation",
+        "run_ode_cohort",
     ]
     
     # Run each step one by one.
