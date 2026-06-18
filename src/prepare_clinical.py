@@ -1,4 +1,3 @@
-# %%
 import pandas as pd
 from pathlib import Path
 
@@ -6,8 +5,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 def main():
-
-    # %%
     # cBioPortal clinical files contain a metadata header (comments beginning with #) which must be skipped
     clinical = pd.read_csv(
         ROOT / "data" / "raw" / "clinical" / "data_clinical_patient.txt",
@@ -19,7 +16,6 @@ def main():
     #print("Columns:", clinical.columns.tolist(), "\n")
     #print(clinical[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS']].head())
 
-    # %%
     # Filter to patients with complete OS data
     clinical_clean = clinical.dropna(subset=['OS_MONTHS', 'OS_STATUS'])
 
