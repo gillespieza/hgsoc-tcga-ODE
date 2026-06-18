@@ -20,6 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 # --- Global literature-fixed parameters ---
+# Global kinetic parameters cannot be derived analytically and must be estimated.
 GLOBAL_PARAMS = {
     # Drug perturbation input: φ(t) = D0 * exp(-t / tau_drug)
     # Models carboplatin delivery and clearance from tumour tissue.
@@ -111,7 +112,7 @@ def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
     # Step 2: Build composite pathway features
     #
     # BRCA_cap: HR repair capacity
-    #   min(BRCA1, BRCA2) captures the bottleneck in complex assembly —
+    #   min(BRCA1, BRCA2) captures the bottleneck/limiting step in complex assembly —
     #   both proteins are required and the lesser-expressed one limits throughput.
     #   RAD51 is the strand-invasion effector loaded by the BRCA1-BRCA2 scaffold.
     #   PALB2 bridges BRCA1 and BRCA2; included as square-root modifier.
@@ -134,7 +135,7 @@ def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
 
     # BCL2_ratio: apoptotic resistance
     #   Pro-survival (BCL2, BCL2L1) over pro-apoptotic (BAX, BAD).
-    #   Higher ratio → cells more resistant to apoptosis → slower X decay.
+    #   Higher BCL2_ratio → cells more resistant to apoptosis → slower X decay.
     #   Small epsilon prevents division by zero.
     BCL2_ratio = (fpkm['BCL2'] + fpkm['BCL2L1']) / (fpkm['BAX'] + fpkm['BAD'] + 1e-6)
 
@@ -206,8 +207,9 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     k_suppress = global_params['k_suppress']
     K_hr = global_params['K_hr'] 
 
-    # Drug perturbation input: exponentially decaying damage bolus
+    # Platinum perturbation input: exponentially decaying damage bolus
     # φ(t) represents the rate of new DSB formation from circulating platinum
+    # simulating carboplatin pharmacokinetics
     phi = D0 * np.exp(-t / tau_drug)
 
     # Clamp state variables to non-negative (numerical safeguard)
@@ -225,11 +227,13 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     # dA/dt: ATM/ATR checkpoint kinase activation: activation_by_D - decay
     # Activated proportionally to damage D and total kinase abundance ATM_tot.
     # Deactivated by phosphatases (PP2A, WIP1) at rate d_a.
+    # `ATM_tot` is a patient-specific constant derived from mRNA
     dA = k_a * ATM_tot * D - d_a * A
 
     # dC/dt: CHK1/CHK2 checkpoint effector activation: activation_by_A - decay
     # Activated by ATM/ATR signal A, scaled by effector abundance CHK_tot.
     # Deactivated at rate d_c (PP2A-mediated dephosphorylation).
+    # `CHK_tot` is a patient-specific constant derived from mRNA
     dC = k_c * A * CHK_tot - d_c * C
 
     # dR/dt: HR repair complex dynamics: synthesis_from_BRCA_cap - basal_decay - damage_consumption
@@ -239,6 +243,7 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     # Depleted by sustained checkpoint activity (k_load * C * R): CHK2-mediated
     # BRCA1 hyperphosphorylation eventually exhausts the repair complex.
     # Basal degradation at rate d_r.
+    # `BRCA_cap` is a patient-specific constant derived from mRNA
     k_r = d_r   # ensures R_ss = BRCA_cap analytically at D=0
     dR = k_r * BRCA_cap - k_load * C * R - d_r * R
 
@@ -253,13 +258,18 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
 def simulate_patient(patient_params: dict, global_params: dict) -> dict:
     """
     Simulate the HR-DDR ODE for a single patient.
+        - set initial conditions from zero-damage steady state
+        - apply platinum perturbation input φ(t) = D0 * exp(-t / tau_drug)
+            - units normalised; tau_drug = 6h reflects ~ carboplatin half-life
+        - integrate using `scipy.integrate.solve_ivp` with `method='RK45'
+        - extract ODE summary scores for survival prediction
 
     Initial conditions derived from zero-damage analytical steady state:
-        D(0) = 0       (no damage before drug)
-        A(0) = 0       (no ATM/ATR activation)
-        C(0) = 0       (no CHK activation)
+        D(0) = 0         (no damage before drug)
+        A(0) = 0         (no ATM/ATR activation: activation requires damage signal)
+        C(0) = 0         (no CHK activation: activation requires ATM/ATR signal)
         R(0) = BRCA_cap  (HR complex at steady-state level — analytical result)
-        X(0) = 0       (no apoptotic signal)
+        X(0) = 0         (no apoptotic drive without checkpoint activation)
 
     Parameters
     ----------
@@ -277,6 +287,7 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
     t_span = (0.0, 120.0)              # 0 to 120 hours (5 days)
     t_eval = np.linspace(0, 120, 241)  # every 0.5h
 
+    # integrate using `scipy.integrate.solve_ivp` with `method='RK45'
     sol = solve_ivp(
         fun=hrddr_ode,
         t_span=t_span,
