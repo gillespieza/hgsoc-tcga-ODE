@@ -5,26 +5,29 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 def main():
-    # cBioPortal clinical files contain a metadata header (comments beginning with #) which must be skipped
+    # cBioPortal clinical files contain metadata lines starting with "#".
+    # The comment parameter tells pandas to ignore those lines.
     clinical = pd.read_csv(
         ROOT / "data" / "raw" / "clinical" / "data_clinical_patient.txt",
         sep="\t",
         comment="#"
     )
 
-    #print("Shape:", clinical.shape, "\n")
-    #print("Columns:", clinical.columns.tolist(), "\n")
-    #print(clinical[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS']].head())
-
-    # Filter to patients with complete OS data
+    # Keep only patients with non-missing overall survival information.
     clinical_clean = clinical.dropna(subset=['OS_MONTHS', 'OS_STATUS'])
 
-    # Check for duplicates in PATIENT_ID
+    # Remove patients with non-positive survival time.
+    # This avoids invalid or unusable follow-up values.
     clinical_clean = clinical_clean[clinical_clean['OS_MONTHS'] > 0].copy()
+
+    # Remove duplicate patient rows if any exist.
+    # keep="first" keeps the first occurrence of each PATIENT_ID.
+    clinical_clean = clinical_clean.drop_duplicates(subset=["PATIENT_ID"], keep="first")
 
     print(f"\nPatients with complete OS data: {len(clinical_clean)}\n")
 
-    # Encode OS_STATUS as binary event
+    # Convert OS_STATUS from text labels to binary event indicators.
+    # 0 = alive at last follow-up, 1 = deceased.
     os_status_map = {
         '0:LIVING': 0,
         '1:DECEASED': 1
@@ -32,12 +35,9 @@ def main():
     # Map the OS_STATUS to binary events
     clinical_clean['OS_EVENT'] = clinical_clean['OS_STATUS'].map(os_status_map)
 
-    # Check event rate
-    #print(f"\nOS event rate: {clinical_clean['OS_EVENT'].mean():.2%}\n")
-    #print(clinical_clean[['PATIENT_ID', 'OS_MONTHS', 'OS_STATUS', 'OS_EVENT']].head(10))
-
-    # Save the cleaned clinical data to a CSV file
-    clinical_clean.to_csv(ROOT / "data" / "processed" / "clinical_clean.csv", index=False)
+    # Save the cleaned clinical table to a CSV for the merge step later.
+    out_path = ROOT / "data" / "processed" / "clinical_clean.csv"
+    clinical_clean.to_csv(out_path, index=False)
     
     #print("Saved: data/processed/clinical_clean.csv")
 

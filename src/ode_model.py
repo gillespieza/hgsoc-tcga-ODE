@@ -17,57 +17,58 @@ import pandas as pd
 from scipy.integrate import solve_ivp
 from pathlib import Path
 
+# set the root path of the project
 ROOT = Path(__file__).resolve().parent.parent
 
 # --- Global literature-fixed parameters ---
 # Global kinetic parameters cannot be derived analytically and must be estimated.
+# These are the same for every patient.
+# Patient-to-patient differences come from expression-derived parameters,
+# not from re-fitting these kinetic constants.
 GLOBAL_PARAMS = {
     # Drug perturbation input: φ(t) = D0 * exp(-t / tau_drug)
     # Models carboplatin delivery and clearance from tumour tissue.
     # Carboplatin plasma half-life ~2-6h; tau_drug set to 6h.
-    'D0':        1.0,    # normalised initial damage magnitude (arbitrary units)
+    'D0':        1.0,    # Initial damage input magnitude (arbitrary normalized units)
     'tau_drug':  6.0,    # h — drug decay time constant
 
-    # ATM/ATR activation 
+    # ATM/ATR activation and decay.
     # ATM activates within minutes; full activation plateau ~1-2h; 
     # deactivation by PP2A/WIP1 over ~2h after damage resolution.
-    'k_a':  1.0,         # h⁻¹ — ATM/ATR activation rate per unit D and ATM_tot
-    'd_a':  0.5,         # h⁻¹ — ATM/ATR deactivation rate (half-life ~2h)
+    'k_a':  1.0,         # h⁻¹ — Rate at which damage activates ATM/ATR
+    'd_a':  0.5,         # h⁻¹ — Deactivation rate of ATM/ATR (half-life ~2h)
 
 
-    # CHK1/CHK2 activation
+    # CHK1/CHK2 activation and decay.
     # CHK2 phosphorylated by ATM within ~30 min; sustained for several hours.
     # CHK1 activated by ATR; deactivated by PP2A over ~3-5h.
-    'k_c':  0.5,         # h⁻¹ — CHK activation rate per unit A and CHK_tot
-    'd_c':  0.2,         # h⁻¹ — CHK deactivation rate (half-life ~5h)
+    'k_c':  0.5,         # h⁻¹ — Rate at which ATM/ATR activates CHK1/CHK2
+    'd_c':  0.2,         # h⁻¹ — Deactivation rate of CHK1/CHK2 (half-life ~5h)
 
     # DNA repair kinetics
-    # HR repair of DSBs: 4-24h depending on complexity
+    # HR repair of DSBs: 4-24h depending on complexity. HR depends on repair complex R, while NHEJ is modeled as always available
     # NHEJ is faster (~1-4h) but error-prone; operates independently of BRCA capacity.
     'k_HR':    0.15,     # h⁻¹ — HR repair rate per unit R (repair complete in ~6-20h)
-    'k_NHEJ':  0.30,     # h⁻¹ — NHEJ repair rate (faster, R-independent)
+    'k_NHEJ':  0.30,     # h⁻¹ — Baseline NHEJ repair rate (faster, R-independent)
 
     # HR complex dynamics
     # k_load: CHK2 phosphorylates BRCA1 to facilitate HR loading, but sustained
     # checkpoint activity eventually depletes the available complex (exhaustion term).
     # d_r: constitutive HR complex turnover.
-    'k_load':  0.20,     # h⁻¹ — CHK-driven HR complex depletion rate
-    'd_r':     0.10,     # h⁻¹ — basal HR complex degradation rate
+    'k_load':  0.20,     # h⁻¹ — CHK-driven depletion/exhaustion of HR repair complex
+    'd_r':     0.10,     # h⁻¹ — Basal turnover of HR repair complex
 
     # Apoptotic signal kinetics
     # X represents commitment to apoptosis (upstream of caspase activation).
     # k_x: rate at which sustained CHK activity, unchecked by HR, drives apoptosis.
     # d_x: base apoptotic signal decay (intrinsic anti-apoptotic buffering).
     # BCL2_ratio modulates d_x per patient (higher BCL2 → faster signal clearance).
-    'k_x':  0.10,        # h⁻¹ — apoptotic signal generation rate per unit C
-    'd_x':  0.02,        # h⁻¹ — base apoptotic signal decay rate (half-life ~35h)
+    'k_x':  0.10,        # h⁻¹ — Rate at which checkpoint activity drives apoptosis
+    'd_x':  0.02,        # h⁻¹ — Basal decay of apoptotic signal (half-life ~35h)
 
-    'k_suppress': 0.3,   # h⁻¹ — HR complex-mediated apoptotic signal degradation rate
-    'K_hr': 1.0,         # # half-saturation constant
+    'k_suppress': 0.3,   # h⁻¹ — HR-mediated suppression of apoptotic signal
+    'K_hr': 1.0         # Half-saturation constant for HR suppression
 
-    'alpha': 0.1,
-    'c_floor': 0.01,
-    'x_floor': 0.001 
 }        
 
 
@@ -76,72 +77,81 @@ def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
     """
     Derive patient-specific ODE parameters from log2(FPKM+1) expression values.
 
-    Goal: turn each patient’s expression profile into a small set of ODE parameters, without 
+    Goal: turn each patient's RNA expression profile into a small set of ODE parameters, without 
     fitting survival data. The key idea is that baseline DNA damage is zero, so the only 
     patient-specific baseline state we need is the HR repair capacity R_ss
 
-    Approach:
-    1. Back-transform log2(FPKM+1) → FPKM (linear scale)
-    2. Compute composite parameters from gene groups
-    3. Normalise each parameter to population median so that the
-        median patient has parameter value = 1.0
-        (global rate constants are then calibrated for this reference patient)
+    Main idea:
+    - The RNA data are stored as log2(FPKM + 1).
+    - We convert them back to linear FPKM scale.
+    - We combine related genes into pathway-level composite quantities.
+    - We normalize each composite to the cohort median so the "typical"
+      patient has value 1.0.
 
     Returns a DataFrame with columns:
-        PATIENT_ID, BRCA_cap, ATM_tot, CHK_tot, BCL2_ratio, BRCA_MUTANT
-    plus the original OS_MONTHS and OS_EVENT for convenience.
+        PATIENT_ID, OS_MONTHS, OS_EVENT, BRCA_MUTANT,
+        BRCA_cap, ATM_tot, CHK_tot, BCL2_ratio
     """
 
-    # copy the merged DataFrame to avoid modifying the original
+    # Copy to avoid modifying the input DataFrame in place.
     df = merged_df.copy()
     
-    # Identify the gene columns used for parameterisation 
+    # Gene columns actually used for parameterization.
+    # TP53 is intentionally excluded because it is a negative control here.
     gene_cols = [
         'BRCA1', 'BRCA2', 'RAD51', 'PALB2', 'BRIP1',       # Homologous recombination repair
         'ATM', 'ATR',                                      # DNA damage sensing/checkpoint kinases
         'CHEK1', 'CHEK2',                                  # Checkpoint effectors/signalling
         'BCL2', 'BCL2L1', 'BAX', 'BAD'                     # Apoptotic threshold
     ]        
-    # TP53 excluded — negative control, not used in ODE
 
-    # Step 1: Back-transform each gene from log2(FPKM+1) to FPKM using the inverse transformation.
-    # log2(FPKM + 1) → FPKM = 2^value - 1
+    # Back-transform from log2(FPKM + 1) to FPKM.
+    # If x = log2(FPKM + 1), then FPKM = 2^x - 1.
     fpkm = 2 ** df[gene_cols] - 1
-    fpkm = fpkm.clip(lower=0)   # guard against floating-point negatives
 
-    # Step 2: Build composite pathway features
+    # Guard against tiny negative values caused by floating-point precision.
+    fpkm = fpkm.clip(lower=0)
+
+    # --- Build composite pathway features ---
+
+    # BRCA_cap: homologous recombination repair capacity.
     #
-    # BRCA_cap: HR repair capacity
-    #   min(BRCA1, BRCA2) captures the bottleneck/limiting step in complex assembly —
-    #   both proteins are required and the lesser-expressed one limits throughput.
-    #   RAD51 is the strand-invasion effector loaded by the BRCA1-BRCA2 scaffold.
-    #   PALB2 bridges BRCA1 and BRCA2; included as square-root modifier.
+    # Why use min(BRCA1, BRCA2)?
+    # Because both proteins are needed, and the lower one can act like a bottleneck/rate-limiting step.
+    #
+    # Why multiply by RAD51?
+    # RAD51 is the strand-invasion effector loaded by the BRCA1-BRCA2 scaffold in HR repair.
+    #
+    # Why sqrt(PALB2 + 1)?
+    # PALB2 supports BRCA1/2 function, but we include it as a softer modifier
+    # rather than letting it dominate multiplicatively.
+    #
+    # np.log1p(...) means log(1 + value), which compresses very large values.
+
     BRCA_cap = np.log1p(
         np.minimum(fpkm['BRCA1'], fpkm['BRCA2'])
         * fpkm['RAD51']
         * np.sqrt(fpkm['PALB2'] + 1)
     )
-    # BRCA_cap = np.mean([fpkm['BRCA1'], fpkm['BRCA2'], fpkm['PALB2'], fpkm['RAD51']]) 
-    # BRCA_cap = geometric_mean(BRCA1, BRCA2, PALB2, RAD51)
 
-    # ATM_tot: total checkpoint kinase abundance
+    # ATM_tot: total upstream damage-sensing capacity.
     #   ATM senses DSBs; ATR senses replication stress and ssDNA.
     #   Both are activated by platinum-induced lesions.
     ATM_tot = (fpkm['ATM'] + fpkm['ATR']) / 2
 
-    # CHK_tot: total checkpoint effector abundance
+    # CHK_tot: total downstream checkpoint effector capacity.
     #   CHEK1 and CHEK2 are the direct substrates of ATR and ATM respectively.
     CHK_tot = (fpkm['CHEK1'] + fpkm['CHEK2']) / 2
 
-    # BCL2_ratio: apoptotic resistance
-    #   Pro-survival (BCL2, BCL2L1) over pro-apoptotic (BAX, BAD).
-    #   Higher BCL2_ratio → cells more resistant to apoptosis → slower X decay.
-    #   Small epsilon prevents division by zero.
-    BCL2_ratio = (fpkm['BCL2'] + fpkm['BCL2L1']) / (fpkm['BAX'] + fpkm['BAD'] + 1e-6)
+    # BCL2_ratio: balance of anti-apoptotic vs pro-apoptotic expression (i.e. apoptotic resistance).
+    #    Pro-survival (BCL2, BCL2L1) over pro-apoptotic (BAX, BAD).
+    # Small epsilon avoids division by zero.
+    BCL2_ratio = (
+        (fpkm["BCL2"] + fpkm["BCL2L1"]) /
+        (fpkm["BAX"] + fpkm["BAD"] + 1e-6)
+    )
 
-    # Step 3: Normalise to population median
-    #   After normalisation, the median patient has each parameter = 1.0.
-    #   Global rate constants (GLOBAL_PARAMS) are calibrated for this reference.
+    # Assemble the patient parameter table.
     params = pd.DataFrame({
         'PATIENT_ID':   df['PATIENT_ID'].values,
         'OS_MONTHS':    df['OS_MONTHS'].values,
@@ -153,6 +163,8 @@ def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
         'BCL2_ratio':   BCL2_ratio.values,
     })
 
+    # Normalize each parameter to the cohort median.
+    # After this step, a median patient has parameter value ~1.0.
     params['BRCA_cap']   /= params['BRCA_cap'].median()
     params['ATM_tot']    /= params['ATM_tot'].median()
     params['CHK_tot']    /= params['CHK_tot'].median()
@@ -164,7 +176,7 @@ def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
 # --- ODE right-hand side ---
 def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> list:
     """
-    Right-hand side of the HR-DDR ODE system.
+    Right-hand side of the HR-DDR ODE system. Compute the derivatives of the five ODE state variables at time t.
 
     State vector y = [D, A, C, R, X]
 
@@ -183,6 +195,8 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     -------
     list of floats: [dD/dt, dA/dt, dC/dt, dR/dt, dX/dt]
     """
+
+    # Unpack the state vector.
     D, A, C, R, X = y
 
     # Unpack patient-specific parameters
@@ -207,12 +221,12 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     k_suppress = global_params['k_suppress']
     K_hr = global_params['K_hr'] 
 
-    # Platinum perturbation input: exponentially decaying damage bolus
-    # φ(t) represents the rate of new DSB formation from circulating platinum
-    # simulating carboplatin pharmacokinetics
+    # Drug-driven damage input.
+    # At t = 0, phi is largest; then it decays exponentially.
     phi = D0 * np.exp(-t / tau_drug)
 
-    # Clamp state variables to non-negative (numerical safeguard)
+    # Numerical safety:
+    # if the solver ever produces a tiny negative number, clamp it to zero.
     D = max(D, 0.0)
     A = max(A, 0.0)
     C = max(C, 0.0)
@@ -220,12 +234,12 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     X = max(X, 0.0)
 
     # dD/dt: DNA damage dynamics: input_damage - repair_by_R
-    # New damage arrives from drug (phi), repaired by HR (rate k_HR * R, proportional
-    # to available HR complex) and NHEJ (rate k_NHEJ, R-independent).
+    # Damage increases because of the drug input phi.
+    # Damage decreases through HR repair (depends on R) and NHEJ repair.
     dD = phi - (k_HR * R + k_NHEJ) * D
 
-    # dA/dt: ATM/ATR checkpoint kinase activation: activation_by_D - decay
-    # Activated proportionally to damage D and total kinase abundance ATM_tot.
+    # dA/dt: ATM/ATR checkpoint kinase activation dynamics: activation_by_D - decay
+    # More damage and more total ATM/ATR abundance lead to more activation.
     # Deactivated by phosphatases (PP2A, WIP1) at rate d_a.
     # `ATM_tot` is a patient-specific constant derived from mRNA
     dA = k_a * ATM_tot * D - d_a * A
@@ -236,10 +250,10 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     # `CHK_tot` is a patient-specific constant derived from mRNA
     dC = k_c * A * CHK_tot - d_c * C
 
+
     # dR/dt: HR repair complex dynamics: synthesis_from_BRCA_cap - basal_decay - damage_consumption
-    # Constitutive loading at rate k_r * BRCA_cap (patient-specific synthesis).
-    # Note: k_r is absorbed into BRCA_cap normalisation (k_r = d_r at steady state),
-    # so R_ss = BRCA_cap after normalisation — the analytical zero-damage result.
+    # We choose k_r = d_r so that, at zero damage steady state:
+    # dR/dt = d_r * BRCA_cap - d_r * R = 0  ->  R_ss = BRCA_cap
     # Depleted by sustained checkpoint activity (k_load * C * R): CHK2-mediated
     # BRCA1 hyperphosphorylation eventually exhausts the repair complex.
     # Basal degradation at rate d_r.
@@ -247,20 +261,26 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     k_r = d_r   # ensures R_ss = BRCA_cap analytically at D=0
     dR = k_r * BRCA_cap - k_load * C * R - d_r * R
 
-    # dX/dt: Apoptotic commitment signal: activation_by_C and BCL2_ratio - decay
-    HR_suppression = 1.0 / (1.0 + R / K_hr)
-    # dX = k_x * C * HR_suppression - d_x * BCL2_ratio * X
-    dX = ( k_x*C - d_x*BCL2_ratio*X - k_suppress*R*X/(K_hr+R) )
+    # dX/dt: apoptotic commitment signal.
+    #
+    # X is increased by checkpoint stress (k_x * C).
+    # X is decreased by:
+    # 1. intrinsic buffering scaled by BCL2_ratio
+    # 2. suppression from HR capacity R
+    dX = (
+        k_x * C
+        - d_x * BCL2_ratio * X
+        - k_suppress * R * X / (K_hr + R)
+    )
 
     return [dD, dA, dC, dR, dX]
 
 # --- Single patient simulation ---
 def simulate_patient(patient_params: dict, global_params: dict) -> dict:
     """
-    Simulate the HR-DDR ODE for a single patient.
+    Simulate the HR-DDR ODE for a single patient over 120 hours.
         - set initial conditions from zero-damage steady state
         - apply platinum perturbation input φ(t) = D0 * exp(-t / tau_drug)
-            - units normalised; tau_drug = 6h reflects ~ carboplatin half-life
         - integrate using `scipy.integrate.solve_ivp` with `method='RK45'
         - extract ODE summary scores for survival prediction
 
@@ -280,10 +300,12 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
     -------
     dict with keys: t, D, A, C, R, X, PATIENT_ID
     """
+
     # Initial conditions from zero-damage steady state
     R_ss = patient_params['BRCA_cap']   # analytical result: R_ss = BRCA_cap after normalisation
     y0 = [0.0, 0.0, 0.0, R_ss, 0.0]   # [D, A, C, R, X]
 
+    # Simulate for 5 days, sampled every 0.5 hours.
     t_span = (0.0, 120.0)              # 0 to 120 hours (5 days)
     t_eval = np.linspace(0, 120, 241)  # every 0.5h
 
@@ -300,8 +322,8 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
         dense_output=False,
     )
 
+    # If integration fails, return NaN arrays so downstream code can detect failure.
     if not sol.success:
-        # Return NaN arrays if integration failed — flagged during score computation
         nan_arr = np.full(len(t_eval), np.nan)
         return {
             'PATIENT_ID': patient_params['PATIENT_ID'],
@@ -310,6 +332,7 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
             'success': False
         }
 
+    # If integration succeeds, return the time grid and all state trajectories.
     return {
         'PATIENT_ID': patient_params['PATIENT_ID'],
         't': sol.t,
@@ -324,13 +347,18 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
 # --- ODE score extraction ---
 def compute_ode_scores(sim_result: dict) -> dict:
     """
-    Extract summary statistics from a single patient ODE simulation.
+    Reduce a full time-course simulation to a few summary numbers.
 
-    Primary score: AUC_X — integral of apoptotic signal over 120h.
+    Main score:
+        AUC_X = area under the apoptotic signal curve over time
+
     Higher AUC_X → more apoptotic commitment → tumour more platinum-sensitive
     → expected better patient survival.
 
     Secondary scores retained for sensitivity analysis.
+        X_peak   = maximum apoptotic signal
+        T_repair = approximate repair time
+        D_resid  = residual damage at final time
     """
     from scipy.integrate import trapezoid
 
@@ -338,11 +366,17 @@ def compute_ode_scores(sim_result: dict) -> dict:
     X = sim_result['X']
     D = sim_result['D']
 
-    AUC_X   = trapezoid(X, t)           # primary survival predictor
-    X_peak  = float(np.max(X))          # peak apoptotic signal
-    D_resid = float(D[-1])              # residual damage at t=120h
+    # AUC of apoptosis signal: main model output and primary survival predictor.
+    AUC_X   = trapezoid(X, t)           
 
-    # Time for D to fall to 10% of its peak value (repair speed proxy)
+    # Peak apoptosis signal.
+    X_peak  = float(np.max(X))
+
+    # Residual damage at the end of the simulation.  
+    D_resid = float(D[-1])    
+
+    # Repair time proxy:
+    # Find how long damage stays above 10% of its maximum.
     D_peak  = float(np.max(D))
     thresh  = 0.1 * D_peak
     above   = np.where(D > thresh)[0]
@@ -358,6 +392,8 @@ def compute_ode_scores(sim_result: dict) -> dict:
     }
 
 def main():
+    # Placeholder for later testing / validation pipeline.
+    # For now, this file defines functions but does not run a full workflow.
     pass
 
 if __name__ == "__main__":
