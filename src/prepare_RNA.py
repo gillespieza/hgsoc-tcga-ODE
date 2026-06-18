@@ -60,6 +60,9 @@ def main():
     expr_ode.index.name = 'gene_symbol'
 
     # After loading and filtering to 14 ODE genes
+    # log transform the expression values (log2(FPKM + 1)) to stabilize variance and reduce skewness
+    # This transformation is common in RNA-seq data analysis to make the data more suitable for downstream statistical analyses and modeling.
+    # Adding + 1 to avoid log(0)
     expr_ode = np.log2(expr_ode + 1)
 
     print(f"\nKept {len(expr_ode)} of 14 ODE genes")
@@ -78,8 +81,7 @@ def main():
     #print("Saved:", out_path)
     #print(gene_id_map)
 
-    # expr_ode is genes × samples
-    # Transpose to samples × genes
+    # expr_ode is genes × samples: transpose to samples × genes
     expr_ode_log = expr_ode.T
     expr_ode_log.index.name = 'SAMPLE_ID'
 
@@ -87,8 +89,24 @@ def main():
     expr_ode_log.index = expr_ode_log.index.str[:12]
     expr_ode_log.index.name = 'PATIENT_ID'
 
-    print(f"\nExpression matrix shape: {expr_ode_log.shape}\n")
-    #print(expr_ode_log.head())
+    # Drop patients with excessive missingness
+    missing_frac = expr_ode_log.isna().mean(axis=1)
+    expr_ode_log = expr_ode_log.loc[missing_frac <= 0.20].copy()
+
+    # Deduplicate by patient ID, keeping the row with fewest missing values
+    expr_ode_log = (
+        expr_ode_log
+        .assign(_missing=expr_ode_log.isna().sum(axis=1))
+        .sort_values('_missing')
+        .loc[~expr_ode_log.index.duplicated(keep='first')]
+        .drop(columns='_missing')
+    )
+
+    print(f"\nUnique patients after filtering: {expr_ode_log.shape[0]}")
+    print(f"\nExpression matrix shape: {expr_ode_log.shape}")
+
+
+    print(expr_ode_log.head())
 
     # Save expression matrix for downstream merge step
     expr_out = ROOT / "data" / "processed" / "rna_clean.csv"
