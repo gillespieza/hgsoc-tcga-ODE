@@ -8,6 +8,7 @@ This file runs the full preprocessing/model pipeline in order:
 3. prepare_brca1_2_mutation.py  - build BRCA1/2 mutation labels
 4. merge_data.py                - merge clinical + expression data
 5. run_ode_cohort.py            - simulate cohort and save ODE-derived scores
+5. analyse_ode_survival.py          
 """
 
 import sys
@@ -109,8 +110,9 @@ def main():
         "prepare_brca1_2_mutation",
         "merge_data",
         #"ode_model",
-        #"ode_validation",
+        "ode_validation",
         "run_ode_cohort",
+        "analyse_ode_survival",
     ]
     
     # Run each step one by one.
