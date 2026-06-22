@@ -99,7 +99,6 @@ def main():
     p_val, med_high, med_low = stratify_and_plot(df)
 
     p_str = f'{p_val:.4f}' if p_val >= 0.0001 else '< 0.0001'
-    print(f"\n--- Report sentence ---")
     print(f"Patients in the high AUC_X group had median OS of {med_high:.1f} months "
           f"vs {med_low:.1f} months in the low group (log-rank p={p_str}).")
 

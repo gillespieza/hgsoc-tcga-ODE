@@ -58,7 +58,7 @@ plt.suptitle(
 )
 plt.tight_layout()
 
-plt.savefig(ROOT / "data" / "processed" / "ode_validation_trajectories.png", dpi=150, bbox_inches='tight')
+plt.savefig(ROOT / "results" / "figures" / "ode_validation_trajectories.png", dpi=150, bbox_inches='tight')
 plt.close(fig)
 
-print("Saved: data/processed/ode_validation_trajectories.png")
+print("Saved: results/figures/ode_validation_trajectories.png")
