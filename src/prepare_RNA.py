@@ -2,11 +2,31 @@ import pandas as pd
 import numpy as np
 import mygene
 from pathlib import Path
+import logging
 
-# set the root path of the project
+# ---------------------------------------------------------------------
+# Project root
+# ---------------------------------------------------------------------
+
 ROOT = Path(__file__).resolve().parent.parent
+logger = logging.getLogger(__name__)
 
 def main():
+    """
+    Prepare RNA-seq expression matrix for ODE modelling.
+
+    Steps:
+    1. Map ODE gene symbols to Entrez IDs
+    2. Subset RNA-seq expression matrix
+    3. Log-transform expression values
+    4. Align TCGA samples to patient IDs
+    5. Clean missing values and duplicates
+    6. Export processed matrix for downstream modelling
+    """
+
+    # -----------------------------------------------------------------
+    # Gene annotation service
+    # -----------------------------------------------------------------
 
     # Initialize MyGeneInfo - an online gene annotation service
     mg = mygene.MyGeneInfo()
@@ -22,6 +42,12 @@ def main():
         'TP53'                                             # Negative control
     ]
 
+    logger.info(f"Querying MyGeneInfo for {len(ode_genes)} genes")
+
+    # -----------------------------------------------------------------
+    # Gene ID mapping
+    # -----------------------------------------------------------------
+
     # Query MyGeneInfo for Entrez Gene IDs corresponding to the gene symbols.
     results = mg.querymany(
         ode_genes,
@@ -32,13 +58,30 @@ def main():
         verbose=False
     )
 
-    # Create a lookup dictionary from gene symbols -> Entrez Gene IDs, dropping genes that did not resolve.
-    symbol_to_entrez = results['entrezgene'].dropna().astype(str).to_dict()
+    # Drop unresolved genes explicitly
+    valid_results = results.dropna(subset=["entrezgene"])
+
+    # Create a lookup dictionary from gene symbols -> Entrez Gene IDs
+    symbol_to_entrez = (
+        valid_results["entrezgene"]
+        .astype(int)
+        .astype(str)
+        .to_dict()
+    )
 
     # Create a reverse mapping: Entrez ID -> gene symbol.
     entrez_to_symbol = {v: k for k, v in symbol_to_entrez.items()}
 
-    # Load the raw RNA-seq matrix.
+    missing_genes = set(ode_genes) - set(valid_results.index)
+
+    if missing_genes:
+        logger.warning(f"Unmapped genes: {missing_genes}")
+
+    logger.info(f"Mapped genes: {len(symbol_to_entrez)}/{len(ode_genes)}")
+
+    # -----------------------------------------------------------------
+    # Load RNA-seq data
+    # -----------------------------------------------------------------
     # Rows are genes, columns are samples.
     expr = pd.read_csv(
         ROOT / "data" / "raw" / "expression" / "data_mrna_seq_fpkm.txt",
@@ -49,57 +92,122 @@ def main():
     # Convert row labels to strings so they match Entrez IDs stored as strings.
     expr.index = expr.index.astype(str)
 
+    # -----------------------------------------------------------------
+    # Subset to ODE genes
+    # -----------------------------------------------------------------
+
     # Keep only genes that match our target Entrez IDs.
     target_entrez = set(entrez_to_symbol.keys())
-    expr_ode = expr.loc[expr.index.intersection(target_entrez)].copy()
+
+    matched_genes = expr.index.intersection(target_entrez)
+
+    if len(matched_genes) == 0:
+        raise ValueError(
+            "No genes matched between expression matrix and ODE gene set. "
+            "Check whether RNA-seq IDs are Entrez IDs."
+        )
+
+    expr_ode = expr.loc[matched_genes].copy()
 
     # Rename gene rows from Entrez IDs to human readable gene symbols.
     expr_ode.index = expr_ode.index.map(entrez_to_symbol)
-    expr_ode.index.name = 'gene_symbol'
+    expr_ode.index.name = "gene_symbol"
+
+    # -----------------------------------------------------------------
+    # Log transform
+    # -----------------------------------------------------------------
 
     # Apply log2(FPKM + 1) transformation.
     # This reduces skew and makes expression values easier to use in modeling.
     # Adding + 1 to avoid log(0)
     expr_ode = np.log2(expr_ode + 1)
 
-    print(f"\nKept {len(expr_ode)} of 14 ODE genes")
+    logger.info(f"Kept {expr_ode.shape[0]} of 14 ODE genes")
 
-    ## Save the gene ID mapping for traceability - to a DataFrame and a CSV file.
+    # -----------------------------------------------------------------
+    # Save gene mapping (traceability)
+    # -----------------------------------------------------------------
+
     gene_id_map = pd.DataFrame(
         list(entrez_to_symbol.items()),
-        columns=['entrez_id', 'symbol']
+        columns=["entrez_id", "symbol"]
     )
-    out_path = ROOT / "data" / "processed" / "gene_id_map.csv"
-    gene_id_map.to_csv(out_path, index=False)
 
-    # Transpose so rows become samples and columns become genes.
-    expr_ode_log = expr_ode.T
-    expr_ode_log.index.name = 'SAMPLE_ID'
+    gene_id_map.to_csv(
+        ROOT / "data" / "processed" / "gene_id_map.csv",
+        index=False
+    )
 
-    # Convert TCGA sample barcodes to 12-character patient IDs.
-    # Example: TCGA-04-1331-01A -> TCGA-04-1331
-    expr_ode_log.index = expr_ode_log.index.str[:12]
-    expr_ode_log.index.name = 'PATIENT_ID'
+    # -----------------------------------------------------------------
+    # Sample alignment
+    # -----------------------------------------------------------------
 
-    # Remove patients with more than 20% missing values across the gene panel.
-    missing_frac = expr_ode_log.isna().mean(axis=1)
-    expr_ode_log = expr_ode_log.loc[missing_frac <= 0.20].copy()
+    expr_ode = expr_ode.T
+    expr_ode.index.name = "SAMPLE_ID"
 
-    # Keep one row per patient.
-    # If duplicate patient IDs exist, keep the row with the fewest missing values.
-    expr_ode_log = expr_ode_log.assign(_missing=expr_ode_log.isna().sum(axis=1))
-    expr_ode_log = expr_ode_log.sort_values("_missing")
-    expr_ode_log = expr_ode_log[~expr_ode_log.index.duplicated(keep="first")]
-    expr_ode_log = expr_ode_log.drop(columns="_missing")
+    # TCGA barcode truncation (assumption: standard TCGA format)
+    expr_ode.index = expr_ode.index.str[:12]
+    expr_ode.index.name = "PATIENT_ID"
 
-    print(f"\nUnique patients after filtering: {expr_ode_log.shape[0]}")
-    print(f"\nExpression matrix shape: {expr_ode_log.shape}\n")
-    print(expr_ode_log.head())
+    # -----------------------------------------------------------------
+    # Missing data handling
+    # -----------------------------------------------------------------
 
-    # Save the cleaned matrix for the merge step.
-    expr_out = ROOT / "data" / "processed" / "rna_clean.csv"
-    expr_out.parent.mkdir(parents=True, exist_ok=True)
-    expr_ode_log.reset_index().to_csv(expr_out, index=False)
+    missing_frac = expr_ode.isna().mean(axis=1)
+    before_filter = len(expr_ode)
+
+    expr_ode = expr_ode.loc[missing_frac <= 0.20].copy()
+
+    logger.info(
+        f"Removed {before_filter - len(expr_ode)} patients "
+        f"due to missing expression values"
+    )
+
+    # -----------------------------------------------------------------
+    # Deduplication
+    # -----------------------------------------------------------------
+
+    expr_ode["_missing"] = expr_ode.isna().sum(axis=1)
+
+    expr_ode = (
+        expr_ode.sort_values("_missing")
+        .loc[~expr_ode.index.duplicated(keep="first")]
+        .drop(columns="_missing")
+    )
+
+    logger.info(
+        f"Final RNA cohort: {expr_ode.shape[0]} patients, {expr_ode.shape[1]} genes"
+    )
+
+    # -----------------------------------------------------------------
+    # Save output
+    # -----------------------------------------------------------------
+
+    out_path = ROOT / "data" / "processed" / "rna_clean.csv"
+
+    expr_ode.reset_index().to_csv(out_path, index=False)
+
+    logger.info(f"Saved processed RNA matrix to {out_path}")
+
+
+    # -----------------------------------------------------------------
+    # Final cohort comparison debug (IMPORTANT)
+    # -----------------------------------------------------------------
+
+    clinical_path = ROOT / "data" / "processed" / "clinical_clean.csv"
+    clinical = pd.read_csv(clinical_path)
+
+    clinical_ids = set(clinical["PATIENT_ID"])
+    rna_ids = set(expr_ode.index)
+
+    logger.info(
+        "\nCohort overlap debug:\n"
+        f"  Clinical patients : {len(clinical_ids)}\n"
+        f"  RNA patients      : {len(rna_ids)}\n"
+        f"  Overlap           : {len(clinical_ids & rna_ids)}\n"
+        f"  Only clinical     : {len(clinical_ids - rna_ids)}\n"
+        f"  Only RNA          : {len(rna_ids - clinical_ids)}\n"
+    )
 
 if __name__ == "__main__":
     main()
