@@ -1,15 +1,17 @@
 """
 ode_model.py — HR-DDR ODE model for HGSOC patient-specific survival prediction.
 
-Five-variable ODE system:
-    D(t) : DNA damage load (normalised DSBs)
-    A(t) : Activated ATM/ATR (checkpoint kinase signal)
-    C(t) : Activated CHK1/CHK2 (checkpoint effector signal)
-    R(t) : Functional HR repair complex (BRCA1-BRCA2-PALB2-RAD51)
-    X(t) : Apoptotic commitment signal
+Mechanistic structure:
+    D(t) : DNA damage load
+    A(t) : ATM/ATR checkpoint activation
+    C(t) : CHK1/CHK2 signalling
+    R(t) : HR repair capacity (BRCA axis)
+    X(t) : apoptotic commitment
 
-Patient-specific parameters derived analytically from zero-damage steady state.
-Global kinetic parameters are literature-fixed (not data-calibrated).
+Key idea:
+- Global kinetics are fixed (literature-informed)
+- Patient variation enters via RNA-derived pathway compression
+- Survival signal derived from apoptotic burden (AUC_X)
 """
 
 import numpy as np
@@ -17,10 +19,11 @@ import pandas as pd
 from scipy.integrate import solve_ivp
 from pathlib import Path
 
-# set the root path of the project
 ROOT = Path(__file__).resolve().parent.parent
 
-# --- Global literature-fixed parameters ---
+# ================================================================
+# GLOBAL PARAMETERS (fixed kinetics)
+# ================================================================
 # Global kinetic parameters cannot be derived analytically and must be estimated.
 # These are the same for every patient.
 # Patient-to-patient differences come from expression-derived parameters,
@@ -72,7 +75,9 @@ GLOBAL_PARAMS = {
 }        
 
 
-# --- Patient parameter computation ---
+# ================================================================
+# PATIENT PARAMETER CONSTRUCTION
+# ================================================================
 def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
     """
     Derive patient-specific ODE parameters from log2(FPKM+1) expression values.
@@ -105,14 +110,35 @@ def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
         'BCL2', 'BCL2L1', 'BAX', 'BAD'                     # Apoptotic threshold
     ]        
 
-    # Back-transform from log2(FPKM + 1) to FPKM.
-    # If x = log2(FPKM + 1), then FPKM = 2^x - 1.
-    fpkm = 2 ** df[gene_cols] - 1
+    # ------------------------------------------------------------
+    # Safety check: ensure required genes exist
+    # ------------------------------------------------------------
+    missing_genes = [g for g in gene_cols if g not in df.columns]
+    if missing_genes:
+        raise ValueError(f"Missing gene columns in merged dataset: {missing_genes}")
+
+    # ------------------------------------------------------------
+    # Handle numerical stability issues
+    # ------------------------------------------------------------
+    expr = df[gene_cols].replace([np.inf, -np.inf], np.nan)
+
+    if expr.isna().any().any():
+        raise ValueError(
+            "NaNs detected in expression matrix after merge. "
+            "Check RNA preprocessing."
+        )
+
+    # ------------------------------------------------------------
+    # Back-transform log2(FPKM+1)
+    # ------------------------------------------------------------
+    fpkm = 2 ** expr - 1
 
     # Guard against tiny negative values caused by floating-point precision.
     fpkm = fpkm.clip(lower=0)
 
-    # --- Build composite pathway features ---
+    # ------------------------------------------------------------
+    # Pathway compression (phenomenological, not mechanistic kinetics)
+    # ------------------------------------------------------------
 
     # BRCA_cap: homologous recombination repair capacity.
     #
@@ -165,15 +191,16 @@ def compute_patient_params(merged_df: pd.DataFrame) -> pd.DataFrame:
 
     # Normalize each parameter to the cohort median.
     # After this step, a median patient has parameter value ~1.0.
-    params['BRCA_cap']   /= params['BRCA_cap'].median()
-    params['ATM_tot']    /= params['ATM_tot'].median()
-    params['CHK_tot']    /= params['CHK_tot'].median()
-    params['BCL2_ratio'] /= params['BCL2_ratio'].median()
+    for col in ["BRCA_cap", "ATM_tot", "CHK_tot", "BCL2_ratio"]:
+        params[col] /= params[col].median()
 
     return params          
 
 
-# --- ODE right-hand side ---
+
+# ================================================================
+# ODE right-hand side
+# ================================================================
 def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> list:
     """
     Right-hand side of the HR-DDR ODE system. Compute the derivatives of the five ODE state variables at time t.
@@ -208,16 +235,21 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     # Unpack global parameters
     D0       = global_params['D0']
     tau_drug = global_params['tau_drug']
+
     k_a      = global_params['k_a']
     d_a      = global_params['d_a']
     k_c      = global_params['k_c']
     d_c      = global_params['d_c']
+
     k_HR     = global_params['k_HR']
     k_NHEJ   = global_params['k_NHEJ']
+
     k_load   = global_params['k_load']
     d_r      = global_params['d_r']
+
     k_x      = global_params['k_x']
     d_x      = global_params['d_x']
+
     k_suppress = global_params['k_suppress']
     K_hr = global_params['K_hr'] 
 
@@ -226,7 +258,7 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
     phi = D0 * np.exp(-t / tau_drug)
 
     # Numerical safety:
-    # if the solver ever produces a tiny negative number, clamp it to zero.
+    # if the solver ever produces a tiny negative number, clamp it to zero so it doesn't explode
     D = max(D, 0.0)
     A = max(A, 0.0)
     C = max(C, 0.0)
@@ -275,7 +307,9 @@ def hrddr_ode(t: float, y: list, patient_params: dict, global_params: dict) -> l
 
     return [dD, dA, dC, dR, dX]
 
-# --- Single patient simulation ---
+# ================================================================
+# SINGLE PATIENT SIMULATION
+# ================================================================
 def simulate_patient(patient_params: dict, global_params: dict) -> dict:
     """
     Simulate the HR-DDR ODE for a single patient over 120 hours.
@@ -309,14 +343,17 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
     t_span = (0.0, 120.0)              # 0 to 120 hours (5 days)
     t_eval = np.linspace(0, 120, 241)  # every 0.5h
 
-    # integrate using `scipy.integrate.solve_ivp` with `method='RK45'
+    # integrate using `scipy.integrate.solve_ivp` with `method='RK45' or LSODA
     sol = solve_ivp(
-        fun=hrddr_ode,
-        t_span=t_span,
-        y0=y0,
+        hrddr_ode,
+        t_span,
+        y0,
         t_eval=t_eval,
         args=(patient_params, global_params),
-        method='RK45',
+
+        # method='RK45',
+        method='LSODA', # RECOMMENDED solver for mixed-timescale systems
+
         rtol=1e-6,
         atol=1e-9,
         dense_output=False,
@@ -326,10 +363,14 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
     if not sol.success:
         nan_arr = np.full(len(t_eval), np.nan)
         return {
-            'PATIENT_ID': patient_params['PATIENT_ID'],
-            't': t_eval, 'D': nan_arr, 'A': nan_arr,
-            'C': nan_arr, 'R': nan_arr, 'X': nan_arr,
-            'success': False
+            "PATIENT_ID": patient_params["PATIENT_ID"],
+            "t": t_eval,
+            "D": nan_arr,
+            "A": nan_arr,
+            "C": nan_arr,
+            "R": nan_arr,
+            "X": nan_arr,
+            "success": False,
         }
 
     # If integration succeeds, return the time grid and all state trajectories.
@@ -344,7 +385,9 @@ def simulate_patient(patient_params: dict, global_params: dict) -> dict:
         'success': True,
     }       
 
-# --- ODE score extraction ---
+# ================================================================
+# ODE SCORING
+# ================================================================
 def compute_ode_scores(sim_result: dict) -> dict:
     """
     Reduce a full time-course simulation to a few summary numbers.
@@ -390,11 +433,3 @@ def compute_ode_scores(sim_result: dict) -> dict:
         'D_resid':    D_resid,
         'success':    sim_result['success'],
     }
-
-def main():
-    # Placeholder for later testing / validation pipeline.
-    # For now, this file defines functions but does not run a full workflow.
-    pass
-
-if __name__ == "__main__":
-    main()
