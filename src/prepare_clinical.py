@@ -1,45 +1,122 @@
 import pandas as pd
 from pathlib import Path
+import logging
 
-# set the root path of the project
+# ---------------------------------------------------------------------
+# Project root
+# ---------------------------------------------------------------------
+
+# This script lives in src/, so we go up one level to reach project root.
 ROOT = Path(__file__).resolve().parent.parent
 
+logger = logging.getLogger(__name__)
+
+
 def main():
-    # cBioPortal clinical files contain metadata lines starting with "#".
-    # The comment parameter tells pandas to ignore those lines.
+    """
+    Prepare TCGA clinical data for survival analysis.
+
+    Steps:
+    1. Load cBioPortal clinical patient table
+    2. Remove missing or invalid survival records
+    3. Deduplicate patient entries
+    4. Convert survival status into binary event variable
+    5. Save cleaned dataset for downstream modelling
+    """
+
+    # -----------------------------------------------------------------
+    # Load raw clinical data
+    # -----------------------------------------------------------------
+
+    # cBioPortal files include metadata lines starting with "#"
+    # These must be ignored for correct parsing.
     clinical = pd.read_csv(
         ROOT / "data" / "raw" / "clinical" / "data_clinical_patient.txt",
         sep="\t",
         comment="#"
     )
 
-    # Keep only patients with non-missing overall survival information.
-    clinical_clean = clinical.dropna(subset=['OS_MONTHS', 'OS_STATUS'])
+    logger.info(f"Loaded clinical data: {clinical.shape[0]} rows")
 
-    # Remove patients with non-positive survival time.
-    # This avoids invalid or unusable follow-up values.
-    clinical_clean = clinical_clean[clinical_clean['OS_MONTHS'] > 0].copy()
+    # -----------------------------------------------------------------
+    # Basic survival filtering
+    # -----------------------------------------------------------------
 
-    # Remove duplicate patient rows if any exist.
-    # keep="first" keeps the first occurrence of each PATIENT_ID.
-    clinical_clean = clinical_clean.drop_duplicates(subset=["PATIENT_ID"], keep="first")
+    # Survival analysis requires:
+    # - known follow-up time (OS_MONTHS)
+    # - known event status (OS_STATUS)
+    # therefore drop patients with missing survival information.
+    clinical_clean = clinical.dropna(subset=["OS_MONTHS", "OS_STATUS"])
 
-    print(f"\nPatients with complete OS data: {len(clinical_clean)}\n")
+    # Remove invalid follow-up times.
+    # OS_MONTHS <= 0 is not biologically meaningful for survival modelling.
+    clinical_clean = clinical_clean[clinical_clean["OS_MONTHS"] > 0].copy()
 
-    # Convert OS_STATUS from text labels to binary event indicators.
-    # 0 = alive at last follow-up, 1 = deceased.
+    logger.info(
+        f"After filtering missing/invalid survival data: "
+        f"{len(clinical_clean)} patients"
+    )
+
+    # -----------------------------------------------------------------
+    # Deduplication
+    # -----------------------------------------------------------------
+
+    # TCGA tables occasionally contain duplicated patient IDs
+    # due to multiple samples or annotation merges.
+    clinical_clean = clinical_clean.drop_duplicates(
+        subset=["PATIENT_ID"],
+        keep="first"
+    )
+
+    logger.info(f"After deduplication: {len(clinical_clean)} patients")
+
+    # -----------------------------------------------------------------
+    # Convert survival status to binary event variable
+    # -----------------------------------------------------------------
+
+    # OS_STATUS format:
+    #   "0:LIVING"     -> censored (0)
+    #   "1:DECEASED"   -> event occurred (1)
     os_status_map = {
-        '0:LIVING': 0,
-        '1:DECEASED': 1
+        "0:LIVING": 0,
+        "1:DECEASED": 1
     }
-    # Map the OS_STATUS to binary events
-    clinical_clean['OS_EVENT'] = clinical_clean['OS_STATUS'].map(os_status_map)
 
-    # Save the cleaned clinical table to a CSV for the merge step later.
+    clinical_clean["OS_EVENT"] = clinical_clean["OS_STATUS"].map(os_status_map)
+
+    # -----------------------------------------------------------------
+    # Validation check (important!)
+    # -----------------------------------------------------------------
+
+    # If unmapped values exist, survival modelling becomes invalid.
+    unmapped = clinical_clean["OS_EVENT"].isna().sum()
+
+    if unmapped > 0:
+        logger.warning(
+            f"Found {unmapped} unmapped OS_STATUS values. "
+            f"These rows may be excluded downstream."
+        )
+
+    # -----------------------------------------------------------------
+    # Summary statistics
+    # -----------------------------------------------------------------
+
+    logger.info(
+        "Survival summary:\n"
+        f"  Patients        : {len(clinical_clean)}\n"
+        f"  Event rate      : {clinical_clean['OS_EVENT'].mean():.1%}\n"
+        f"  Median OS (mo)  : {clinical_clean['OS_MONTHS'].median():.1f}"
+    )
+
+    # -----------------------------------------------------------------
+    # Save processed output
+    # -----------------------------------------------------------------
+
     out_path = ROOT / "data" / "processed" / "clinical_clean.csv"
     clinical_clean.to_csv(out_path, index=False)
-    
-    #print("Saved: data/processed/clinical_clean.csv")
+
+    logger.info(f"Saved cleaned clinical data to: {out_path}")
+
 
 if __name__ == "__main__":
     main()
