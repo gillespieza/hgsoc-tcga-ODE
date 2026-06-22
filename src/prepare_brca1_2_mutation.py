@@ -1,40 +1,111 @@
 from pathlib import Path
 import pandas as pd
+import logging
 
-# set the root path of the project
+# ---------------------------------------------------------------------
+# Project root
+# ---------------------------------------------------------------------
+
 ROOT = Path(__file__).resolve().parent.parent
+logger = logging.getLogger(__name__)
 
 def main():
-    # Load the raw mutation table from cBioPortal.
-    # comment="#" skips metadata lines at the top of the file.
+    """
+    Create BRCA1/2 mutation status for TCGA-OV cohort.
+
+    Output:
+    - Adds binary BRCA_MUTANT label to clinical dataset
+
+    Definition:
+    - 1 = at least one recorded mutation in BRCA1 or BRCA2
+    - 0 = no detected mutations in these genes
+    """
+
+    # -----------------------------------------------------------------
+    # Load mutation data
+    # -----------------------------------------------------------------
+
     mutations = pd.read_csv(
         ROOT / "data" / "raw" / "mutation" / "data_mutations.txt",
         sep="\t",
         comment="#"
     )
+    
+    logger.info(f"Loaded mutation table: {mutations.shape}")
 
-    # Keep only BRCA1 and BRCA2 mutation records.
-    brca_mut = mutations[mutations['Hugo_Symbol'].isin(['BRCA1', 'BRCA2'])]
+    # -----------------------------------------------------------------
+    # Filter BRCA genes
+    # -----------------------------------------------------------------
 
-    # Convert sample barcodes to 12-character patient IDs.
-    # This collapses multiple samples from the same patient into one identifier.
-    brca_patients = set(brca_mut['Tumor_Sample_Barcode'].str[:12]) # TCGA patient ID prefix
+    brca_mut = mutations[
+        mutations["Hugo_Symbol"].isin(["BRCA1", "BRCA2"])
+    ].copy()
 
-    # Load the cleaned clinical table from the previous step.
-    clinical_clean = pd.read_csv(ROOT / "data" / "processed" / "clinical_clean.csv")
+    # Convert sample → patient ID
+    brca_patients = set(
+        brca_mut["Tumor_Sample_Barcode"].str[:12]
+    )
 
-    # Create a binary mutation label:
-    # 1 = patient has a BRCA1/2 mutation, 0 = no BRCA1/2 mutation detected.
-    clinical_clean["BRCA_MUTANT"] = clinical_clean["PATIENT_ID"].apply(
+    logger.info(f"BRCA-mutant samples found: {len(brca_patients)}")
+
+    # -----------------------------------------------------------------
+    # Load clinical cohort
+    # -----------------------------------------------------------------
+
+    clinical_path = ROOT / "data" / "processed" / "clinical_clean.csv"
+    clinical = pd.read_csv(clinical_path)
+
+    clinical_ids = set(clinical["PATIENT_ID"])
+
+    # -----------------------------------------------------------------
+    # Sanity check: mutation coverage
+    # -----------------------------------------------------------------
+
+    overlap = len(clinical_ids & brca_patients)
+
+    logger.info(
+        f"Mutation overlap with clinical cohort: {overlap}"
+    )
+
+    missing_in_clinical = brca_patients - clinical_ids
+
+    if missing_in_clinical:
+        logger.warning(
+            f"{len(missing_in_clinical)} BRCA-mutant samples "
+            f"not found in clinical cohort (likely filtered earlier)"
+        )
+
+    # -----------------------------------------------------------------
+    # Create binary label
+    # -----------------------------------------------------------------
+
+    clinical["BRCA_MUTANT"] = clinical["PATIENT_ID"].apply(
         lambda pid: 1 if pid in brca_patients else 0
     )
 
-    # Print a simple summary of the mutation counts.
-    print(f"\nBRCA1/2 mutant patients: {clinical_clean['BRCA_MUTANT'].sum()}")
-    print(f"\nBRCA1/2 wildtype patients: {(clinical_clean['BRCA_MUTANT'] == 0).sum()}\n")
+    # -----------------------------------------------------------------
+    # Summary
+    # -----------------------------------------------------------------
 
-    # Save the updated clinical table back to disk.
-    clinical_clean.to_csv(ROOT / "data" / "processed" / "clinical_clean.csv", index=False)
+    n_mut = clinical["BRCA_MUTANT"].sum()
+    n_wt = len(clinical) - n_mut
+
+    logger.info(
+        "BRCA status summary:\n"
+        f"  Mutant   : {n_mut}\n"
+        f"  Wildtype : {n_wt}"
+    )
+
+    # -----------------------------------------------------------------
+    # Save output (OVERWRITE WARNING)
+    # -----------------------------------------------------------------
+
+    out_path = ROOT / "data" / "processed" / "clinical_clean.csv"
+
+    clinical.to_csv(out_path, index=False)
+
+    logger.info(f"Updated clinical file saved to: {out_path}")
+
 
 if __name__ == "__main__":
     main()
