@@ -7,7 +7,7 @@ This file runs the full preprocessing/model pipeline in order:
 2. prepare_RNA.py               - load RNA-seq data and keep ODE genes
 3. prepare_brca1_2_mutation.py  - build BRCA1/2 mutation labels
 4. merge_data.py                - merge clinical + expression data
-5. ode_model.py                 - build ODE inputs / model outputs
+5. run_ode_cohort.py            - simulate cohort and save ODE-derived scores
 """
 
 import sys
@@ -15,7 +15,6 @@ import time
 import logging
 import os
 from pathlib import Path
-import pandas as pd
 
 # Limit NUMEXPR threads to avoid performance or compatibility issues on Windows.
 # NUMEXPR_MAX_THREADS=16 is a reasonable default for most modern CPUs (as of 2026).
@@ -109,7 +108,7 @@ def main():
         "prepare_RNA",
         "prepare_brca1_2_mutation",
         "merge_data",
-        "ode_model",
+        #"ode_model",
         #"ode_validation",
         "run_ode_cohort",
     ]
