@@ -128,8 +128,7 @@ def plot_rsf_importances(importances, stds):
     print(f"Saved: {out}")
     return out
 
-
-if __name__ == "__main__":
+def main():
     X, y = load_data()
     print(f"Loaded: {X.shape[0]} patients, {X.shape[1]} genes\n")
 
@@ -155,3 +154,6 @@ if __name__ == "__main__":
     out = ROOT / 'data/processed/feature_importance_table.csv'
     feat_df.to_csv(out, index=False)
     print(f"\nFeature table saved to {out}")
+
+if __name__ == "__main__":
+    main()
