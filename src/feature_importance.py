@@ -351,7 +351,7 @@ def plot_cox_coefficients(coefs: pd.Series, alpha: float) -> None:
     out_path = fig_dir / "fig_cox_lasso_coefficients.png"
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close()
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./results/figures.fig_cox_lasso_coefficients.png")
 
 
 def plot_rsf_importances(
@@ -403,7 +403,7 @@ def plot_rsf_importances(
     out_path = fig_dir / "fig_rsf_feature_importances.png"
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close()
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./results/figures/fig_rsf_feature_importances.png")
 
 
 # =================================================================
@@ -434,7 +434,6 @@ def main() -> None:
     # -----------------------------------------------------------------
     logger.info('-' * 50)
     logger.info("Cox LASSO (CV alpha, full-data fit)")
-    logger.info('-' * 50)
     coefs, best_alpha = fit_cox_lasso_full(X, y)
     logger.info(f"Cox LASSO coefficients (alpha={best_alpha}):\n{coefs.to_string()}")
     plot_cox_coefficients(coefs, best_alpha)
@@ -442,7 +441,8 @@ def main() -> None:
     # -----------------------------------------------------------------
     # RSF — full-data fit with permutation importance
     # -----------------------------------------------------------------
-    logger.info("--- RSF permutation importances (n=20 repeats, full-data fit) ---")
+    logger.info('-' * 50)
+    logger.info("RSF permutation importances (n=20 repeats, full-data fit)")
     importances, stds = fit_rsf_full(X, y)
     logger.info(f"RSF importances:\n{importances.to_string()}")
     plot_rsf_importances(importances, stds)
@@ -460,7 +460,7 @@ def main() -> None:
     out_path = ROOT / "data" / "processed" / "feature_importance_table.csv"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     feat_df.to_csv(out_path, index=False)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./data/processed/feature_importance_table.csv")
 
 
 if __name__ == "__main__":

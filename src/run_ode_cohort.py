@@ -158,7 +158,7 @@ def main():
     n_failed = (~scores_df["success"]).sum()
     n_success = scores_df["success"].sum()
 
-    logger.info(
+    logger.summary(
         f"ODE simulation complete: "
         f"{n_success}/{n_total} successful, "
         f"{n_failed} failed ({n_failed / n_total:.1%})"
@@ -186,8 +186,8 @@ def main():
         index=False,
     )
 
-    logger.info(
-        f"Saved: data/processed/ode_scores.csv "
+    logger.success(
+        f"[FILE] Saved: ./data/processed/ode_scores.csv "
         f"({n_total} rows, including failures)"
     )
 
@@ -237,8 +237,8 @@ def main():
         index=False,
     )
 
-    logger.info(
-        f"Saved: data/processed/survival_analysis_df.csv "
+    logger.success(
+        f"[FILE] Saved: ./data/processed/survival_analysis_df.csv "
         f"({len(analysis_df)} rows)"
     )
 
@@ -250,16 +250,18 @@ def main():
     # - patient counts are as expected
     # - survival data appear reasonable
     # - ODE-derived features fall within plausible ranges
+    logger.info('-' * 50)
     logger.info(
         f"Sanity checks (survival_analysis_df):\n"
-        f"  Shape          : {analysis_df.shape}\n"
-        f"  OS event rate  : {analysis_df['OS_EVENT'].mean():.1%}\n"
-        f"  Median OS      : {analysis_df['OS_MONTHS'].median():.1f} months\n"
-        f"  AUC_X range    : {analysis_df['AUC_X'].min():.4f} – "
+        f"\t\t\t\t\tShape          : {analysis_df.shape}\n"
+        f"\t\t\t\t\tOS event rate  : {analysis_df['OS_EVENT'].mean():.1%}\n"
+        f"\t\t\t\t\tMedian OS      : {analysis_df['OS_MONTHS'].median():.1f} months\n"
+        f"\t\t\t\t\tAUC_X range    : {analysis_df['AUC_X'].min():.4f} – "
         f"{analysis_df['AUC_X'].max():.4f}\n"
-        f"  AUC_X median   : {analysis_df['AUC_X'].median():.4f}\n"
-        f"  BRCA mutant n  : {int(analysis_df['BRCA_MUTANT'].sum())}"
+        f"\t\t\t\t\tAUC_X median   : {analysis_df['AUC_X'].median():.4f}\n"
+        f"\t\t\t\t\tBRCA mutant n  : {int(analysis_df['BRCA_MUTANT'].sum())}"
     )
+    logger.info('-' * 50)
 
 
 if __name__ == "__main__":

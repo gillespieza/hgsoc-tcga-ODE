@@ -667,12 +667,12 @@ def save_comparison_table(
 
     df = pd.DataFrame(rows)
 
+    logger.info('-' * 50)
     logger.info("Model comparison table:")
     logger.info(
-        f"{'Model':<30} {'Feature set':<26} "
-        f"{'C-index (CV)':<18} {'95% Bootstrap CI':<20} Notes"
+        f"{'MODEL':<30} {'FEATURE SET':<26} "
+        f"{'C-INDEX (CV)':<18} {'95% BOOTSTRAP CI':<20} NOTES"
     )
-    logger.info("-" * 110)
 
     for _, r in df.iterrows():
         ci_str = f"[{r['CI_low']}, {r['CI_high']}]"
@@ -684,7 +684,7 @@ def save_comparison_table(
     out_path = ROOT / "data" / "processed" / "ml_comparison_table.csv"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out_path, index=False)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./data/processed/ml_comparison_table.csv")
 
     return df
 
@@ -748,7 +748,7 @@ def plot_forest(
     out_path = fig_dir / "fig_ml_forest_plot.png"
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close()
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./results/figures/fig_ml_forest_plot.png")
 
 
 def plot_bootstrap_distributions(
@@ -806,7 +806,7 @@ def plot_bootstrap_distributions(
     out_path = fig_dir / "fig_ml_bootstrap_distributions.png"
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close()
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./results/figures/fig_ml_bootstrap_distributions.png")
 
 
 # =================================================================
@@ -859,10 +859,12 @@ def main() -> None:
     # -----------------------------------------------------------------
     # Cross-validated model fitting
     # -----------------------------------------------------------------
-    logger.info("--- Cox LASSO (5-fold outer CV, inner 3-fold alpha) ---")
+    logger.info('-' * 50)
+    logger.info("Cox LASSO (5-fold outer CV, inner 3-fold alpha)")
     lasso_cindices, lasso_alphas = fit_cox_lasso(X, y, cv)
 
-    logger.info("--- Random Survival Forest (5-fold CV) ---")
+    logger.info('-' * 50)
+    logger.info("Random Survival Forest (5-fold CV)")
     rsf_cindices = fit_rsf(X, y, cv)
 
     # -----------------------------------------------------------------
@@ -890,7 +892,8 @@ def main() -> None:
     # -----------------------------------------------------------------
     # Bootstrap confidence intervals
     # -----------------------------------------------------------------
-    logger.info("--- Bootstrap CIs (1000 reps) ---")
+    logger.info('-' * 50)
+    logger.info("Bootstrap CIs (1000 reps)")
     ode_boot   = bootstrap_cindex(ode_risk,  y, desc="ODE bootstrap")
     lasso_boot = bootstrap_cindex(lasso_oof, y, desc="LASSO bootstrap")
     rsf_boot   = bootstrap_cindex(rsf_oof,   y, desc="RSF bootstrap")

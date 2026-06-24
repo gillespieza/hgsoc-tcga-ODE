@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 """
-Master pipeline script for HGSOC TCGA ODE survival modelling.
+Master pipeline orchestrator for HGSOC TCGA ODE survival modelling.
 
-Purpose
--------
-This script orchestrates the complete analysis workflow, starting from
-raw clinical, mutation, and RNA-seq data and ending with survival,
-machine-learning, and biomarker analyses.
+Orchestrates the complete analysis workflow, starting from raw clinical,
+mutation, and RNA-seq data and ending with survival, machine-learning,
+and biomarker analyses.
 
 The pipeline integrates:
 
@@ -33,6 +31,9 @@ Pipeline stages
 8.  ml_benchmark.py              - Cox LASSO + RSF benchmark
 9.  feature_importance.py        - model interpretation
 10. kaplan_meier.py              - KM stratification and log-rank test
+
+Note: ode_model is imported as a library by downstream scripts and is
+not executed as a standalone pipeline stage.
 """
 
 import sys
@@ -41,20 +42,12 @@ import logging
 import os
 from pathlib import Path
 
-# ---------------------------------------------------------------------
-# Environment configuration
-# ---------------------------------------------------------------------
+from tqdm import tqdm
+from colorama import just_fix_windows_console
 
-# Several scientific Python libraries may use NumExpr internally
-# for accelerated numerical computations.
-#
-# Explicitly limiting the thread count avoids occasional performance
-# inconsistencies and warning messages on Windows systems.
-os.environ["NUMEXPR_MAX_THREADS"] = "16"
-
-# ---------------------------------------------------------------------
+# =================================================================
 # Project paths
-# ---------------------------------------------------------------------
+# =================================================================
 
 # This file lives in the project root.
 #
@@ -70,69 +63,109 @@ os.environ["NUMEXPR_MAX_THREADS"] = "16"
 # repository rather than the current working directory.
 ROOT = Path(__file__).resolve().parent
 
-# Python searches for modules in directories listed in sys.path.
-#
-# Adding src/ allows project modules to be imported directly:
-#
-#     import prepare_clinical
-#
-# without requiring installation as a formal Python package.
-#
-# This is a common pattern in research code where simplicity and
-# transparency are often preferred over packaging infrastructure.
-sys.path.insert(0, str(ROOT / "src"))
+# =================================================================
+# Logging helpers
+# =================================================================
 
-# ---------------------------------------------------------------------
-# Logging configuration
-# ---------------------------------------------------------------------
+SUCCESS = 25
+logging.addLevelName(SUCCESS, "SUCCESS")
 
-log_file = ROOT / "pipeline.log"
+SUMMARY = 26
+logging.addLevelName(SUMMARY, "SUMMARY")
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.FileHandler(log_file, encoding="utf-8"),
-        logging.StreamHandler(sys.stdout),
-    ],
-)
+def success(self, message, *args, **kwargs):
+    if self.isEnabledFor(SUCCESS):
+        self._log(SUCCESS, message, args, **kwargs)
+
+def summary(self, message, *args, **kwargs):
+    if self.isEnabledFor(SUMMARY):
+        self._log(SUMMARY, message, args, **kwargs)
+
+logging.Logger.success = success
+logging.Logger.summary = summary
+
+# =================================================================
+# Logging setup
+# =================================================================
 
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------
-# Terminal colours
-# ---------------------------------------------------------------------
+log_file = ROOT / "pipeline.log"
 
-RED = "\u001b[31m"
-GREEN = "\u001b[32m"
-YELLOW = "\u001b[33m"
-RESET = "\u001b[0m"
-CYAN = "\u001b[36m"
+class _ColorFormatter(logging.Formatter):
+    """
+    Formatter that prepends ANSI colour codes for terminal output only.
 
+    Applied exclusively to the StreamHandler so that pipeline.log
+    contains clean, ANSI-free text — readable in editors and CI logs.
+    """
 
-def success_msg(script_name: str, elapsed: float):
-    return f"[OK] {script_name} completed ({elapsed:.2f}s)\n"
+    logging.Logger.success = success
 
+    _COLOURS = {
+        SUCCESS: "\033[32m",
+        SUMMARY: "\u001b[36m",
+        logging.DEBUG:    "\u001b[36m",   # cyan
+        logging.INFO:     "\u001b[0m",    # default terminal colour
+        logging.WARNING:  "\u001b[33m",   # yellow
+        logging.ERROR:    "\u001b[31m",   # red
+        logging.CRITICAL: "\u001b[31m",   # red
+    }
+    _RESET = "\u001b[0m"
+
+    def format(self, record: logging.LogRecord) -> str:
+        """Prepend the level-appropriate colour code and append a reset."""
+        colour = self._COLOURS.get(record.levelno, self._RESET)
+        return f"{colour}{super().format(record)}{self._RESET}"
+
+class TqdmLoggingHandler(logging.Handler):
+    """
+    Logging handler compatible with tqdm progress bars.
+    """
+
+    def emit(self, record):
+        try:
+            msg = self.format(record)
+            tqdm.write(msg)
+        except Exception:
+            self.handleError(record)
+
+def success_msg(script_name: str, elapsed: float) -> str:
+    """Return a formatted completion message for a finished pipeline stage."""
+    return f"[OK] {script_name} completed ({elapsed:.2f}s)"
 
 def fail_msg(script_name: str, elapsed: float):
     return f"[FAIL] {script_name} failed after {elapsed:.2f}s\n"
 
 
-def run_script(script_name: str):
+def run_script(script_name: str) -> float:
     """
     Import a module from src/ and execute its main() function.
 
-    Most pipeline stages expose a main() entry point. This allows
-    individual scripts to be run independently while also supporting
-    orchestration from this master pipeline.
+    Each pipeline stage exposes a main() entry point, allowing stages
+    to be run independently or orchestrated from this master script.
+    Dynamic imports are used so stages can be listed as strings and
+    executed sequentially without hard-coded top-level imports.
 
-    Dynamic imports are used so that pipeline stages can be listed
-    as strings and executed sequentially without hard-coded imports.
+    Parameters
+    ----------
+    script_name : str
+        Module name (without .py) corresponding to a script in src/.
+
+    Returns
+    -------
+    float
+        Wall-clock time taken to complete the stage, in seconds.
+
+    Raises
+    ------
+    Exception
+        Re-raises any exception raised by the stage after logging it.
     """
 
-    logger.info(f"{RESET}{'=' * 60}{RESET}")
-    logger.info(f"{YELLOW}Running: {script_name}{RESET}")
-    logger.info(f"{RESET}{'=' * 60}{RESET}")
+    logger.info("=" * 60)
+    logger.info(f"▶ Starting {script_name}")
+    logger.info("=" * 60)
 
     start = time.time()
 
@@ -151,12 +184,14 @@ def run_script(script_name: str):
         if hasattr(module, "main"):
             module.main()
         else:
+            # Stage has no main() — re-import triggers module-level code,
+            # but this pattern is fragile. Stages should always define main().
             __import__(script_name)
 
         elapsed = time.time() - start
 
-        logger.info(f"{GREEN}{success_msg(script_name, elapsed)}{RESET}")
-
+        logger.success(success_msg(script_name, elapsed))
+        
         return elapsed
 
     except Exception:
@@ -165,46 +200,92 @@ def run_script(script_name: str):
         logger.exception(
             f"{script_name} failed after {elapsed:.2f}s"
         )
+        logger.exception(fail_msg(script_name, elapsed))
 
         raise
-
-
-def main():
+    
+def main() -> None:
     """
     Run the complete preprocessing, modelling, and analysis workflow.
+
+    Configures the environment and logging, then executes each pipeline
+    stage in dependency order. Stages are imported dynamically at
+    runtime and their main() functions called sequentially.
     """
 
-    logger.info(f"{CYAN}{'=' * 60}{RESET}")
-    logger.info(f"{CYAN}HGSOC TCGA ODE Survival Pipeline{RESET}")
-    logger.info(f"{CYAN}{'=' * 60}{RESET}")
+    # -----------------------------------------------------------------
+    # Environment configuration
+    # -----------------------------------------------------------------
+
+    # Several scientific Python libraries use NumExpr internally for
+    # accelerated numerical computation. Bounding the thread count
+    # avoids occasional performance warnings on Windows systems.
+    os.environ["NUMEXPR_MAX_THREADS"] = "16"
+
+    # -----------------------------------------------------------------
+    # Add src/ to module search path
+    # -----------------------------------------------------------------
+
+    # run_script() imports stage modules by name at runtime.
+    # Inserting src/ here ensures they are found regardless of which
+    # directory the pipeline is launched from.
+    sys.path.insert(0, str(ROOT / "src"))
+
+    # -----------------------------------------------------------------
+    # Logging configuration
+    # -----------------------------------------------------------------
+
+    just_fix_windows_console()
+    
+    log_format = "%(asctime)s - %(levelname)s - %(message)s"
+
+    # FileHandler receives plain text — no colour codes in the log file.
+    file_handler = logging.FileHandler(log_file, encoding="utf-8")
+    file_handler.setFormatter(logging.Formatter(log_format))
+
+    # StreamHandler receives colour-coded output for terminal readability.
+    stream_handler = logging.StreamHandler(sys.stdout)
+    stream_handler.setFormatter(_ColorFormatter(log_format))
+
+    logging.basicConfig(
+        level=logging.INFO,
+        handlers=[file_handler, stream_handler],
+    )
+
+    # -----------------------------------------------------------------
+    # Pipeline execution
+    # -----------------------------------------------------------------
+
+    logger.info("=" * 60)
+    logger.info("HGSOC TCGA ODE Survival Pipeline")
+    logger.info("=" * 60)
 
     total_start = time.time()
 
-    # Pipeline order is critical because each stage produces outputs
-    # consumed by downstream analyses.
+    # Pipeline order is critical: each stage produces outputs consumed
+    # by one or more downstream stages.
     #
     # Data flow:
     #
-    # Clinical data
-    #      │
-    # RNA-seq data
-    #      │
-    # BRCA mutation labels
-    #      ▼
-    # Integrated patient table
-    #      ▼
-    # Patient-specific ODE simulations
-    #      ▼
-    # ODE-derived biomarkers
-    #      ▼
-    # Survival and machine-learning analyses
+    #   Clinical data  ──┐
+    #   RNA-seq data   ──┤
+    #   BRCA mutations ──┘
+    #                    ▼
+    #          Integrated patient table
+    #                    ▼
+    #     Patient-specific ODE simulations
+    #                    ▼
+    #           ODE-derived biomarkers
+    #                    ▼
+    #  Survival and machine-learning analyses
     steps = [
         "prepare_clinical",
         "prepare_RNA",
         "prepare_brca1_2_mutation",
         "merge_data",
 
-        # Imported by downstream scripts rather than run directly.
+        # ode_model is imported as a library by downstream scripts;
+        # it is not executed as a standalone pipeline stage.
         # "ode_model",
 
         # Validate model behaviour on representative patients before
@@ -226,13 +307,9 @@ def main():
         # model performance estimates.
         "ml_benchmark",
 
-        # Interpret model behaviour.
-        #
-        # Cox model:
-        #     coefficient magnitude
-        #
-        # RSF:
-        #     permutation importance
+        # Interpret model behaviour:
+        #   Cox model — coefficient magnitude
+        #   RSF       — permutation importance
         "feature_importance",
 
         # Visualise survival differences between groups defined by
@@ -248,11 +325,9 @@ def main():
 
     total_elapsed = time.time() - total_start
 
-    logger.info(f"{GREEN}{'=' * 60}{RESET}")
-    logger.info(
-        f"{GREEN}Pipeline complete ({total_elapsed:.2f}s total){RESET}"
-    )
-    logger.info(f"{GREEN}{'=' * 60}{RESET}")
+    logger.info("=" * 60)
+    logger.info(f"Pipeline complete ({total_elapsed:.2f}s total)")
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":

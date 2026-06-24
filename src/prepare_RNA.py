@@ -175,7 +175,7 @@ def main():
         .drop(columns="_missing")
     )
 
-    logger.info(
+    logger.summary(
         f"Final RNA cohort: {expr_ode.shape[0]} patients, {expr_ode.shape[1]} genes"
     )
 
@@ -187,7 +187,7 @@ def main():
 
     expr_ode.reset_index().to_csv(out_path, index=False)
 
-    logger.info(f"Saved processed RNA matrix to {out_path}")
+    logger.success(f"[FILE] Saved processed RNA matrix to ./data/processed/rna_clean.csv")
 
 
     # -----------------------------------------------------------------
@@ -200,14 +200,16 @@ def main():
     clinical_ids = set(clinical["PATIENT_ID"])
     rna_ids = set(expr_ode.index)
 
+    logger.info('-' * 50)
     logger.info(
-        "\nCohort overlap debug:\n"
-        f"  Clinical patients : {len(clinical_ids)}\n"
-        f"  RNA patients      : {len(rna_ids)}\n"
-        f"  Overlap           : {len(clinical_ids & rna_ids)}\n"
-        f"  Only clinical     : {len(clinical_ids - rna_ids)}\n"
-        f"  Only RNA          : {len(rna_ids - clinical_ids)}\n"
+        "COHORT OVERLAP sanity check:\n"
+        f"\t\t\t\t\t Clinical patients : {len(clinical_ids)}\n"
+        f"\t\t\t\t\t RNA patients      : {len(rna_ids)}\n"
+        f"\t\t\t\t\t Overlap           : {len(clinical_ids & rna_ids)}\n"
+        f"\t\t\t\t\t Only clinical     : {len(clinical_ids - rna_ids)}\n"
+        f"\t\t\t\t\t Only RNA          : {len(rna_ids - clinical_ids)}"
     )
+    logger.info('-' * 50)
 
 if __name__ == "__main__":
     main()

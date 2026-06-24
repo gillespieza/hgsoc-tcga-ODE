@@ -41,12 +41,10 @@ def main():
 
     overlap = clinical_ids & expr_ids
 
-    logger.info(
-        f"Cohort sizes before merge:\n"
-        f"  Clinical : {len(clinical_ids)}\n"
-        f"  RNA      : {len(expr_ids)}\n"
-        f"  Overlap  : {len(overlap)}"
-    )
+    logger.info("Cohort sizes before merge:")
+    logger.info(f"    Clinical   : {len(clinical_ids)}")
+    logger.info(f"    RNA        : {len(expr_ids)}")
+    logger.info(f"    Overlap    : {len(overlap)}")
 
     # Sanity check: ensure merge is meaningful
     if len(overlap) == 0:
@@ -65,7 +63,7 @@ def main():
     # Post-merge validation
     # -----------------------------------------------------------------
 
-    logger.info(f"Merged dataset shape: {merged.shape}")
+    logger.summary(f"Merged dataset shape: {merged.shape}")
 
     expected_n = len(overlap)
 
@@ -97,7 +95,7 @@ def main():
     out_path = ROOT / "data" / "processed" / "hgsoc_tcga_merged.csv"
     merged.to_csv(out_path, index=False)
 
-    logger.info(f"Saved merged cohort to: {out_path}")
+    logger.success(f"[FILE] Saved merged cohort to ./data/processed/hgsoc_tcga_merged.csv")
 
 
 if __name__ == "__main__":

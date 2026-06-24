@@ -90,11 +90,13 @@ def main():
     n_mut = clinical["BRCA_MUTANT"].sum()
     n_wt = len(clinical) - n_mut
 
-    logger.info(
+    logger.info('-' * 50)
+    logger.summary(
         "BRCA status summary:\n"
-        f"  Mutant   : {n_mut}\n"
-        f"  Wildtype : {n_wt}"
+        f"\t\t\t\t\t Mutant   : {n_mut}\n"
+        f"\t\t\t\t\t Wildtype : {n_wt}"
     )
+    logger.info('-' * 50)
 
     # -----------------------------------------------------------------
     # Save output (OVERWRITE WARNING)
@@ -104,7 +106,7 @@ def main():
 
     clinical.to_csv(out_path, index=False)
 
-    logger.info(f"Updated clinical file saved to: {out_path}")
+    logger.success(f"[FILE] Updated clinical file ./data/processed/clinical_clean.csv")
 
 
 if __name__ == "__main__":

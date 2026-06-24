@@ -156,7 +156,7 @@ def main():
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
-    logger.info(f"Saved figure: {out_path}")
+    logger.success(f"[FILE] Saved figure: ./results/figures/ode_validation_trajectories.png")
 
 
 if __name__ == "__main__":

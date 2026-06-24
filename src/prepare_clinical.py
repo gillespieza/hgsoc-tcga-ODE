@@ -101,12 +101,14 @@ def main():
     # Summary statistics
     # -----------------------------------------------------------------
 
-    logger.info(
-        "Survival summary:\n"
-        f"  Patients        : {len(clinical_clean)}\n"
-        f"  Event rate      : {clinical_clean['OS_EVENT'].mean():.1%}\n"
-        f"  Median OS (mo)  : {clinical_clean['OS_MONTHS'].median():.1f}"
+    logger.info('-' * 50)
+    logger.summary(
+        f"SURVIVAL SUMMARY:\n"
+        f"\t\t\t\t\t Patients          : {len(clinical_clean)}\n"
+        f"\t\t\t\t\t Event rate        : {clinical_clean['OS_EVENT'].mean():.1%}\n"
+        f"\t\t\t\t\t Median OS (mo)    : {clinical_clean['OS_MONTHS'].median():.1f}"
     )
+    logger.info('-' * 50)
 
     # -----------------------------------------------------------------
     # Save processed output
@@ -115,7 +117,7 @@ def main():
     out_path = ROOT / "data" / "processed" / "clinical_clean.csv"
     clinical_clean.to_csv(out_path, index=False)
 
-    logger.info(f"Saved cleaned clinical data to: {out_path}")
+    logger.success(f"[FILE] Saved cleaned clinical data to ./data/processed/clinical_clean.csv")
 
 
 if __name__ == "__main__":
