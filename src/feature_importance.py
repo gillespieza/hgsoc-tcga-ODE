@@ -36,7 +36,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -273,7 +276,7 @@ def fit_rsf_full(
         n_estimators=200,
         min_samples_leaf=25,
         max_features=0.5,
-        n_jobs=-1,
+        n_jobs=4,
         random_state=42,
     )
     rsf.fit(X.values, y)
@@ -282,7 +285,7 @@ def fit_rsf_full(
         rsf, X.values, y,
         n_repeats=20,
         random_state=42,
-        n_jobs=-1,
+        n_jobs=4,
     )
 
     importances = pd.Series(
@@ -429,7 +432,9 @@ def main() -> None:
     # -----------------------------------------------------------------
     # Cox LASSO — full-data fit with CV alpha selection
     # -----------------------------------------------------------------
-    logger.info("--- Cox LASSO (CV alpha, full-data fit) ---")
+    logger.info('-' * 50)
+    logger.info("Cox LASSO (CV alpha, full-data fit)")
+    logger.info('-' * 50)
     coefs, best_alpha = fit_cox_lasso_full(X, y)
     logger.info(f"Cox LASSO coefficients (alpha={best_alpha}):\n{coefs.to_string()}")
     plot_cox_coefficients(coefs, best_alpha)
