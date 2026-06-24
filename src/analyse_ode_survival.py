@@ -167,9 +167,9 @@ def km_tertile_split(df, score_col, out_path):
 # Loop over each ODE score
 # ---------------------------------------------------------------------
 for score_col in score_cols:
-    print(f"\n{'=' * 70}")
+    print(f"\n{'-' * 50}")
     print(f"Processing score: {score_col}")
-    print(f"{'=' * 70}")
+    print(f"{'-' * 50}")
 
     # -------------------------------------------------------------
     # Threshold scan (EXPLORATORY — p-value not valid for inference)
