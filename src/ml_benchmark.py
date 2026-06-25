@@ -98,11 +98,13 @@ LASSO_ALPHAS_14 = [0.01, 0.05, 0.1, 0.5, 1.0]
 # ~330 training patients per outer fold — severe p >> n).
 #
 # Why no small alphas here?
-# With p >> n, a small alpha (e.g. 0.001) leaves thousands of non-zero
-# coefficients. The resulting linear predictor Xβ can easily exceed ±700,
-# causing exp(Xβ) to overflow to inf inside CoxnetSurvivalAnalysis.predict().
-# The minimum safe alpha for this regime is ~0.1; the grid starts there.
-LASSO_ALPHAS_ALL = [0.1, 0.5, 1.0, 5.0, 10.0]
+# With p >> n, even alpha=0.1 triggers an ArithmeticError ("weights too
+# large") inside glmnet's Cython layer on inner folds of ~220 patients.
+# glmnet internally extends the path below the smallest requested alpha via
+# alpha_min_ratio; _select_alpha_inner_cv sets alpha_min_ratio=1.0 to pin
+# the path to exactly these values with no downward extrapolation.
+# The floor of 1.0 was validated empirically on this cohort.
+LASSO_ALPHAS_ALL = [1.0, 2.0, 5.0, 10.0, 20.0]
 
 
 # =================================================================
@@ -528,6 +530,12 @@ def _select_alpha_inner_cv(
             cox_path = CoxnetSurvivalAnalysis(
                 l1_ratio=1.0,
                 alphas=alphas_desc,
+                # alpha_min_ratio=1.0 pins the path exactly to the supplied
+                # alphas with no downward extrapolation. Without this, glmnet
+                # extends the path below the smallest alpha using an internal
+                # ratio, which reaches numerically unsafe values in the p >> n
+                # regime and raises ArithmeticError in the Cython solver.
+                alpha_min_ratio=1.0,
                 fit_baseline_model=True,
                 normalize=False,
                 max_iter=10000,
