@@ -836,7 +836,7 @@ def main() -> None:
         scan_summary_rows.append({
             "score":             score_col,
             "best_cutoff":       best_cut,
-            "scan_best_p":       best_p,         # exploratory only
+            "scan_best_p":       best_p,          # exploratory only
             "tertile_logrank_p": tertile_p,       # primary, valid for inference
             "exploratory_km_p":  exploratory_p,   # same caveat as scan_best_p
         })
