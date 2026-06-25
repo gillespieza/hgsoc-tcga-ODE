@@ -188,7 +188,7 @@ def km_tertile_split(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: KM plot")
 
     return p_val
 
@@ -254,7 +254,7 @@ def _run_threshold_scan(
     csv_path = out_dir / f"{score_col.lower()}_threshold_scan.csv"
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     scan.to_csv(csv_path, index=False)
-    logger.info(f"Saved: {csv_path}")
+    logger.success(f"[FILE] Saved: {score_col.lower()}_threshold_scan.csv")
 
     # NOTE: selecting the cutpoint by minimising log-rank p invalidates that
     # p-value for inference. This result is retained as exploratory only.
@@ -317,7 +317,7 @@ def _plot_threshold_scan(
     out_path = fig_dir / f"fig_threshold_scan_{score_col.lower()}.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_threshold_scan_{score_col.lower()}.png")
 
 
 # =================================================================
@@ -395,7 +395,7 @@ def _km_exploratory(
     out_path = fig_dir / f"fig_km_{score_col.lower()}_exploratory_cutoff.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_km_{score_col.lower()}_exploratory_cutoff.png")
 
     return float(km_res.p_value)
 
@@ -450,7 +450,7 @@ def _plot_histogram(
     out_path = fig_dir / f"fig_hist_{score_col.lower()}.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_hist_{score_col.lower()}.png")
 
 
 def _plot_boxplot(
@@ -482,7 +482,7 @@ def _plot_boxplot(
     out_path = fig_dir / f"fig_boxplot_{score_col.lower()}_brca.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_boxplot_{score_col.lower()}_brca.png")
 
 
 # =================================================================
@@ -554,7 +554,7 @@ def _run_cox_univariate(
     out_path = fig_dir / f"fig_cox_hr_{score_col.lower()}_univariate.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_cox_hr_{score_col.lower()}_univariate.png")
 
     return {
         "score":              score_col,
@@ -650,7 +650,7 @@ def _run_cox_multivariate(
     out_path = fig_dir / f"fig_cox_hr_{score_col.lower()}_multivariate.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_cox_hr_{score_col.lower()}_multivariate.png")
 
     # Full multivariate forest plot.
     summary = (
@@ -681,7 +681,7 @@ def _run_cox_multivariate(
     out_path = fig_dir / f"fig_forest_{score_col.lower()}_multivariate.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_forest_{score_col.lower()}_multivariate.png")
 
 
 # =================================================================
@@ -712,7 +712,7 @@ def _save_tables(
     scan_path = out_dir / "threshold_scan_summary.csv"
     scan_path.parent.mkdir(parents=True, exist_ok=True)
     scan_df.to_csv(scan_path, index=False)
-    logger.info(f"Saved: {scan_path}")
+    logger.success(f"[FILE] Saved: threshold_scan_summary.csv")
 
     logger.info(
         "Threshold scan summary\n"
@@ -732,7 +732,7 @@ def _save_tables(
 
     cox_path = out_dir / "univariate_cox_comparison.csv"
     cox_df.to_csv(cox_path, index=False)
-    logger.info(f"Saved: {cox_path}")
+    logger.success(f"[FILE] Saved: univariate_cox_comparison.csv")
 
     display_cols = [
         "score", "expected_direction", "HR", "95% CI",
@@ -795,9 +795,8 @@ def main() -> None:
     cox_comparison_rows: list[dict] = []
 
     for score_col in SCORE_COLS:
-        logger.info(f"{'=' * 60}")
         logger.info(f"Processing score: {score_col}")
-        logger.info(f"{'=' * 60}")
+        logger.info(f"{'-' * 60}")
 
         # Threshold scan (EXPLORATORY)
         scan, best_cut, best_p = _run_threshold_scan(
@@ -846,8 +845,6 @@ def main() -> None:
     # Save summary tables
     # -----------------------------------------------------------------
     _save_tables(scan_summary_rows, cox_comparison_rows, out_dir)
-
-    logger.info("analyse_ode_survival complete.")
 
 
 if __name__ == "__main__":
