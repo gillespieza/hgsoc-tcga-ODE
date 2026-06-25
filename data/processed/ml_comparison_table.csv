@@ -1,4 +1,6 @@
 Model,Feature_set,CV_cindex,CV_sd,CV_display,CI_low,CI_high,Notes
 HR-DDR ODE (AUC_X),14 genes → 4 params → ODE,0.533,,0.533,0.426,0.505,No CV needed (zero-shot predictor)
-Cox LASSO,14 genes (raw),0.518,0.036,0.518 ± 0.036,0.485,0.562,"5-fold CV, alpha via inner 3-fold CV"
-Random Survival Forest,14 genes (raw),0.480,0.032,0.480 ± 0.032,0.472,0.551,"5-fold CV, global OOF direction check"
+Cox LASSO (14-gene),14 genes (raw),0.504,0.021,0.504 ± 0.021,0.468,0.548,"5-fold CV, alpha via inner 3-fold CV"
+RSF (14-gene),14 genes (raw),0.480,0.032,0.480 ± 0.032,0.472,0.551,"5-fold CV, global OOF direction check"
+Cox LASSO (all-genes),27066 genes (raw),0.500,0.000,0.500 ± 0.000,0.500,0.500,"5-fold CV, alpha via inner 3-fold CV"
+RSF (all-genes),27066 genes (raw),0.549,0.038,0.549 ± 0.038,0.505,0.581,"5-fold CV, max_features=sqrt, OOF direction check"

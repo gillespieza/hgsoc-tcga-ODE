@@ -41,7 +41,7 @@ results/figures/:
     fig_km_{score}_exploratory_cutoff.png   (× 4)
     fig_hist_{score}.png                    (× 4)
     fig_boxplot_{score}_brca.png            (× 4)
-    fig_cox_hr_{score}_univariate.png       (× 4)
+    fig_forest_univariate_all_scores.png    (combined 4-score panel)
     fig_cox_hr_{score}_multivariate.png     (× 4)
     fig_forest_{score}_multivariate.png     (× 4)
 """
@@ -492,13 +492,14 @@ def _plot_boxplot(
 def _run_cox_univariate(
     analysis_df: pd.DataFrame,
     score_col: str,
-    fig_dir: Path,
 ) -> dict:
     """
     Fit a univariate Cox proportional hazards model for one ODE score.
 
     Uses the pre-computed log-transformed score (log_<score_col>) from
     survival_analysis_df.csv rather than re-transforming the raw score.
+    Plotting is deferred to _plot_univariate_forest, which draws all four
+    scores on a single combined panel.
 
     Parameters
     ----------
@@ -506,13 +507,12 @@ def _run_cox_univariate(
         Must contain f'log_{score_col}', 'OS_MONTHS', 'OS_EVENT'.
     score_col : str
         ODE score name (used for labelling and EXPECTED_DIRECTION lookup).
-    fig_dir : Path
-        Destination directory for the HR forest plot.
 
     Returns
     -------
     dict
-        Summary row for the univariate Cox comparison table.
+        Summary row for the univariate Cox comparison table, including HR,
+        95% CI bounds, p-value, C-index, and direction assessment.
     """
     log_col = f"log_{score_col}"
     cox_df  = analysis_df[["OS_MONTHS", "OS_EVENT", log_col]].dropna().copy()
@@ -537,25 +537,6 @@ def _run_cox_univariate(
         f"p={p:.3g}, C-index={c_index:.4f}, {direction_match}"
     )
 
-    # Single-variable HR plot.
-    fig, ax = plt.subplots(figsize=(5, 2.2))
-    ax.errorbar(
-        hr, 0, xerr=[[hr - lo], [hi - hr]],
-        fmt="o", color="black", capsize=4,
-    )
-    ax.axvline(1, color="red", linestyle="--", linewidth=1)
-    ax.set_yticks([0])
-    ax.set_yticklabels([log_col])
-    ax.set_xlabel("Hazard ratio")
-    ax.set_title(f"Univariate Cox model: {score_col}")
-    fig.tight_layout()
-
-    fig_dir.mkdir(parents=True, exist_ok=True)
-    out_path = fig_dir / f"fig_cox_hr_{score_col.lower()}_univariate.png"
-    fig.savefig(out_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_cox_hr_{score_col.lower()}_univariate.png")
-
     return {
         "score":              score_col,
         "expected_direction": expected,
@@ -566,6 +547,92 @@ def _run_cox_univariate(
         "C_index":            c_index,
         "direction_match":    direction_match,
     }
+
+
+def _plot_univariate_forest(
+    cox_rows: list[dict],
+    fig_dir: Path,
+) -> None:
+    """
+    Single-axes forest plot of univariate Cox HRs for all four ODE scores.
+
+    Each score occupies one row on a shared log-scale x-axis. Point estimates
+    are dots; horizontal bars span the 95% CI. A dashed vertical line marks
+    HR = 1 (null). Annotation to the right of each row shows HR [CI], p,
+    C-index, and whether the observed direction matches the biological
+    expectation.
+
+    A single shared axis is used rather than a subplot grid so that HR
+    magnitudes and CI widths are directly comparable across scores without
+    rescaling between panels.
+
+    Parameters
+    ----------
+    cox_rows : list[dict]
+        One dict per score as returned by _run_cox_univariate, in the order
+        they were collected (SCORE_COLS order). Rows are plotted top-to-bottom
+        in the order supplied.
+    fig_dir : Path
+        Destination directory for the combined figure.
+    """
+    n = len(cox_rows)
+
+    fig, ax = plt.subplots(figsize=(9, 2.2 + 0.8 * n))
+
+    # y-positions: top score at the highest y value so the list reads
+    # top-to-bottom in the same order as SCORE_COLS.
+    y_positions = list(range(n - 1, -1, -1))
+
+    for y, row in zip(y_positions, cox_rows):
+        hr = row["HR"]
+        lo = row["CI_low"]
+        hi = row["CI_high"]
+        p  = row["p_value"]
+
+        color = "#1976D2" if row["direction_match"] == "✓" else "#d32f2f"
+
+        ax.plot([lo, hi], [y, y], color=color, linewidth=2,
+                solid_capstyle="round")
+        ax.scatter(hr, y, color=color, s=60, zorder=5)
+
+        # Right-hand annotation at a fixed axes-fraction x so the text
+        # always clears the CI bar regardless of the data x-range.
+        p_str = f"{p:.3g}" if p >= 0.001 else f"{p:.2e}"
+        label = (
+            f"HR {hr:.3g} [{lo:.3g}–{hi:.3g}]   "
+            f"p={p_str}   C={row['C_index']:.3f}   "
+            f"{row['expected_direction']} {row['direction_match']}"
+        )
+        ax.text(
+            1.02, y, label,
+            va="center", ha="left", fontsize=8,
+            transform=ax.get_yaxis_transform(),
+        )
+
+    ax.axvline(1, color="black", linestyle="--", linewidth=1, alpha=0.7)
+
+    # Log scale so that CIs are visually symmetric around HR = 1.
+    ax.set_xscale("log")
+    ax.set_xlabel("Hazard ratio (log scale)", fontsize=10)
+
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels([r["score"] for r in cox_rows], fontsize=10)
+    ax.set_ylim(-0.6, n - 0.4)
+
+    ax.set_title(
+        "Univariate Cox Proportional Hazards — ODE Scores\n"
+        "(blue = direction matches expectation, red = unexpected)",
+        fontsize=11,
+    )
+    ax.grid(axis="x", alpha=0.3)
+
+    fig.tight_layout()
+
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    out_path = fig_dir / "fig_forest_univariate_all_scores.png"
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    logger.success("[FILE] Saved: fig_forest_univariate_all_scores.png")
 
 
 # =================================================================
@@ -825,8 +892,8 @@ def main() -> None:
         _plot_histogram(analysis_df, score_col, best_cut, fig_dir)
         _plot_boxplot(analysis_df, score_col, fig_dir)
 
-        # Univariate Cox
-        cox_row = _run_cox_univariate(analysis_df, score_col, fig_dir)
+        # Univariate Cox — data only; combined plot is drawn after the loop.
+        cox_row = _run_cox_univariate(analysis_df, score_col)
         cox_comparison_rows.append(cox_row)
 
         # Multivariate Cox adjusted for BRCA_MUTANT
@@ -840,6 +907,11 @@ def main() -> None:
             "tertile_logrank_p": tertile_p,       # primary, valid for inference
             "exploratory_km_p":  exploratory_p,   # same caveat as scan_best_p
         })
+
+    # -----------------------------------------------------------------
+    # Combined univariate forest plot (all four scores, single figure)
+    # -----------------------------------------------------------------
+    _plot_univariate_forest(cox_comparison_rows, fig_dir)
 
     # -----------------------------------------------------------------
     # Save summary tables
