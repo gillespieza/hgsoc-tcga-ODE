@@ -42,8 +42,7 @@ results/figures/:
     fig_hist_{score}.png                    (× 4)
     fig_boxplot_{score}_brca.png            (× 4)
     fig_forest_univariate_all_scores.png    (combined 4-score panel)
-    fig_cox_hr_{score}_multivariate.png     (× 4)
-    fig_forest_{score}_multivariate.png     (× 4)
+    fig_forest_multivariate_all_scores.png  (combined 4-score × 2-covariate panel)
 """
 
 import contextlib
@@ -642,8 +641,7 @@ def _plot_univariate_forest(
 def _run_cox_multivariate(
     analysis_df: pd.DataFrame,
     score_col: str,
-    fig_dir: Path,
-) -> None:
+) -> dict:
     """
     Fit a multivariate Cox model adjusted for BRCA_MUTANT and check PH assumption.
 
@@ -654,14 +652,21 @@ def _run_cox_multivariate(
     We capture that output with contextlib.redirect_stdout and route it through
     logger.info to avoid bypassing pipeline.log.
 
+    Plotting is deferred to _plot_multivariate_forest, which draws all four
+    scores on a single combined panel.
+
     Parameters
     ----------
     analysis_df : pd.DataFrame
         Must contain f'log_{score_col}', 'OS_MONTHS', 'OS_EVENT', 'BRCA_MUTANT'.
     score_col : str
         ODE score name (used for labelling).
-    fig_dir : Path
-        Destination directory for HR and forest plots.
+
+    Returns
+    -------
+    dict
+        Keys: score_col, c_index, and a 'covariates' list of dicts, one per
+        model covariate, each containing variable, HR, CI_low, CI_high, p.
     """
     log_col   = f"log_{score_col}"
     cox_mv_df = analysis_df[
@@ -694,61 +699,133 @@ def _run_cox_multivariate(
     if ph_text:
         logger.info(f"PH assumption check ({score_col}):\n{ph_text}")
 
-    # Multivariate HR plot for ODE score covariate only.
-    s_mv  = cmvph.summary.loc[log_col]
-    hr_mv = float(s_mv["exp(coef)"])
-    lo_mv = float(s_mv["exp(coef) lower 95%"])
-    hi_mv = float(s_mv["exp(coef) upper 95%"])
+    # Collect per-covariate HR/CI/p for the combined forest plot.
+    covariates = []
+    for var in cmvph.summary.index:
+        s = cmvph.summary.loc[var]
+        covariates.append({
+            "variable": var,
+            "HR":       float(s["exp(coef)"]),
+            "CI_low":   float(s["exp(coef) lower 95%"]),
+            "CI_high":  float(s["exp(coef) upper 95%"]),
+            "p":        float(s["p"]),
+        })
 
-    fig, ax = plt.subplots(figsize=(5, 2.2))
-    ax.errorbar(
-        hr_mv, 0,
-        xerr=[[hr_mv - lo_mv], [hi_mv - hr_mv]],
-        fmt="o", color="black", capsize=4,
+    return {
+        "score_col": score_col,
+        "c_index":   float(cmvph.concordance_index_),
+        "covariates": covariates,
+    }
+
+
+def _plot_multivariate_forest(
+    mv_results: list[dict],
+    fig_dir: Path,
+) -> None:
+    """
+    Single-axes forest plot of multivariate Cox results for all four ODE scores.
+
+    Each score contributes two rows (log_<score> and BRCA_MUTANT) on a shared
+    log-scale x-axis. Score groups are separated by a horizontal rule and a
+    group label so the two covariates per model are visually grouped without
+    requiring subplots.
+
+    A single shared axis is used so that HR magnitudes are directly comparable
+    across all scores and covariates without rescaling between panels.
+
+    Parameters
+    ----------
+    mv_results : list[dict]
+        One dict per score as returned by _run_cox_multivariate, in SCORE_COLS
+        order. Each dict contains 'score_col', 'c_index', and 'covariates'.
+    fig_dir : Path
+        Destination directory for the combined figure.
+    """
+    # Build a flat list of (label, HR, CI_low, CI_high, p, color, is_score_row)
+    # working top-to-bottom, with a separator gap between score groups.
+    # is_score_row=True marks the ODE score covariate (vs BRCA_MUTANT) for
+    # colour coding: blue for the score row, grey for the adjustment covariate.
+    rows = []
+    group_boundaries: list[float] = []   # y positions of inter-group gaps
+
+    y = 0
+    for result in mv_results:
+        score_col  = result["score_col"]
+        c_index    = result["c_index"]
+        covariates = result["covariates"]
+
+        # Record the y-position of the top of this group for the separator line.
+        if rows:
+            group_boundaries.append(y + 0.5)
+
+        for cov in covariates:
+            is_score = cov["variable"] == f"log_{score_col}"
+            rows.append({
+                "y":          y,
+                "label":      f"{score_col} — {cov['variable']}" if is_score
+                              else f"  BRCA_MUTANT (adj.)",
+                "HR":         cov["HR"],
+                "CI_low":     cov["CI_low"],
+                "CI_high":    cov["CI_high"],
+                "p":          cov["p"],
+                "color":      "#1976D2" if is_score else "#757575",
+                "c_index":    c_index if is_score else None,
+            })
+            y += 1
+
+    n_rows = len(rows)
+    fig, ax = plt.subplots(figsize=(10, 2.2 + 0.65 * n_rows))
+
+    # Reverse y so the first score group appears at the top.
+    y_max = n_rows - 1
+    for row in rows:
+        y_plot = y_max - row["y"]
+        hr, lo, hi = row["HR"], row["CI_low"], row["CI_high"]
+
+        ax.plot([lo, hi], [y_plot, y_plot],
+                color=row["color"], linewidth=2, solid_capstyle="round")
+        ax.scatter(hr, y_plot, color=row["color"], s=55, zorder=5)
+
+        p_str = f"{row['p']:.3g}" if row["p"] >= 0.001 else f"{row['p']:.2e}"
+        c_str = f"   C={row['c_index']:.3f}" if row["c_index"] is not None else ""
+        annotation = (
+            f"HR {hr:.3g} [{lo:.3g}–{hi:.3g}]   p={p_str}{c_str}"
+        )
+        ax.text(
+            1.02, y_plot, annotation,
+            va="center", ha="left", fontsize=8,
+            transform=ax.get_yaxis_transform(),
+        )
+
+    # Draw separator lines between score groups.
+    for gap_y in group_boundaries:
+        ax.axhline(
+            y_max - gap_y + 1,
+            color="grey", linestyle=":", linewidth=0.8, alpha=0.6,
+        )
+
+    ax.axvline(1, color="black", linestyle="--", linewidth=1, alpha=0.7)
+    ax.set_xscale("log")
+    ax.set_xlabel("Hazard ratio (log scale)", fontsize=10)
+
+    y_labels = [r["label"] for r in reversed(rows)]
+    ax.set_yticks(list(range(n_rows)))
+    ax.set_yticklabels(y_labels, fontsize=9)
+    ax.set_ylim(-0.6, n_rows - 0.4)
+
+    ax.set_title(
+        "Multivariate Cox Proportional Hazards — ODE Scores (adj. BRCA_MUTANT)\n"
+        "(blue = ODE score covariate, grey = adjustment covariate)",
+        fontsize=11,
     )
-    ax.axvline(1, color="red", linestyle="--", linewidth=1)
-    ax.set_yticks([0])
-    ax.set_yticklabels([log_col])
-    ax.set_xlabel("Hazard ratio")
-    ax.set_title(f"Multivariate Cox model: {score_col}")
+    ax.grid(axis="x", alpha=0.3)
     fig.tight_layout()
 
     fig_dir.mkdir(parents=True, exist_ok=True)
-    out_path = fig_dir / f"fig_cox_hr_{score_col.lower()}_multivariate.png"
+    out_path = fig_dir / "fig_forest_multivariate_all_scores.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_cox_hr_{score_col.lower()}_multivariate.png")
-
-    # Full multivariate forest plot.
-    summary = (
-        cmvph.summary.copy()
-        .reset_index()
-        .rename(columns={"covariate": "variable"})
-    )
-    summary["HR"]   = summary["exp(coef)"]
-    summary["low"]  = summary["exp(coef) lower 95%"]
-    summary["high"] = summary["exp(coef) upper 95%"]
-    summary = summary.sort_values("HR")
-
-    fig, ax = plt.subplots(figsize=(7, max(3, 0.35 * len(summary))))
-    y = range(len(summary))
-    ax.errorbar(
-        summary["HR"], y,
-        xerr=[summary["HR"] - summary["low"], summary["high"] - summary["HR"]],
-        fmt="o", color="black", capsize=3,
-    )
-    ax.axvline(1, color="red", linestyle="--", linewidth=1)
-    ax.set_yticks(list(y))
-    ax.set_yticklabels(summary["variable"])
-    ax.set_xscale("log")
-    ax.set_xlabel("Hazard ratio (log scale)")
-    ax.set_title(f"Multivariate Cox model: {score_col}")
-    fig.tight_layout()
-
-    out_path = fig_dir / f"fig_forest_{score_col.lower()}_multivariate.png"
-    fig.savefig(out_path, dpi=300, bbox_inches="tight")
-    plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_forest_{score_col.lower()}_multivariate.png")
+    logger.success("[FILE] Saved: fig_forest_multivariate_all_scores.png")
 
 
 # =================================================================
@@ -860,6 +937,7 @@ def main() -> None:
     # -----------------------------------------------------------------
     scan_summary_rows: list[dict] = []
     cox_comparison_rows: list[dict] = []
+    mv_results: list[dict] = []
 
     for score_col in SCORE_COLS:
         logger.info(f"Processing score: {score_col}")
@@ -896,8 +974,10 @@ def main() -> None:
         cox_row = _run_cox_univariate(analysis_df, score_col)
         cox_comparison_rows.append(cox_row)
 
-        # Multivariate Cox adjusted for BRCA_MUTANT
-        _run_cox_multivariate(analysis_df, score_col, fig_dir)
+        # Multivariate Cox adjusted for BRCA_MUTANT — data only; combined
+        # plot is drawn after the loop.
+        mv_result = _run_cox_multivariate(analysis_df, score_col)
+        mv_results.append(mv_result)
 
         # Accumulate scan summary — tertile p is the primary result.
         scan_summary_rows.append({
@@ -912,6 +992,11 @@ def main() -> None:
     # Combined univariate forest plot (all four scores, single figure)
     # -----------------------------------------------------------------
     _plot_univariate_forest(cox_comparison_rows, fig_dir)
+
+    # -----------------------------------------------------------------
+    # Combined multivariate forest plot (all four scores, single figure)
+    # -----------------------------------------------------------------
+    _plot_multivariate_forest(mv_results, fig_dir)
 
     # -----------------------------------------------------------------
     # Save summary tables
