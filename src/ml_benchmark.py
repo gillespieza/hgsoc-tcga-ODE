@@ -523,7 +523,11 @@ def _select_alpha_inner_cv(
             ("cox", CoxnetSurvivalAnalysis(
                 l1_ratio=1.0,
                 alphas=[alpha],
-                fit_baseline_model=True,
+                # fit_baseline_model=False: BreslowEstimator.fit() computes
+                # np.exp(linear_predictor) in pure Python; in the p >> n
+                # regime large β values overflow float64. We never call
+                # predict_survival_function(), so the baseline is unused.
+                fit_baseline_model=False,
                 normalize=False,
                 max_iter=10000,
             )),
@@ -540,7 +544,15 @@ def _select_alpha_inner_cv(
                 if np.all(pipe.named_steps["cox"].coef_ == 0):
                     continue
 
-                risk = pipe.predict(X_train[inner_val])
+                # Use the linear predictor (Xβ) rather than predict()'s
+                # exp(Xβ). The C-index is rank-based, so both are
+                # equivalent; the linear predictor avoids float64 overflow
+                # when ‖β‖ is large in the p >> n all-genes regime.
+                coef = pipe.named_steps["cox"].coef_.ravel()
+                X_scaled_val = pipe.named_steps["scaler"].transform(
+                    X_train[inner_val]
+                )
+                risk = X_scaled_val @ coef
                 ci = concordance_index_censored(
                     y_train[inner_val]["event"],
                     y_train[inner_val]["time"],
@@ -639,7 +651,7 @@ def fit_cox_lasso(
             ("cox", CoxnetSurvivalAnalysis(
                 l1_ratio=1.0,
                 alphas=[best_alpha],
-                fit_baseline_model=True,
+                fit_baseline_model=False,
                 normalize=False,
                 max_iter=10000,
             )),
@@ -647,7 +659,8 @@ def fit_cox_lasso(
 
         try:
             pipe.fit(X_train, y_train)
-            risk = pipe.predict(X_test)
+            coef = pipe.named_steps["cox"].coef_.ravel()
+            risk = pipe.named_steps["scaler"].transform(X_test) @ coef
             ci = concordance_index_censored(
                 y_test["event"], y_test["time"], risk
             )[0]
@@ -822,13 +835,14 @@ def collect_oof_predictions(
             ("cox", CoxnetSurvivalAnalysis(
                 l1_ratio=1.0,
                 alphas=[lasso_alphas[fold]],
-                fit_baseline_model=True,
+                fit_baseline_model=False,
                 normalize=False,
                 max_iter=10000,
             )),
         ])
         pipe.fit(X_train, y_train)
-        lasso_oof[test_idx] = pipe.predict(X_test)
+        coef = pipe.named_steps["cox"].coef_.ravel()
+        lasso_oof[test_idx] = pipe.named_steps["scaler"].transform(X_test) @ coef
 
         # RSF
         rsf_fold = RandomSurvivalForest(
