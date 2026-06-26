@@ -1326,7 +1326,13 @@ def main() -> None:
         .loc[X.index]
         .reset_index()
     )
-    ode_risk = surv_full["log_AUC_X"].values
+    # Negate log_AUC_X before passing to concordance_index_censored.
+    # Higher AUC_X → more apoptotic commitment → better survival (lower hazard).
+    # concordance_index_censored assumes higher score → worse outcome, so the
+    # sign must be flipped to get a C-index > 0.5 for a positively prognostic
+    # score. CoxPHFitter in analyse_ode_survival.py handles this internally;
+    # the raw scores used here do not.
+    ode_risk = -surv_full["log_AUC_X"].values
 
     # -----------------------------------------------------------------
     # Bootstrap confidence intervals
