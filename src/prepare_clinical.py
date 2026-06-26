@@ -226,7 +226,7 @@ def plot_cohort_summary(
     out_path = fig_dir / "fig_cohort_summary.png"
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: fig_cohort_summary.png")
 
 
 # =================================================================
@@ -340,7 +340,7 @@ def main() -> None:
     out_path = ROOT / "data" / "processed" / "clinical_clean.csv"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     clinical_clean.to_csv(out_path, index=False)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: clinical_clean.csv")
 
     # -----------------------------------------------------------------
     # Cohort summary figure
