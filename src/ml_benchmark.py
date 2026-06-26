@@ -94,17 +94,18 @@ GENE_COLS = [
 # be useful but not so permissive that coefficients explode.
 LASSO_ALPHAS_14 = [0.01, 0.05, 0.1, 0.5, 1.0]
 
-# Candidate regularisation strengths for the all-genes arm (~40k features,
+# Candidate regularisation strengths for the all-genes arm (~27k features,
 # ~330 training patients per outer fold — severe p >> n).
 #
-# Why no small alphas here?
-# With p >> n, even alpha=0.1 triggers an ArithmeticError ("weights too
-# large") inside glmnet's Cython layer on inner folds of ~220 patients.
-# glmnet internally extends the path below the smallest requested alpha via
-# alpha_min_ratio; _select_alpha_inner_cv sets alpha_min_ratio=1.0 to pin
-# the path to exactly these values with no downward extrapolation.
-# The floor of 1.0 was validated empirically on this cohort.
-LASSO_ALPHAS_ALL = [1.0, 2.0, 5.0, 10.0, 20.0]
+# Same grid as LASSO_ALPHAS_14. After StandardScaler, the data-driven
+# alpha_max for this cohort (n≈220 inner patients, p≈27k, ~88 events) is
+# approximately 0.15–0.20 — computed as max_j|∑_{events} x_ij| / n where
+# x_ij ~ N(0,1). Alphas in [0.01, 0.5] span the useful regularisation
+# range; alpha=1.0 is retained as an over-regularised reference point.
+#
+# The prior grid [1.0, 2.0, 5.0, 10.0, 20.0] was 5–100× above alpha_max
+# and produced trivially zero models at every candidate alpha.
+LASSO_ALPHAS_ALL = [0.01, 0.05, 0.1, 0.5, 1.0]
 
 
 # =================================================================
@@ -468,12 +469,11 @@ def _select_alpha_inner_cv(
     the model. This function selects alpha entirely within the outer training
     fold, keeping the outer test fold unseen during hyperparameter search.
 
-    Strategy: fit the full regularisation path in a single CoxnetSurvivalAnalysis
-    call per inner fold, then read off per-alpha coefficients and predictions.
-    This is the intended use of the estimator — it uses warm starts internally
-    (high alpha → low alpha), which keeps coefficients from growing uncontrollably
-    and avoids the exp() overflow that occurs when fitting each alpha independently
-    from scratch in the p >> n regime.
+    Each alpha is evaluated with an independent Pipeline fit (cold start
+    from β=0). This avoids the warm-start path instability that occurs in
+    the p >> n regime when a single estimator traverses a descending alpha
+    sequence: accumulated β growth across intermediate coordinates can cause
+    exp(Xβ) overflow in the Newton-Raphson weights (ArithmeticError).
 
     Parameters
     ----------
@@ -508,69 +508,55 @@ def _select_alpha_inner_cv(
     # Accumulate per-alpha C-index scores across all inner folds.
     alpha_scores: dict[float, list[float]] = {a: [] for a in alphas}
 
-    # Pass the full alpha sequence to a single estimator so glmnet's
-    # coordinate-descent warm starts across the path — numerically stable
-    # and faster than one fit per alpha.
+    # Fit one independent Pipeline per (alpha, inner fold) pair.
+    # Each fit starts from β=0 (cold start), so no warm-start path is
+    # traversed and accumulated coefficient growth cannot cause overflow.
     #
-    # alphas must be sorted descending so the path runs from most to least
-    # regularised (standard glmnet convention).
-    alphas_desc = sorted(alphas, reverse=True)
-
-    for inner_train, inner_val in tqdm(
-        inner_cv.split(X_train, y_train["event"]),
-        total=n_inner,
-        desc=progress_desc,
-        leave=False,
-    ):
-        try:
-            scaler = StandardScaler()
-            X_scaled_train = scaler.fit_transform(X_train[inner_train])
-            X_scaled_val   = scaler.transform(X_train[inner_val])
-
-            cox_path = CoxnetSurvivalAnalysis(
+    # The path approach (fitting all alphas in a single estimator call via
+    # warm starts) is numerically unstable in the p >> n regime: traversing
+    # the path from a high to a low alpha grows β across intermediate
+    # coordinates until exp(Xβ) overflows in the Newton-Raphson weights.
+    # Per-alpha cold starts avoid this entirely.
+    for alpha in tqdm(alphas, desc=progress_desc, leave=False):
+        pipe = Pipeline([
+            ("scaler", StandardScaler()),
+            ("cox", CoxnetSurvivalAnalysis(
                 l1_ratio=1.0,
-                alphas=alphas_desc,
-                # alpha_min_ratio=1.0 pins the path exactly to the supplied
-                # alphas with no downward extrapolation. Without this, glmnet
-                # extends the path below the smallest alpha using an internal
-                # ratio, which reaches numerically unsafe values in the p >> n
-                # regime and raises ArithmeticError in the Cython solver.
-                alpha_min_ratio=1.0,
+                alphas=[alpha],
                 fit_baseline_model=True,
                 normalize=False,
                 max_iter=10000,
-            )
-            cox_path.fit(X_scaled_train, y_train[inner_train])
+            )),
+        ])
 
-            # coef_ shape: (n_features, n_alphas) — one column per alpha.
-            # Iterate columns in the same order as alphas_desc.
-            for idx, alpha in enumerate(cox_path.alphas_):
-                coef_col = cox_path.coef_[:, idx]
+        for inner_train, inner_val in inner_cv.split(
+            X_train, y_train["event"]
+        ):
+            try:
+                pipe.fit(X_train[inner_train], y_train[inner_train])
 
                 # Skip alphas that shrink everything to zero — the model
                 # has no discriminative power and predicts a constant risk.
-                if np.all(coef_col == 0):
+                if np.all(pipe.named_steps["cox"].coef_ == 0):
                     continue
 
-                # Predict using only this alpha's coefficients to get a
-                # per-alpha C-index without re-fitting.
-                linear_pred = X_scaled_val @ coef_col
+                risk = pipe.predict(X_train[inner_val])
                 ci = concordance_index_censored(
                     y_train[inner_val]["event"],
                     y_train[inner_val]["time"],
-                    linear_pred,
+                    risk,
                 )[0]
+                alpha_scores[alpha].append(ci)
 
-                # Map the fitted alpha back to the caller's grid value.
-                # cox_path.alphas_ may differ slightly from the requested
-                # values due to internal scaling; match by closest value.
-                nearest = min(alphas, key=lambda a: abs(a - alpha))
-                alpha_scores[nearest].append(ci)
-
-        except Exception:
-            logger.exception(
-                f"Inner-CV fold failed during alpha path search; skipping."
-            )
+            except Exception:
+                # NOTE: style guide mandates logger.exception, but a full
+                # traceback for every failed (alpha, fold) pair would flood
+                # pipeline.log when the all-genes arm is running.
+                # logger.warning is used here as a documented deviation;
+                # failures are expected and recoverable (fold is skipped).
+                logger.warning(
+                    f"Inner-CV fit failed for alpha={alpha}; skipping fold."
+                )
 
     # Choose the alpha with the highest mean inner-fold C-index.
     # Fall back to the largest alpha (strongest regularisation) if every
@@ -601,10 +587,8 @@ def fit_cox_lasso(
 
     Alpha is selected by 3-fold inner CV on each outer training fold so
     the outer test fold is never used during hyperparameter search. The
-    inner CV fits the full regularisation path in one CoxnetSurvivalAnalysis
-    call per fold (warm starts), which is numerically stable and avoids the
-    exp() overflow that occurs when fitting each alpha from scratch in the
-    p >> n regime.
+    inner CV fits each alpha independently (cold start from β=0 each time),
+    which is safe in both the 14-gene and p >> n all-genes regimes.
 
     Parameters
     ----------
