@@ -400,30 +400,61 @@ def compute_ode_scores(sim_result: dict) -> dict:
 
     Secondary scores retained for sensitivity analysis.
         X_peak   = maximum apoptotic signal
-        T_repair = approximate repair time
+        T_repair = duration R stays significantly depleted below R_ss
         D_resid  = residual damage at final time
+
+    T_repair definition
+    -------------------
+    R_ss = BRCA_cap is the analytical zero-damage steady state for R (derived
+    in hrddr_ode: k_r = d_r, so dR/dt = 0 gives R_ss = BRCA_cap).
+
+    T_repair is the last time point at which R has not yet recovered to within
+    10% of that baseline:
+
+        T_repair = max { t : R(t) < 0.9 * BRCA_cap }
+
+    This is patient-specific because BRCA_cap varies per patient, and the
+    depletion trajectory is driven by k_load * C * R, which couples ATM_tot
+    and CHK_tot. A value of 0.0 means R was never meaningfully perturbed
+    (high BRCA_cap, weak checkpoint activation).
+
+    The previous definition — time D stays above 10% of D_peak — was almost
+    entirely governed by the global tau_drug constant and carried negligible
+    patient-specific information.
     """
     from scipy.integrate import trapezoid
 
     t = sim_result['t']
     X = sim_result['X']
     D = sim_result['D']
+    R = sim_result['R']
+
+    # BRCA_cap is the analytical R steady state at zero damage.
+    # sim_result carries the patient's R trajectory; R[0] = BRCA_cap
+    # by construction (initial condition set in simulate_patient).
+    R_ss = float(R[0])
 
     # AUC of apoptosis signal: main model output and primary survival predictor.
-    AUC_X   = trapezoid(X, t)           
+    AUC_X = trapezoid(X, t)
 
     # Peak apoptosis signal.
-    X_peak  = float(np.max(X))
+    X_peak = float(np.max(X))
 
-    # Residual damage at the end of the simulation.  
-    D_resid = float(D[-1])    
+    # Residual damage at the end of the simulation.
+    D_resid = float(D[-1])
 
-    # Repair time proxy:
-    # Find how long damage stays above 10% of its maximum.
-    D_peak  = float(np.max(D))
-    thresh  = 0.1 * D_peak
-    above   = np.where(D > thresh)[0]
-    T_repair = float(t[above[-1]]) if len(above) > 0 else 120.0
+    # T_repair: duration the HR complex remains significantly depleted.
+    #
+    # Threshold at 0.9 * R_ss: a 10% depletion from baseline is the smallest
+    # perturbation considered biologically meaningful. Tighter thresholds
+    # (e.g. 0.5) only fire for very low BRCA_cap patients; looser ones
+    # (e.g. 0.95) risk firing from numerical noise.
+    #
+    # Fallback 0.0: if R never dips below the threshold the checkpoint never
+    # meaningfully impaired the HR complex — a valid and informative result.
+    depletion_thresh = 0.9 * R_ss
+    depleted = np.where(R < depletion_thresh)[0]
+    T_repair = float(t[depleted[-1]]) if len(depleted) > 0 else 0.0
 
     return {
         'PATIENT_ID': sim_result['PATIENT_ID'],
