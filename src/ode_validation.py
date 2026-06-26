@@ -1,5 +1,30 @@
+"""
+ode_validation.py — Validation suite for the HR-DDR ODE model.
+
+Runs three checks before the full cohort simulation:
+
+1. Steady-state consistency: confirms that the analytical zero-damage
+   steady state [D, A, C, R, X] = [0, 0, 0, BRCA_cap, 0] evaluates to
+   zero derivatives for all five equations across a sweep of patient
+   parameter values. A non-zero residual would indicate an error in the
+   ODE right-hand side or the initial condition derivation.
+
+2. Directional sensitivity: simulates one low-BRCA and one high-BRCA
+   representative patient and confirms that lower repair capacity produces
+   higher apoptotic commitment (AUC_X), as expected biologically.
+
+3. Trajectory visualisation: plots all five state variables for both
+   representative patients and saves to results/figures/.
+
+Outputs
+-------
+- results/figures/ode_validation_trajectories.png
+"""
+
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import logging
 from pathlib import Path
@@ -18,6 +43,100 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+# Residual magnitude below which a derivative is considered zero.
+# Chosen to be well above float64 machine epsilon (~1e-16) but tight
+# enough to catch genuine equation errors.
+_SS_TOLERANCE = 1e-10
+
+
+# =================================================================
+# Steady-state validation
+# =================================================================
+
+def validate_steady_state(params_df: pd.DataFrame) -> None:
+    """
+    Confirm that the analytical zero-damage steady state satisfies dY/dt = 0.
+
+    At zero drug input (D0 = 0) the system has an analytical steady state:
+
+        D_ss = 0            (no damage without drug)
+        A_ss = 0            (no ATM/ATR activation without damage)
+        C_ss = 0            (no CHK signalling without ATM/ATR)
+        R_ss = BRCA_cap     (HR complex at basal level; derived from
+                             k_r * BRCA_cap = d_r * R with k_r = d_r)
+        X_ss = 0            (no apoptotic drive without checkpoint)
+
+    This function evaluates the ODE right-hand side at y_ss for every
+    patient in params_df and asserts that the maximum absolute derivative
+    is below _SS_TOLERANCE. Any non-zero residual indicates either an
+    error in the equations or a mismatch between the initial conditions
+    and the analytical derivation.
+
+    The check is intentionally run across the full parameter sweep
+    (not just two representative patients) because BRCA_cap and
+    BCL2_ratio vary widely across the cohort. A bug that cancels at
+    median parameter values might still surface at extremes.
+
+    Parameters
+    ----------
+    params_df : pd.DataFrame
+        Output of ode_model.compute_patient_params(); one row per patient.
+
+    Raises
+    ------
+    ValueError
+        If any patient's steady-state residual exceeds _SS_TOLERANCE,
+        with details of which patient and which equation failed.
+    """
+    # Build zero-drug global params: D0 = 0 eliminates the drug input
+    # φ(t) = D0 * exp(-t / tau_drug) entirely, giving a true no-damage
+    # baseline.
+    zero_drug_params = dict(ode_model.GLOBAL_PARAMS)
+    zero_drug_params["D0"] = 0.0
+
+    state_names = ["D", "A", "C", "R", "X"]
+    n_patients = len(params_df)
+    n_failed = 0
+
+    logger.info(
+        f"Steady-state check: evaluating {n_patients} patients "
+        f"(tolerance = {_SS_TOLERANCE:.0e})"
+    )
+
+    for _, row in params_df.iterrows():
+        patient = row.to_dict()
+        brca_cap = patient["BRCA_cap"]
+
+        # Analytical steady state: R = BRCA_cap, all others zero.
+        y_ss = [0.0, 0.0, 0.0, brca_cap, 0.0]
+
+        dydt = ode_model.hrddr_ode(
+            0.0, y_ss, patient, zero_drug_params
+        )
+
+        for i, (name, residual) in enumerate(zip(state_names, dydt)):
+            if abs(residual) > _SS_TOLERANCE:
+                n_failed += 1
+                raise ValueError(
+                    f"Steady-state residual too large for patient "
+                    f"{patient['PATIENT_ID']}: "
+                    f"d{name}/dt = {residual:.3e} "
+                    f"(tolerance = {_SS_TOLERANCE:.0e}, "
+                    f"BRCA_cap = {brca_cap:.4f}). "
+                    "Check the ODE right-hand side and initial condition "
+                    "derivation."
+                )
+
+    logger.info(
+        f"Steady-state check PASSED: all {n_patients} patients "
+        f"satisfy dY/dt = 0 at [D, A, C, R, X] = "
+        f"[0, 0, 0, BRCA_cap, 0] (max residual < {_SS_TOLERANCE:.0e})"
+    )
+
+
+# =================================================================
+# Main
+# =================================================================
 
 def main():
     """
@@ -41,7 +160,15 @@ def main():
         raise ValueError("Not enough patients for validation.")
 
     # -----------------------------------------------------------------
-    # Define representative patients
+    # Check 1: steady-state consistency
+    # -----------------------------------------------------------------
+
+    # Runs before any simulation so a bad ODE fails loudly here rather
+    # than producing silently wrong trajectories for all cohort patients.
+    validate_steady_state(params_df)
+
+    # -----------------------------------------------------------------
+    # Check 2: directional sensitivity — define representative patients
     # -----------------------------------------------------------------
 
     brca_mut = params_df[params_df["BRCA_MUTANT"] == 1]
@@ -84,7 +211,7 @@ def main():
     logger.info(f"AUC_X high-BRCA : {score_high['AUC_X']:.3f}")
 
     # -----------------------------------------------------------------
-    # Biological directionality check
+    # Biological directionality check (Check 2)
     # -----------------------------------------------------------------
 
     if score_low["AUC_X"] <= score_high["AUC_X"]:
@@ -94,7 +221,7 @@ def main():
         )
 
     # -----------------------------------------------------------------
-    # Plot trajectories
+    # Check 3: trajectory visualisation
     # -----------------------------------------------------------------
 
     fig, axes = plt.subplots(1, 5, figsize=(18, 3.8), sharex=True)
