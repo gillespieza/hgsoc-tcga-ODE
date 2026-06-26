@@ -46,24 +46,70 @@ Discrimination was assessed by Harrell's C-index (bootstrap 95% CI).
 
 ---
 
-## 2. Results
+## 2. Clinical Cohort
 
-### 2.1 ODE Validation
+### 2.1 Cohort Assembly and Attrition
+
+The analysis cohort was drawn from the TCGA High-Grade Serous Ovarian Carcinoma
+(HGSOC) dataset accessed via cBioPortal. Starting from 608 raw patient records,
+25 patients were excluded for missing or invalid overall survival data (OS_MONTHS
+≤ 0 or OS_STATUS unmapped), leaving 583 patients after OS filtering. No duplicate
+PATIENT_IDs were identified in the clinical table. A further 163 patients were
+lost at the RNA merge step — clinical records with no matching RNA-seq profile in
+the FPKM expression file — yielding a final analysis cohort of **420 patients**.
+
+![HGSOC TCGA Clinical Cohort Summary](fig_cohort_summary.png)
+
+*Figure 1. Clinical cohort summary for the HGSOC TCGA dataset (n = 420).
+Top-left: patient attrition from raw download to final merged cohort.
+Top-centre: follow-up time distribution stratified by vital status.
+Top-right: overall event rate (deceased vs. living/censored).
+Bottom-left: Kaplan-Meier curve for the full cohort with median OS marked.
+Bottom-right: BRCA1/2 germline mutation prevalence.*
+
+### 2.2 Cohort Characteristics
+
+**Overall survival.** Of 420 patients, 262 (62.4%) experienced the primary
+endpoint (death) during follow-up, and 158 (37.6%) were censored alive. Median
+overall survival was **44.5 months** (approximately 3.7 years). The follow-up
+distribution is right-skewed: most events occur within the first 75 months, with
+a small number of patients followed beyond 150 months, consistent with the
+long natural history of platinum-sensitive HGSOC.
+
+**BRCA1/2 mutation status.** Germline BRCA1/2 mutations were identified in 17
+patients (4.0%), with the remaining 403 patients (96.0%) classified as wild type.
+This mutation rate is lower than the 15–20% typically reported in clinical HGSOC
+series, likely reflecting the known ascertainment bias in the TCGA cohort towards
+sporadic cases and the use of somatic (rather than germline) sequencing panels for
+a proportion of samples.
+
+**Endpoint choice.** Overall survival was selected in preference to
+progression-free survival because it carries a larger event count in this dataset,
+minimises the ambiguity of radiological progression calls, and is the standard
+primary endpoint in HGSOC clinical trials. The high event rate (62.4%) provides
+adequate statistical power for both Cox proportional hazards modelling and
+Kaplan-Meier stratification.
+
+---
+
+## 3. Results
+
+### 3.1 ODE Validation
 Two representative patients (BRCA-mutant vs BRCA-wildtype) showed biologically
 plausible trajectories: the BRCA-mutant patient produced higher AUC_X (greater
 apoptotic commitment), consistent with known platinum sensitivity.
 
-**Figure 1:** `data/processed/ode_validation_trajectories.png`
+**Figure 2:** `results/figures/ode_validation_trajectories.png`
 
-### 2.2 ODE Score Distributions
+### 3.2 ODE Score Distributions
 AUC_X was approximately log-normally distributed across the cohort (n = 420).
 BRCA-mutant patients showed significantly higher AUC_X than wildtype patients,
 validating the biological direction of the model.
 
-**Figure 2:** `data/processed/boxplot_auc_x_by_brca.png`  
-**Figure 3:** `data/processed/hist_auc_x.png`
+**Figure 3:** `results/figures/fig_boxplot_auc_x_brca.png`  
+**Figure 4:** `results/figures/fig_hist_auc_x.png`
 
-### 2.3 Univariate Cox Regression
+### 3.3 Univariate Cox Regression
 
 | ODE Score | HR | 95% CI | p-value | C-index |
 |---|---|---|---|---|
@@ -75,9 +121,9 @@ validating the biological direction of the model.
 HR < 1 for AUC_X is biologically correct: higher apoptotic commitment →
 greater platinum sensitivity → better survival.
 
-**Figure 4:** `data/processed/cox_forest_auc_x_multivariate.png`
+**Figure 5:** `results/figures/fig_cox_hr_auc_x_multivariate.png`
 
-### 2.4 Kaplan-Meier Stratification
+### 3.4 Kaplan-Meier Stratification
 
 Median split (log_AUC_X ≥ median):
 - High AUC_X: median OS = **47.5 months** (n = 210)
@@ -87,10 +133,10 @@ Median split (log_AUC_X ≥ median):
 Optimal cutoff (AUC_X = 98.997, maximising log-rank statistic):
 - Log-rank p = **0.0077**
 
-**Figure 5:** `results/figures/fig_kaplan_meier_aucx.png` (median split)  
-**Figure 6:** `data/processed/km_auc_x_best_cutoff.png` (optimal cutoff)
+**Figure 6:** `results/figures/fig_kaplan_meier_aucx.png` (median split)  
+**Figure 7:** `results/figures/fig_km_auc_x_best_cutoff.png` (optimal cutoff)
 
-### 2.5 Model Comparison
+### 3.5 Model Comparison
 
 All three models achieved identical C-index = **0.533**, indicating that the
 zero-shot mechanistic ODE matches penalised regression and ensemble ML
@@ -102,12 +148,12 @@ despite using no outcome data for calibration.
 | Cox LASSO | 0.533 ± 0.035 | [0.489, 0.563] |
 | Random Survival Forest | 0.533 ± 0.018 | [0.449, 0.528] |
 
-**Figure 7:** `results/figures/fig_ml_forest_plot.png`  
-**Figure 8:** `results/figures/fig_ml_bootstrap_distributions.png`
+**Figure 8:** `results/figures/fig_ml_forest_plot.png`  
+**Figure 9:** `results/figures/fig_ml_bootstrap_distributions.png`
 
 ---
 
-## 3. Discussion
+## 4. Discussion
 
 The HR-DDR ODE model achieves statistically significant prognostic stratification
 (log-rank p = 0.0224 at median split; p = 0.0077 at optimal cutoff) using a
@@ -128,18 +174,20 @@ discriminatory power.
 - Global kinetic parameters are literature-fixed, not patient-calibrated
 - C-index of 0.533 reflects weak discrimination at the individual level
 - TCGA RNA-seq may not fully capture functional HR capacity
+- The low observed BRCA1/2 mutation rate (4.0%) may limit subgroup power
 
 ---
 
-## 4. Figures Summary
+## 5. Figures Summary
 
 | Figure | File | Step |
 |---|---|---|
-| ODE trajectories | `data/processed/ode_validation_trajectories.png` | Step 2 |
-| AUC_X by BRCA status | `data/processed/boxplot_auc_x_by_brca.png` | Step 5 |
-| AUC_X distribution | `data/processed/hist_auc_x.png` | Step 5 |
-| Cox forest plot | `data/processed/cox_forest_auc_x_multivariate.png` | Step 7 |
+| Clinical cohort summary | `results/figures/fig_cohort_summary.png` | Step 1 |
+| ODE trajectories | `results/figures/ode_validation_trajectories.png` | Step 2 |
+| AUC_X by BRCA status | `results/figures/fig_boxplot_auc_x_brca.png` | Step 5 |
+| AUC_X distribution | `results/figures/fig_hist_auc_x.png` | Step 5 |
+| Cox forest plot | `results/figures/fig_cox_hr_auc_x_multivariate.png` | Step 7 |
 | KM median split | `results/figures/fig_kaplan_meier_aucx.png` | Step 10 |
-| KM optimal cutoff | `data/processed/km_auc_x_best_cutoff.png` | Step 6 |
+| KM optimal cutoff | `results/figures/fig_km_auc_x_best_cutoff.png` | Step 6 |
 | ML forest plot | `results/figures/fig_ml_forest_plot.png` | Step 9 |
 | Bootstrap distributions | `results/figures/fig_ml_bootstrap_distributions.png` | Step 9 |
