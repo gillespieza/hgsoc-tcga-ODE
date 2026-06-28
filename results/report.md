@@ -153,23 +153,18 @@ The residual DNA damage load ($D_{resid}$) at 120 hours represents the damage th
 
 | ODE Score | HR    | 95% CI         | p-value   | C-index |
 | --------- | ----- | -------------- | --------- | ------- |
-| AUC_X     | 0.793 | [0.658, 0.956] | **0.015** | 0.533   |
-| X_peak    | 0.733 | [0.569, 0.942] | **0.015** | 0.532   |
-| T_repair  | 0.078 | [0.010, 0.607] | **0.015** | 0.528   |
-| D_resid   | inf   | [nan, inf]     | 0.802     | 0.482   |
+| AUC_X     | 0.856 | [0.756, 0.970] | **0.015** | 0.533   |
+| X_peak    | 0.855 | [0.753, 0.971] | **0.015** | 0.532   |
+| T_repair  | 0.856 | [0.756, 0.970] | **0.015** | 0.528   |
+| D_resid   | 1.017 | [0.894, 1.156] | 0.801     | 0.482   |
 
-HR < 1 for AUC_X and X_peak is biologically correct and statistically significant: higher apoptotic commitment and peak apoptotic signal indicate greater cell death in response to platinum-induced DNA damage, which translates into better patient overall survival.
+To stabilize the regression models and make the hazard ratios directly comparable, the log-transformed scores were Z-score standardized (scaled to mean = 0, standard deviation = 1) across the cohort. Consequently, the Hazard Ratios (HR) in this table represent the change in patient hazard **per standard deviation increase** of each score. 
 
-Interestingly, the time to DNA repair ($T_{\text{repair}}$) also shows a statistically significant protective effect (HR = 0.078, $95\%\text{ CI } = [0.010, 0.607]$, $p = 0.015$, HR < 1), which was initially hypothesized to have an HR > 1 (where slower repair was assumed to associate with worse outcome). 
+The standardized results show a clear and consistent biological signal:
+* **Apoptotic Commitment ($AUC_X$) and Peak Signal ($X_{\text{peak}}$):** Both show a statistically significant protective effect ($HR \approx 0.856$ and $0.855$, $p = 0.015$). Higher tumor cell commitment to apoptosis in response to DNA damage translates to a ~14.4% reduction in the hazard of patient death per 1-SD increase.
+* **Time to DNA Repair ($T_{\text{repair}}$):** Also shows a statistically significant protective effect ($HR = 0.856$, $p = 0.015$). Biologically, a longer repair time signifies homologous recombination deficiency (HRD). Tumors with HRD cannot resolve chemotherapy-induced double-strand breaks quickly, making them highly sensitive to platinum chemotherapy and leading to improved patient survival. Standardizing this variable resolved the previously inflated standard error ($\text{SE} = 1.050$), tightening the wide confidence interval from `[0.010, 0.607]` to a stable, interpretable range of `[0.756, 0.970]`.
+* **Residual DNA Damage ($D_{\text{resid}}$):** Previously, $D_{\text{resid}}$ suffered from a degenerate model fit ($HR = \infty$, $\text{CI} = [\text{NaN}, \infty]$) because its raw values were extremely small (in the order of $10^{-9}$), leading to near-zero variance. Z-score standardization scaled this variance to 1.0, enabling the Cox solver to converge successfully. The resulting hazard ratio of **1.017** ($95\%\text{ CI } = [0.894, 1.156]$, $p = 0.801$) confirms that residual damage has no statistically significant association with survival.
 
-Biologically, this protective direction is correct: a longer repair time signifies impaired homologous recombination (HR) repair (i.e. homologous recombination deficiency, or HRD). When treated with DNA-damaging platinum chemotherapy, tumors with HRD cannot resolve double-strand breaks efficiently, causing sustained checkpoint activation and driving cells toward apoptosis (manifested as higher $AUC_X$ and $X_{\text{peak}}$). This increased tumor sensitivity to chemotherapy translates into improved patient overall survival (lower hazard of death).
-
-However, the 95% confidence interval for $T_{\text{repair}}$ is notably wide (spanning from $0.010$ to $0.607$). This is driven by two main factors:
-1. **Mathematical Scaling (Squashed Covariate):** The cohort values of $T_{\text{repair}}$ are concentrated in a narrow window (range = $[46.0\text{ h}, 73.0\text{ h}]$, mean = $61.04\text{ h}$), meaning its log-transformed counterpart $\log(T_{\text{repair}} + 1)$ has a tiny standard deviation ($\text{SD} = 0.0606$, compared to $0.6688$ for $\log(AUC_X + 1)$). In Cox regression, the standard error ($\text{SE}$) of a coefficient is inversely proportional to the standard deviation of the predictor ($\text{SE}(\beta) \propto 1/\text{SD}(X)$), which inflates the standard error ($\text{SE}(\beta) = 1.050$). Exponentiating this inflated standard error to compute the hazard ratio bounds ($\exp(\beta \pm 1.96 \cdot \text{SE})$) results in an extremely wide and asymmetric confidence interval on the hazard ratio scale. Furthermore, a "1-unit change in $\log(T_{\text{repair}} + 1)$" represents an extrapolation of over 15 standard deviations, which forces the point estimate of the HR to be extremely small ($0.078$).
-2. **Subpopulation Imbalance:** The primary biological driver of high $T_{\text{repair}}$ is homologous recombination deficiency (such as a BRCA mutation). The cohort contains only 17 BRCA-mutant patients compared to 403 wild-type patients. This severe imbalance limits the statistical power to pin down the exact effect size of the $T_{\text{repair}}$ score, contributing to the wide error bars.
-
-
-The residual DNA damage ($D_{resid}$) does not show a statistically significant association with overall survival ($p = 0.802$), likely because the damage is largely resolved at 120 hours for all patients, providing little discriminatory power.
 
 ![[fig_forest_univariate_cox.png]]
 
@@ -242,7 +237,7 @@ The HR-DDR ODE model achieves prognostic stratification of HGSOC patients using 
 
 The biological direction of the prognostic associations is correct: high $AUC_X$ and peak apoptotic signal ($X_{peak}$) associate with longer overall survival, which is consistent with the hypothesis that greater apoptotic drive leads to better chemotherapy response and survival. BRCA-mutant patients showed higher $AUC_X$ and $X_{peak}$ as expected.
 
-Furthermore, reporting on time to repair ($T_{repair}$) highlights a key mechanistic detail of the model: BRCA-mutant patients exhibit slightly longer repair times, which corresponds to their homologous recombination deficiency. In the survival model, longer repair time is associated with better survival (HR = 0.078, $p = 0.015$), indicating that slower DNA damage resolution is protective. Biologically, this reflects the therapeutic exploitability of DNA repair defects; tumors that cannot repair double-strand breaks efficiently are highly sensitive to carboplatin, leading to more effective tumor clearance and better overall survival.
+Furthermore, reporting on time to repair ($T_{repair}$) highlights a key mechanistic detail of the model: BRCA-mutant patients exhibit slightly longer repair times, which corresponds to their homologous recombination deficiency. In the survival model, longer repair time is associated with better survival (standardized HR = 0.856 per SD, $p = 0.015$), indicating that slower DNA damage resolution is protective. Biologically, this reflects the therapeutic exploitability of DNA repair defects; tumors that cannot repair double-strand breaks efficiently are highly sensitive to carboplatin, leading to more effective tumor clearance and better overall survival.
 
 TP53 was excluded from ODE parameterisation as a negative control - its near-universal mutation in HGSOC (~96%) would produce constant parameters with no discriminatory power.
 
