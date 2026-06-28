@@ -749,9 +749,9 @@ def _plot_cox_forest_univariate(
     """
     n = len(cox_rows)
 
-    # Colour each row by expected direction:
-    # protective (HR < 1 expected) → blue; deleterious (HR > 1) → red.
-    direction_colours = {"HR < 1": "#1976D2", "HR > 1": "#d32f2f"}
+    # Colour each row by observed direction:
+    # protective (HR < 1) → blue; deleterious (HR > 1) → red.
+    observed_colours = {True: "#1976D2", False: "#d32f2f"}
 
     fig, ax = plt.subplots(figsize=(8, 1.1 * n + 1.5))
 
@@ -760,7 +760,7 @@ def _plot_cox_forest_univariate(
         lo  = row["CI_low"]
         hi  = row["CI_high"]
         p   = row["p_value"]
-        col = direction_colours.get(row["expected_direction"], "black")
+        col = observed_colours[hr < 1]
 
         ax.errorbar(
             hr, i,
@@ -796,11 +796,11 @@ def _plot_cox_forest_univariate(
     )
     ax.grid(axis="x", alpha=0.25)
 
-    # Legend: expected direction colour key.
+    # Legend: observed direction colour key.
     import matplotlib.patches as mpatches
     patches = [
-        mpatches.Patch(color="#1976D2", label="Expected HR < 1 (protective)"),
-        mpatches.Patch(color="#d32f2f", label="Expected HR > 1 (deleterious)"),
+        mpatches.Patch(color="#1976D2", label="HR < 1 (protective)"),
+        mpatches.Patch(color="#d32f2f", label="HR > 1 (deleterious)"),
     ]
     ax.legend(handles=patches, fontsize=8, loc="lower left", framealpha=0.8)
 

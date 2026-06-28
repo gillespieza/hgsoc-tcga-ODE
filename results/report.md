@@ -168,11 +168,11 @@ The standardized results show a clear and consistent biological signal:
 
 ![[fig_forest_univariate_cox.png]]
 
-**Figure 6: Univariate Cox proportional hazards forest plot.** Hazard ratios (with 95% confidence intervals) for the log-transformed versions of the four ODE-derived scores.
+**Figure 6: Univariate Cox proportional hazards forest plot.** Hazard ratios (with 95% confidence intervals) for the standardized log-transformed versions ($z\text{-}\log$) of the four ODE-derived scores.
 
 ![[fig_forest_multivariate_cox.png]]
 
-**Figure 7: Multivariate Cox proportional hazards forest plot (adjusted for BRCA_MUTANT).** Hazard ratios for the log-transformed ODE scores and BRCA mutation status.
+**Figure 7: Multivariate Cox proportional hazards forest plot (adjusted for BRCA_MUTANT).** Hazard ratios for the standardized log-transformed ODE scores ($z\text{-}\log$) and BRCA mutation status.
 
 ### 4.4 Kaplan-Meier Stratification
 
