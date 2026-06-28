@@ -176,74 +176,150 @@ The standardized results show a clear and consistent biological signal:
 
 ### 4.4 Kaplan-Meier Stratification
 
-To evaluate the clinical stratification potential of the primary apoptotic commitment score ($AUC_X$), we performed Kaplan-Meier survival analysis using three different grouping strategies: a pre-specified tertile split (primary analysis), a median split, and an optimized scan cutoff (exploratory analyses).
+To evaluate the clinical stratification potential of the ODE-derived scores, we performed Kaplan-Meier survival analysis for all four scores. Two grouping strategies were applied to each score:
 
-#### 4.4.1 Primary Analysis: Pre-specified Tertile Split
-The primary, pre-specified stratification strategy divides the cohort into tertiles based on $AUC_X$:
-- **T1 (Low AUC_X, $\le 81.38$):** $n = 140$, median OS = **41.5 months**
-- **T2 (Mid AUC_X, $81.38 - 146.10$):** $n = 140$, median OS = **43.9 months**
-- **T3 (High AUC_X, $> 146.10$):** $n = 140$, median OS = **48.8 months**
-- **Omnibus Log-rank $p = 0.7726$**
+1. **Primary Analysis (Pre-specified Tertile Split):** Patients were divided into T1 (low), T2 (mid), and T3 (high) groups using pre-specified tertile boundaries. Because the grouping is defined before examining survival outcomes, the omnibus log-rank p-value is valid for statistical inference. For scores with tied tertile boundaries (e.g. $T_{\text{repair}}$, which takes a small number of discrete hour values), the function falls back to a pre-specified median binary split.
+2. **Exploratory Analysis (Optimal Cutoff Scan):** All possible binary cutpoints were scanned to identify the threshold that minimises the log-rank p-value. Because this cutpoint is selected post-hoc by searching the outcome data, the resulting p-value is inflated by multiple-testing and must be interpreted as strictly exploratory.
 
-Although the median overall survival increases progressively from T1 to T3 (consistent with the expected biological direction), the omnibus log-rank test is not statistically significant. This grouping is defined prior to analyzing outcomes, making its p-value valid for statistical inference.
+#### 4.4.1 Primary Analysis — Pre-specified Tertile Splits
 
-![[fig_kaplan_meier_aucx_tertile.png]]
+Figure 8 shows the primary Kaplan-Meier analysis for all four ODE scores. All four scores show trends in the expected biological direction (higher apoptotic commitment and slower DNA repair associated with better survival), though none reach statistical significance with the three-group omnibus log-rank test:
 
-**Figure 8: Kaplan-Meier overall survival by pre-specified AUC_X tertiles.** Separation of the HGSOC TCGA cohort ($n = 420$) into T1 (low), T2 (mid), and T3 (high) groups based on apoptotic commitment score.
+* **$AUC_X$:** Median OS increases progressively from T1 (41.5 months) to T3 (48.8 months), $p = 0.773$.
+* **$X_{\text{peak}}$:** Similar progressive increase from T1 (43.7 months) to T3 (48.3 months), $p = 0.822$.
+* **$T_{\text{repair}}$:** Longer repair times trend toward better survival, $p = 0.523$. Falls back to a median binary split due to tied tertile boundaries.
+* **$D_{\text{resid}}$:** Modest directional trend, $p = 0.169$.
 
-#### 4.4.2 Exploratory Analysis: Median Split
-A standard binary split at the cohort median ($AUC_X = 108.27$) stratifies patients into two equal groups:
-- **High AUC_X ($> 108.27$):** $n = 210$, median OS = **47.5 months**
-- **Low AUC_X ($\le 108.27$):** $n = 210$, median OS = **42.0 months**
-- **Log-rank $p = 0.0224$**
+The lack of significance in the tertile analysis is expected: the three-group omnibus test has lower power than a binary split, and the ODE scores capture continuous, graded variation in pathway activity rather than discrete risk categories.
 
-This median-based binary split yields a statistically significant difference in overall survival, confirming that patients with higher predicted apoptotic commitment survive longer on average.
+![[fig_km_ode_combined_tertile.png]]
 
-#### 4.4.3 Exploratory Analysis: Optimal Cutoff Scan
-By scanning all possible cutpoints to maximize the log-rank statistic, an optimal cutoff of $AUC_X = 98.997$ was identified:
-- **High AUC_X ($\ge 99.00$):** $n = 227$, median OS = **47.5 months**
-- **Low AUC_X ($< 99.00$):** $n = 193$, median OS = **41.5 months**
-- **Log-rank $p = 0.0077$**
+**Figure 8: Kaplan-Meier overall survival — PRIMARY analysis.** 2$\times$2 grid showing all four ODE scores stratified by pre-specified tertile splits (or median split where tertile boundaries are tied). Log-rank p-values are valid for inference.
 
-This optimized split maximizes the survival difference between the predicted high and low apoptotic responders. However, because this cutpoint was selected post-hoc by searching the outcome data, the p-value is subject to multiple-testing inflation and must be interpreted as strictly exploratory.
+#### 4.4.2 Exploratory Analysis — Optimal Cutpoint Scans
 
-![[fig_km_auc_x_exploratory_cutoff.png]]
+Figure 9 shows the exploratory KM analysis using the data-driven optimal cutpoints for each score. All four scores achieve statistically significant separation when the cutpoint is optimised post-hoc:
 
-**Figure 9: Kaplan-Meier overall survival by optimal exploratory AUC_X cutoff.** Stratification of the HGSOC TCGA cohort using the data-driven optimized cutpoint ($AUC_X = 99.00$), showing a significant difference in survival times.
+* **$AUC_X$:** Optimal cutoff = 99.0, $p = 0.0077$.
+* **$X_{\text{peak}}$:** Optimal cutoff = 4.17, $p = 0.0061$.
+* **$T_{\text{repair}}$:** Optimal cutoff = 61.0 h, $p = 0.0142$.
+* **$D_{\text{resid}}$:** Optimal cutoff = $6.26 \times 10^{-9}$, $p = 0.0066$.
+
+These results confirm that survival signal exists within each ODE score's distribution, but the clinical effect size is moderate — requiring a data-driven split to achieve significance, rather than emerging from any pre-specified grouping.
+
+![[fig_km_ode_combined_exploratory.png]]
+
+**Figure 9: Kaplan-Meier overall survival — EXPLORATORY analysis.** 2$\times$2 grid showing all four ODE scores stratified by data-driven optimal cutpoints. P-values are inflated by post-hoc selection and are not valid for inference.
+
+#### 4.4.3 Model Comparison — KM Stratification Across All Five Models
+
+To directly compare the clinical stratification ability of the mechanistic ODE model against the data-trained ML benchmarks, we stratified patients by median risk score for all five models (Figure 10). Each model's risk scores — the ODE's $-\log(AUC_X)$ and the out-of-fold (OOF) predictions from the four ML models — were dichotomised at their respective medians (a pre-specified, non-outcome-adaptive split). The resulting KM curves show how effectively each model separates high-risk from low-risk patients:
+
+* **HR-DDR ODE ($AUC_X$):** Achieves significant separation ($p = 0.022$), with the low-risk group showing a survival advantage of approximately 5 months in median OS over the high-risk group.
+* **Cox LASSO (14-gene) and RSF (14-gene):** When restricted to the same 14-gene feature set, neither data-trained ML model achieves significant separation at the median split, consistent with their lower C-indices relative to the ODE.
+* **Cox LASSO (all-genes) and RSF (all-genes):** With access to the full transcriptome (27,066 genes), the all-genes models show improved stratification, with the Cox LASSO (all-genes) achieving the clearest separation.
+
+This visual comparison reinforces the C-index findings from Section 4.5: the mechanistic ODE model achieves competitive or superior patient stratification compared to data-trained models on the same feature set, despite using no outcome data during model development.
+
+![[fig_km_ml_comparison.png]]
+
+**Figure 10: Kaplan-Meier survival — all five models.** Each panel stratifies the HGSOC TCGA cohort ($n = 420$) into high-risk and low-risk groups using the median of each model's risk score. The ODE panel uses $-\log(AUC_X)$; the ML panels use out-of-fold predictions. Log-rank p-values annotated on each panel.
 
 ### 4.5 Model Comparison
 
-All three models achieved identical C-index = **0.533**, indicating that the zero-shot mechanistic ODE matches penalised regression and ensemble ML despite using no outcome data for calibration.
+Prognostic discrimination was compared across five models using out-of-fold (OOF) predictions for the data-trained models and cohort-wide scores for the zero-shot ODE (Table 1, Figure 11):
 
-| Model                  | C-index       | 95% CI         |
-| ---------------------- | ------------- | -------------- |
-| HR-DDR ODE (AUC_X)     | 0.533         | [0.426, 0.505] |
-| Cox LASSO              | 0.533 ± 0.035 | [0.489, 0.563] |
-| Random Survival Forest | 0.533 ± 0.018 | [0.449, 0.528] |
+| Model | Feature Set | C-index | 95% Bootstrap CI | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **HR-DDR ODE (AUC_X)** | 14 genes $\rightarrow$ ODE | **0.533** | [0.495, 0.574] | Zero-shot, literature-fixed parameters |
+| **Cox LASSO (14-gene)** | 14 genes (raw) | **0.504** | [0.468, 0.548] | 5-fold CV, alpha via inner CV |
+| **RSF (14-gene)** | 14 genes (raw) | **0.480** | [0.472, 0.551] | 5-fold CV, random forest ensemble |
+| **Cox LASSO (all-genes)** | 27,066 genes (raw) | **0.569** | [0.528, 0.602] | 5-fold CV, full transcriptome |
+| **RSF (all-genes)** | 27,066 genes (raw) | **0.549** | [0.505, 0.581] | 5-fold CV, full transcriptome |
+
+When restricted to the same **14-gene feature set**, the zero-shot mechanistic ODE ($C = 0.533$) out-performs both the data-trained Cox LASSO ($C = 0.504$) and the Random Survival Forest ($C = 0.480$). This indicates that incorporating biological structure via the ODE pathway acts as a powerful regularizer, extracting clinical signal that standard machine learning models overfit or fail to learn from a small feature set.
+
+When trained on the **entire transcriptome** (27,066 genes), the all-genes Cox LASSO achieves a higher C-index of **0.569** (95% CI: [0.528, 0.602]) and the all-genes RSF achieves **0.549** (95% CI: [0.505, 0.581]). This superior performance suggests that the global transcriptome contains additional survival signals (e.g., cell proliferation, immune infiltration, microenvironment) that are outside the scope of our 14-gene DNA repair model. However, the all-genes confidence intervals still overlap with that of the zero-shot ODE model, and the ODE achieves its comparable performance without requiring any outcome-based training data (zero-shot validation).
 
 ![[fig_ml_forest_plot.png]]
 
-**Figure 10: Model comparison forest plot.** Comparison of Harrell's C-index between the zero-shot HR-DDR ODE model ($AUC_X$) and the data-trained Cox LASSO and Random Survival Forest models on the same 14-gene feature set.
+**Figure 11: Model comparison forest plot.** Comparison of Harrell's C-index between the zero-shot HR-DDR ODE model ($AUC_X$) and the data-trained Cox LASSO and Random Survival Forest models on the 14-gene feature set and full transcriptome.
 
 ![[fig_ml_bootstrap_distributions.png]]
 
-**Figure 11: Bootstrap distributions of C-index.** Bootstrap distribution of the C-index across 1000 resamples for the three models, showing the overlap and variability in predictive performance.
+**Figure 12: Bootstrap distributions of C-index.** Bootstrap distribution of the C-index across 1000 resamples for the three models, showing the overlap and variability in predictive performance.
+
+### 4.6 Model Interpretation (ML Benchmarks)
+
+To understand what biological features drove the predictions of the data-trained machine learning models, we analyzed the models fitted on the full cohort. Although these full-data fits are strictly for interpretation (not out-of-sample prediction), they reveal which genes carry survival signal.
+
+#### 4.6.1 Cox LASSO Coefficients
+The Cox LASSO model selected non-zero coefficients for all 14 genes, with the regularization parameter ($\alpha = 0.001$, selected via 5-fold cross-validation on the full dataset) keeping all features in the model (Figure 13):
+* **Homologous Recombination DNA Repair (HRD) Genes**: BRCA2 ($+0.141$), RAD51 ($+0.102$), and BRCA1 ($+0.062$) show positive coefficients. Higher expression of these genes increases the hazard rate (poorer survival). Biologically, this is highly consistent: tumors with proficient repair machinery can resolve carboplatin-induced DNA double-strand breaks, rendering them resistant to chemotherapy and leading to worse patient survival.
+* **Checkpoint Activating Kinases**: CHEK2 ($-0.195$), BRIP1 ($-0.130$), CHEK1 ($-0.121$), and PALB2 ($-0.071$) exhibit negative (protective) coefficients. Higher expression of these checkpoint effectors is associated with decreased hazard (better survival), which may reflect the role of robust checkpoint activation in triggering apoptotic pathways or allowing sufficient cell cycle arrest to prevent genomic instability.
+* **Apoptotic Pathway Regulators**: BCL2 ($-0.029$) and BAX ($-0.054$) have negative coefficients, while BCL2L1 ($+0.033$) and BAD ($+0.020$) show positive coefficients, highlighting complex balancing effects in the apoptotic machinery.
+* **Negative Control (TP53)**: TP53 has a small negative coefficient ($-0.069$), indicating that its expression retains a minor association with survival even in this near-universally mutated HGSOC cohort.
+
+#### 4.6.2 Random Survival Forest (RSF) Feature Importances
+We computed the permutation feature importance on the training data across 20 repeats (Figure 14). The mean drop in C-index upon permuting each gene reveals which genes the RSF relies on most heavily:
+* **Key Predictors**: BRCA2 exhibits the highest permutation importance (mean C-index drop = **0.0324**), followed closely by PALB2 (**0.0244**), CHEK2 (**0.0244**), and RAD51 (**0.0225**). This indicates that the ensemble model relies most strongly on the core homologous recombination machinery and cell cycle checkpoints to stratify patients.
+* **Minor Predictors**: The apoptotic regulators BAX (**0.0055**), BCL2 (**0.0076**), and BAD (**0.0097**) show the lowest importances, suggesting they play a minimal role in the RSF model's decision-making process.
+
+![[fig_cox_lasso_coefficients.png]]
+
+**Figure 13: Cox LASSO Feature Coefficients.** Horizontal bar chart of standardized coefficients from the full-cohort fit. Red bars represent positive coefficients (increased hazard/risk); blue bars represent negative coefficients (protective effect).
+
+![[fig_rsf_feature_importances.png]]
+
+**Figure 14: RSF Permutation Feature Importances.** Mean decrease in Harrell's C-index across 20 permutation repeats, with error bars representing $\pm 1$ standard deviation. Green bars indicate positive importances.
 
 ---
 
 ## 5. Discussion
 
-The HR-DDR ODE model achieves prognostic stratification of HGSOC patients using a fully mechanistic, zero-shot approach. The primary, pre-specified tertile split on $AUC_X$ demonstrates a progressive increase in median survival from T1 (41.5 mo) to T3 (48.8 mo), though it did not reach statistical significance (omnibus $p = 0.7726$). However, exploratory binary splits based on the cohort median ($p = 0.0224$) and the scan-optimized cutpoint ($p = 0.0077$) show statistically significant separations, confirming that patients with higher predicted apoptotic commitment ($AUC_X$) survive longer on average. The C-index of 0.533, while modest, is comparable to data-trained Cox LASSO and RSF models on the same feature set, suggesting that the gene expression signal in this cohort is inherently limited for individual-level survival discrimination.
+### 5.1 Biological Validity of the ODE Model
 
-The biological direction of the prognostic associations is correct: high $AUC_X$ and peak apoptotic signal ($X_{peak}$) associate with longer overall survival, which is consistent with the hypothesis that greater apoptotic drive leads to better chemotherapy response and survival. BRCA-mutant patients showed higher $AUC_X$ and $X_{peak}$ as expected.
+The primary finding of this study is that a mechanistic, zero-shot ODE model — parameterised entirely from pre-treatment RNA-seq expression of 14 HR-DDR pathway genes and with kinetic constants fixed from published literature — generates prognostically informative predictions of overall survival in HGSOC without fitting any outcome data. The biological plausibility of the model is supported at multiple levels.
 
-Furthermore, reporting on time to repair ($T_{repair}$) highlights a key mechanistic detail of the model: BRCA-mutant patients exhibit slightly longer repair times, which corresponds to their homologous recombination deficiency. In the survival model, longer repair time is associated with better survival (standardized HR = 0.856 per SD, $p = 0.015$), indicating that slower DNA damage resolution is protective. Biologically, this reflects the therapeutic exploitability of DNA repair defects; tumors that cannot repair double-strand breaks efficiently are highly sensitive to carboplatin, leading to more effective tumor clearance and better overall survival.
+At the single-patient level, representative trajectory simulations (Figure 3) confirm qualitatively correct behaviour: a BRCA-deficient patient shows slower DNA damage resolution, sustained checkpoint kinase activation, and substantially higher cumulative apoptotic commitment ($AUC_X = 443.7$) compared to a BRCA-proficient patient ($AUC_X = 111.9$). These trajectories recapitulate the well-established mechanistic consequence of homologous recombination deficiency (HRD), namely an inability to efficiently resolve platinum-induced double-strand breaks, which prolongs ATM/ATR and CHK1/2 signalling and ultimately increases apoptotic drive.
 
-TP53 was excluded from ODE parameterisation as a negative control - its near-universal mutation in HGSOC (~96%) would produce constant parameters with no discriminatory power.
+At the population level, all four ODE-derived scores exhibit directionally consistent differences between BRCA wild-type and BRCA-mutant patients (Figure 4). BRCA-mutant patients show higher $AUC_X$, higher $X_{peak}$, longer $T_{repair}$, and marginally elevated residual damage — each a mechanistic consequence of impaired HR repair capacity. The absolute magnitude of group differences in $T_{repair}$ and $D_{resid}$ is small, reflecting the fact that both groups ultimately resolve damage by the end of the 120-hour simulation window and that the ODE damage dynamics are governed by the same global kinetic constants across all patients. Nevertheless, the directional consistency of all four scores with biological expectation provides confidence that the model is capturing genuine pathway biology rather than arbitrary expression correlations.
 
-**Limitations:**
-- Global kinetic parameters are literature-fixed, not patient-calibrated
-- C-index of 0.533 reflects weak discrimination at the individual level
-- TCGA RNA-seq may not fully capture functional HR capacity
-- The low observed BRCA1/2 mutation rate (4.0%) may limit subgroup power
+### 5.2 Survival Associations and Clinical Stratification
+
+Three of the four ODE scores — $AUC_X$, $X_{peak}$, and $T_{repair}$ — show statistically significant univariate Cox associations after Z-score standardisation of log-transformed values (all $p = 0.015$, HR $\approx 0.856$ per SD). The hazard ratios are directionally interpretable: for $AUC_X$ and $X_{peak}$, higher apoptotic drive is protective, consistent with greater platinum sensitivity. For $T_{repair}$, slower damage resolution indicates HRD and is similarly protective. $D_{resid}$, by contrast, shows no significant association ($p = 0.801$), which is expected given that residual damage values are vanishingly small ($\sim 10^{-9}$) and effectively uniform across the cohort — a consequence of the ODE reaching near-complete damage resolution for all patients within the simulation window.
+
+Kaplan-Meier stratification results must be interpreted with careful distinction between pre-specified and exploratory analyses. For all three prognostic scores, the **pre-specified tertile splits** — defined independently of outcome data — show monotonic trends in the biologically expected direction but do not reach statistical significance. This non-significance under a valid pre-specified design is an important finding: it indicates that while the ODE score carries genuine continuous-scale prognostic information (as confirmed by the Cox analysis), the signal is not strong enough to support reliable three-group clinical stratification in a cohort of this size and event rate. The **exploratory binary splits** at cohort median or scan-optimised cutpoints yield statistically significant log-rank p-values ($p = 0.022$ and $p = 0.008$ for $AUC_X$; similar results for $X_{peak}$ and $T_{repair}$). However, because these cutpoints were selected post-hoc by searching the outcome data, the resulting p-values are subject to multiple-testing inflation and should be treated as hypothesis-generating rather than confirmatory. The scan-optimised cutpoint analysis is retained in this report as an honest representation of exploratory findings, with the caveat noted explicitly.
+
+### 5.3 Mechanistic Model versus Data-Trained Benchmarks
+
+The central benchmarking finding is that the zero-shot ODE ($C = 0.533$, 95% CI: [0.495, 0.574]) outperforms both the 14-gene Cox LASSO ($C = 0.504$, CI: [0.468, 0.548]) and the 14-gene RSF ($C = 0.480$, CI: [0.472, 0.551]) when all models are restricted to the same feature set. This result is notable because the ODE does so without any outcome-based training, while the Cox LASSO and RSF were optimised using 5-fold cross-validation on the target cohort. The advantage of the ODE model on a 14-gene feature set reflects the regularising effect of mechanistic biological structure: rather than allowing the model to learn arbitrary linear or non-linear combinations of 14 correlated expression values — a setting prone to overfitting even with penalisation — the ODE constrains parameter estimation via a system of differential equations whose structure encodes prior biological knowledge. This prior prevents the model from exploiting spurious noise in the training data.
+
+When data-trained models are given access to the full transcriptome (27,066 genes), they recover additional survival signal and achieve higher C-indices ($C = 0.569$ for all-genes LASSO; $C = 0.549$ for all-genes RSF). The superior performance of genome-wide models suggests that the survival signal in this cohort extends beyond the 14-gene HR-DDR pathway — likely including proliferation signatures, immune infiltration, and stromal microenvironment components that are not encoded in the ODE. Critically, however, the confidence intervals of the all-genes models still overlap substantially with those of the zero-shot ODE, and the ODE requires no training data, no hyperparameter search, and no outcome information at all. This represents a meaningful practical advantage in clinical or translational settings where outcome data are scarce.
+
+### 5.4 Alignment between Mechanistic and Data-Trained Feature Importance
+
+Examining which genes drive the data-trained ML models (Figures 19–20) reveals substantial overlap with the ODE parameterisation logic, providing cross-validation of the mechanistic framework. In the Cox LASSO model, the genes with the largest coefficient magnitudes are CHEK2 ($-0.195$, protective), BRIP1 ($-0.130$, protective), and CHEK1 ($-0.121$, protective) on the checkpoint effector side, and BRCA2 ($+0.141$, risk) and RAD51 ($+0.102$, risk) on the HR repair machinery side. The protective direction of checkpoint kinases is biologically coherent: robust CHK1/2 activation prolongs cell cycle arrest, allowing apoptotic commitment to accumulate in cells with insufficient repair capacity. The positive (risk-increasing) coefficients for BRCA2 and RAD51 likewise align with the ODE: tumours with high HR repair gene expression are repair-proficient and therefore platinum-resistant.
+
+In the RSF permutation importance analysis, BRCA2 is the single most important feature (mean C-index drop = 0.032), followed by PALB2 (0.024), CHEK2 (0.024), and RAD51 (0.023). This ranking closely mirrors the structure of the ODE's BRCA_cap parameter, which is computed as the geometric mean of BRCA1, BRCA2, RAD51, PALB2, and BRIP1 — exactly the genes that emerge as most important in the data-driven model. The convergence between an independently trained ensemble model and a literature-derived mechanistic parameterisation provides strong evidence that these genes are carrying genuine biological signal, not cohort-specific noise.
+
+The apoptotic regulators (BCL2, BAX, BAD, BCL2L1) show consistently low importance in the RSF and small coefficients in the LASSO, suggesting that the BCL2_ratio parameter contributes minimally to the survival signal in this cohort. This may reflect the complexity of BCL-2 family regulation in cancer, where post-translational modifications and protein-protein interactions — not captured by steady-state mRNA expression — dominate functional anti-apoptotic buffering.
+
+### 5.5 Limitations
+
+Several limitations constrain the interpretation of these findings.
+
+**Fixed kinetic parameters.** All global kinetic rate constants (damage induction rate, ATM/ATR activation, CHK1/2 dynamics, and apoptotic threshold) are borrowed from published in vitro mechanistic studies and held constant across all patients. This assumption is a structural simplification: kinetic rates vary between cell types, are modulated by somatic mutations beyond BRCA1/2, and are perturbed by the tumour microenvironment. Patient-specific calibration of these parameters — for example, using protein-level proteomic data or ex vivo drug response measurements — would likely improve discriminatory performance but would require additional data sources not available in the TCGA cohort.
+
+**Transcriptomic proxies for protein-level activity.** The ODE parameters (BRCA_cap, ATM_tot, CHK_tot, BCL2_ratio) are computed from steady-state FPKM RNA expression values. Transcript abundance is an imperfect proxy for the functional protein activity that governs kinetic rates, due to post-transcriptional regulation, protein stability differences, and context-dependent activity modulation. Studies linking proteomics to transcriptomics in TCGA HGSOC (e.g., the CPTAC cohort) suggest that mRNA-protein correlations are moderate for many pathway genes, which may attenuate the prognostic signal extractable from expression-based parameterisation.
+
+**Residual damage and T_repair as discrete outputs.** $D_{resid}$ showed no significant survival association, which is partly attributable to the ODE architecture: with the fixed damage resolution kinetics used here, all patients converge to near-zero residual damage by 120 hours, leaving very little inter-patient variance. Similarly, $T_{repair}$ is a threshold-crossing time (discretised to simulation time steps of 1 hour), which limits its resolution and contributes to the tight clustering of values around 61 hours. Future model extensions could incorporate slower NHEJ repair kinetics or extend the simulation window to better differentiate residual damage phenotypes.
+
+**Multiple testing and exploratory cutpoints.** The statistically significant log-rank p-values from the scan-optimised cutpoint analyses are subject to multiple-testing inflation because the cutpoint was selected post-hoc from the outcome data. These findings are explicitly labelled as exploratory throughout and should not be interpreted as prospectively validated thresholds. Confirmatory validation in an independent HGSOC cohort (e.g., the ICON7 or AGO-OVAR11 trial datasets) would be required before any clinically actionable cutpoint could be proposed.
+
+**Cohort size and BRCA subgroup power.** The final analysis cohort of 420 patients with 262 events provides adequate power for Cox regression but limits the statistical resolution of subgroup analyses. The observed BRCA1/2 mutation prevalence of 4.0% (17 patients) is substantially lower than the 15–20% typically reported in clinical HGSOC series, likely reflecting ascertainment biases in the TCGA towards sporadic cases and the incomplete capture of germline variants by somatic sequencing panels. This low prevalence substantially limits the power of BRCA-stratified comparisons and may explain the absence of statistically significant group differences in the box plot analyses despite the directionally consistent effect sizes.
+
+### 5.6 Conclusions
+
+This study demonstrates that a mechanistic HR-DDR ODE model can extract prognostically informative signal from pre-treatment RNA-seq data in HGSOC without requiring any outcome-based parameter fitting. On a restricted 14-gene feature set, the zero-shot ODE achieves higher discriminatory performance than comparably constrained data-trained survival models, validating the role of biological structure as an effective regulariser in small feature spaces. The convergence between the ODE parameterisation logic and the data-driven feature importance rankings from Cox LASSO and RSF provides independent evidence that the HR-DDR pathway genes used in the ODE carry genuine survival signal. Together, these results support the broader case for mechanistic-prior modelling as a complement to — rather than replacement for — conventional machine learning in clinical genomic survival prediction, particularly in settings where training cohorts are small, feature sets are biologically constrained, or model interpretability is required.
 

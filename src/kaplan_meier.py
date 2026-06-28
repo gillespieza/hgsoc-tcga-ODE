@@ -162,10 +162,10 @@ def km_tertile_plot(df: pd.DataFrame) -> tuple[float, str]:
 
     p_str = f"p = {p_val:.4g}" if p_val >= 1e-4 else "p < 0.0001"
     ax.text(
-        0.97, 0.05,
+        0.03, 0.05,
         f"Log-rank {p_str}\n({split_note})",
         transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9,
+        ha="left", va="bottom", fontsize=9,
         bbox=dict(
             boxstyle="round,pad=0.4",
             facecolor="white",

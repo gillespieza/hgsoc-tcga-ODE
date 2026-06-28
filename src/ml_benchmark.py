@@ -65,6 +65,8 @@ matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
 
+from lifelines import KaplanMeierFitter
+from lifelines.statistics import logrank_test
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -1200,6 +1202,140 @@ def plot_bootstrap_distributions(
     )
 
 
+def plot_ml_km(
+    ode_risk: np.ndarray,
+    lasso_oof_14: np.ndarray,
+    rsf_oof_14: np.ndarray,
+    lasso_oof_all: np.ndarray,
+    rsf_oof_all: np.ndarray,
+    y: np.ndarray,
+) -> None:
+    """
+    Plot a 2x3 Kaplan-Meier panel comparing all five models.
+
+    Each panel stratifies patients by median OOF risk score — a pre-specified
+    non-outcome-adaptive split — and reports the log-rank p-value. The ODE
+    panel uses -log_AUC_X (negated so higher = worse, matching convention).
+
+    The sixth panel is hidden to keep the 2x3 layout uniform.
+
+    Parameters
+    ----------
+    ode_risk : np.ndarray
+        ODE risk scores (-log_AUC_X); higher values indicate worse prognosis.
+    lasso_oof_14 : np.ndarray
+        Cox LASSO OOF risk scores from the 14-gene arm.
+    rsf_oof_14 : np.ndarray
+        RSF OOF risk scores from the 14-gene arm.
+    lasso_oof_all : np.ndarray
+        Cox LASSO OOF risk scores from the all-genes arm.
+    rsf_oof_all : np.ndarray
+        RSF OOF risk scores from the all-genes arm.
+    y : np.ndarray
+        Structured survival array with ('event', bool) and ('time', float).
+    """
+    model_specs = [
+        ("HR-DDR ODE (AUC_X)",       ode_risk,       "#2196F3"),
+        ("Cox LASSO (14-gene)",       lasso_oof_14,   "#FF9800"),
+        ("RSF (14-gene)",             rsf_oof_14,     "#4CAF50"),
+        ("Cox LASSO (all-genes)",     lasso_oof_all,  "#E91E63"),
+        ("RSF (all-genes)",           rsf_oof_all,    "#9C27B0"),
+    ]
+
+    os_months = y["time"]
+    os_event  = y["event"].astype(int)
+
+    fig, axes = plt.subplots(2, 3, figsize=(15, 9))
+    axes_flat = axes.flatten()
+
+    for ax, (label, risk, color) in zip(axes_flat[:5], model_specs):
+        # Median split on the OOF / full-cohort risk scores.
+        # This is a pre-specified, non-outcome-adaptive stratification:
+        # the median is defined on the score distribution, not by scanning
+        # survival outcomes.
+        median_cut = np.median(risk)
+        high_mask = risk > median_cut
+        low_mask  = ~high_mask
+
+        n_high = int(high_mask.sum())
+        n_low  = int(low_mask.sum())
+
+        # Log-rank test between the two groups.
+        lr = logrank_test(
+            os_months[low_mask],
+            os_months[high_mask],
+            event_observed_A=os_event[low_mask],
+            event_observed_B=os_event[high_mask],
+        )
+        p_val = lr.p_value
+
+        kmf = KaplanMeierFitter()
+
+        # Low-risk group (better expected survival).
+        kmf.fit(
+            os_months[low_mask], os_event[low_mask],
+            label=f"Low risk (n={n_low})",
+        )
+        kmf.plot_survival_function(
+            ax=ax, ci_show=True, color="#1976D2",
+            ci_alpha=0.12, linewidth=1.8,
+        )
+
+        # High-risk group (worse expected survival).
+        kmf.fit(
+            os_months[high_mask], os_event[high_mask],
+            label=f"High risk (n={n_high})",
+        )
+        kmf.plot_survival_function(
+            ax=ax, ci_show=True, color="#d32f2f",
+            ci_alpha=0.12, linewidth=1.8,
+        )
+
+        p_str = f"p = {p_val:.3g}" if p_val >= 1e-4 else "p < 0.0001"
+        ax.text(
+            0.03, 0.05,
+            f"Log-rank {p_str}\n(median split)",
+            transform=ax.transAxes,
+            ha="left", va="bottom", fontsize=8,
+            bbox=dict(
+                boxstyle="round,pad=0.3",
+                facecolor="white",
+                edgecolor="#cccccc",
+                alpha=0.85,
+            ),
+        )
+
+        # Title bar coloured to match the forest plot convention.
+        ax.set_title(label, fontsize=10, color=color, fontweight="bold")
+        ax.set_xlabel("Time (months)", fontsize=9)
+        ax.set_ylabel("Survival probability", fontsize=9)
+        ax.set_ylim(0, 1.05)
+        ax.grid(alpha=0.2)
+        ax.legend(fontsize=8, loc="upper right")
+
+        logger.info(
+            f"KM median split — {label}: "
+            f"low n={n_low}, high n={n_high}, log-rank p={p_val:.4g}"
+        )
+
+    # Hide the unused sixth panel.
+    axes_flat[5].set_visible(False)
+
+    fig.suptitle(
+        "Kaplan-Meier Survival — All Five Models Stratified by Median Risk Score",
+        fontsize=12,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+
+    fig_dir = ROOT / "results" / "figures"
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    out_path = fig_dir / "fig_km_ml_comparison.png"
+    fig.savefig(out_path, dpi=150, bbox_inches="tight")
+    plt.close()
+    logger.info(f"Saved: {out_path}")
+
+
 # =================================================================
 # Main
 # =================================================================
@@ -1396,6 +1532,25 @@ def main() -> None:
         rsf_boot["samples"],
         lasso_all_boot["samples"],
         rsf_all_boot["samples"],
+    )
+
+
+
+    # -----------------------------------------------------------------
+    # KM comparison across all five models.
+    #
+    # Each model is stratified by its median OOF / full-cohort risk score.
+    # The all-genes OOF scores are passed directly from collect_oof_predictions.
+    # -----------------------------------------------------------------
+    logger.info('-' * 50)
+    logger.info("Plotting KM comparison for all five models")
+    plot_ml_km(
+        ode_risk,
+        lasso_oof,
+        rsf_oof,
+        lasso_all_oof,
+        rsf_all_oof,
+        y,
     )
 
 

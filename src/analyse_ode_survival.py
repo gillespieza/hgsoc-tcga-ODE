@@ -171,10 +171,10 @@ def km_tertile_split(
         kmf.plot_survival_function(ax=ax, ci_show=True, color=color)
 
     ax.text(
-        0.98, 0.05,
+        0.03, 0.05,
         f"log-rank p = {p_val:.3g}\n({split_note})",
         transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9,
+        ha="left", va="bottom", fontsize=9,
     )
     ax.set_xlabel("Time (months)")
     ax.set_ylabel("Survival probability")
@@ -375,11 +375,11 @@ def _km_exploratory(
         kmf.plot_survival_function(ax=ax, ci_show=True)
 
     ax.text(
-        0.98, 0.05,
+        0.03, 0.05,
         f"log-rank p = {km_res.p_value:.3g}\n"
         f"(optimal cutpoint — EXPLORATORY)",
         transform=ax.transAxes,
-        ha="right", va="bottom", fontsize=9,
+        ha="left", va="bottom", fontsize=9,
     )
     ax.set_xlabel("Time (months)")
     ax.set_ylabel("Survival probability")
@@ -964,6 +964,212 @@ def _plot_cox_forest_multivariate(
 
 
 # =================================================================
+# Helper: combined KM grids (PRIMARY tertile + EXPLORATORY cutoff)
+# =================================================================
+
+def _plot_km_combined_tertile(
+    analysis_df: pd.DataFrame,
+    score_cols: list[str],
+    fig_dir: Path,
+) -> None:
+    """
+    Plot a 2x2 grid of PRIMARY Kaplan-Meier curves using pre-specified
+    tertile splits for all four ODE scores.
+
+    Each panel replicates the individual km_tertile_split() analysis —
+    the omnibus log-rank p-value is valid for inference because grouping is
+    defined before examining survival outcomes. Falls back to a median binary
+    split for scores with tied tertile boundaries (e.g. T_repair).
+
+    Parameters
+    ----------
+    analysis_df : pd.DataFrame
+        Must contain score columns, 'OS_MONTHS', and 'OS_EVENT'.
+    score_cols : list[str]
+        Ordered list of four ODE score column names.
+    fig_dir : Path
+        Destination directory for the figure.
+    """
+    fig, axes = plt.subplots(2, 2, figsize=(12, 9))
+    axes = axes.flatten()
+
+    for idx, score_col in enumerate(score_cols):
+        ax = axes[idx]
+        df = analysis_df.copy().dropna(subset=[score_col, "OS_MONTHS", "OS_EVENT"])
+
+        q33 = df[score_col].quantile(1 / 3)
+        q67 = df[score_col].quantile(2 / 3)
+
+        if q33 == q67:
+            # Tertile boundaries tied — fall back to pre-specified median split.
+            median = df[score_col].median()
+            df["tertile"] = np.where(
+                df[score_col] <= median, "Low (≤median)", "High (>median)"
+            )
+            group_labels = ["Low (≤median)", "High (>median)"]
+            colors = ["#1976D2", "#d32f2f"]
+            split_note = "median split"
+        else:
+            tertile_labels = ["T1 (low)", "T2 (mid)", "T3 (high)"]
+            df["tertile"] = pd.cut(
+                df[score_col],
+                bins=[-np.inf, q33, q67, np.inf],
+                labels=tertile_labels,
+            )
+            group_labels = tertile_labels
+            colors = ["#1976D2", "#F57C00", "#d32f2f"]
+            split_note = "tertile split"
+
+        res = multivariate_logrank_test(
+            df["OS_MONTHS"],
+            df["tertile"].astype(str),
+            event_col=df["OS_EVENT"],
+        )
+        p_val = res.p_value
+
+        kmf = KaplanMeierFitter()
+        for label, color in zip(group_labels, colors):
+            grp = df[df["tertile"] == label]
+            kmf.fit(
+                grp["OS_MONTHS"], grp["OS_EVENT"],
+                label=f"{label} (n={len(grp)})",
+            )
+            kmf.plot_survival_function(
+                ax=ax, ci_show=True, color=color,
+                ci_alpha=0.12, linewidth=1.8,
+            )
+
+        p_str = f"p = {p_val:.3g}" if p_val >= 1e-4 else "p < 0.0001"
+        ax.text(
+            0.03, 0.05,
+            f"Log-rank {p_str}\n({split_note})",
+            transform=ax.transAxes,
+            ha="left", va="bottom", fontsize=8,
+            bbox=dict(
+                boxstyle="round,pad=0.3",
+                facecolor="white",
+                edgecolor="#cccccc",
+                alpha=0.85,
+            ),
+        )
+        ax.set_xlabel("Time (months)", fontsize=9)
+        ax.set_ylabel("Survival probability", fontsize=9)
+        ax.set_title(f"{score_col} — PRIMARY ({split_note})", fontsize=10)
+        ax.set_ylim(0, 1.05)
+        ax.grid(alpha=0.2)
+        ax.legend(fontsize=7.5, loc="upper right")
+
+    fig.suptitle(
+        "Kaplan-Meier Survival — ODE Scores (PRIMARY Analysis, Pre-specified Splits)",
+        fontsize=12,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    out_path = fig_dir / "fig_km_ode_combined_tertile.png"
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    logger.info(f"Saved: {out_path}")
+
+
+def _plot_km_combined_exploratory(
+    analysis_df: pd.DataFrame,
+    best_cuts: dict[str, float],
+    score_cols: list[str],
+    fig_dir: Path,
+) -> None:
+    """
+    Plot a 2x2 grid of EXPLORATORY Kaplan-Meier curves using the data-driven
+    optimal cutpoints for all four ODE scores.
+
+    NOTE: the log-rank p-values shown here are inflated because each cutpoint
+    was selected post-hoc to minimise the p-value. These figures are labelled
+    explicitly as exploratory and are not used for inference.
+
+    Parameters
+    ----------
+    analysis_df : pd.DataFrame
+        Must contain score columns, 'OS_MONTHS', and 'OS_EVENT'.
+    best_cuts : dict[str, float]
+        Mapping from score name to the optimal cutpoint from _run_threshold_scan.
+    score_cols : list[str]
+        Ordered list of four ODE score column names.
+    fig_dir : Path
+        Destination directory for the figure.
+    """
+    fig, axes = plt.subplots(2, 2, figsize=(12, 9))
+    axes = axes.flatten()
+
+    for idx, score_col in enumerate(score_cols):
+        ax = axes[idx]
+        best_cut = best_cuts[score_col]
+        df = analysis_df.copy()
+        df["_group"] = np.where(
+            df[score_col] <= best_cut, "Low", "High"
+        )
+
+        low_mask = df["_group"] == "Low"
+        high_mask = df["_group"] == "High"
+
+        km_res = logrank_test(
+            df.loc[low_mask,  "OS_MONTHS"],
+            df.loc[high_mask, "OS_MONTHS"],
+            event_observed_A=df.loc[low_mask,  "OS_EVENT"],
+            event_observed_B=df.loc[high_mask, "OS_EVENT"],
+        )
+        p_val = km_res.p_value
+
+        kmf = KaplanMeierFitter()
+        colors = {"Low": "#1976D2", "High": "#d32f2f"}
+        for group, grp in df.groupby("_group"):
+            kmf.fit(
+                grp["OS_MONTHS"], grp["OS_EVENT"],
+                label=f"{group} (n={len(grp)})",
+            )
+            kmf.plot_survival_function(
+                ax=ax, ci_show=True, color=colors[group],
+                ci_alpha=0.12, linewidth=1.8,
+            )
+
+        p_str = f"p = {p_val:.3g}" if p_val >= 1e-4 else "p < 0.0001"
+        ax.text(
+            0.03, 0.05,
+            f"Log-rank {p_str}\n(cutoff = {best_cut:.3g}, EXPLORATORY)",
+            transform=ax.transAxes,
+            ha="left", va="bottom", fontsize=7.5,
+            bbox=dict(
+                boxstyle="round,pad=0.3",
+                facecolor="#fff8e1",
+                edgecolor="#f9a825",
+                alpha=0.9,
+            ),
+        )
+        ax.set_xlabel("Time (months)", fontsize=9)
+        ax.set_ylabel("Survival probability", fontsize=9)
+        ax.set_title(
+            f"{score_col} — EXPLORATORY (cutoff = {best_cut:.3g})",
+            fontsize=10,
+        )
+        ax.set_ylim(0, 1.05)
+        ax.grid(alpha=0.2)
+        ax.legend(fontsize=7.5, loc="upper right")
+
+    fig.suptitle(
+        "Kaplan-Meier Survival — ODE Scores (EXPLORATORY — Optimal Cutpoints, NOT for Inference)",
+        fontsize=11,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+
+    fig_dir.mkdir(parents=True, exist_ok=True)
+    out_path = fig_dir / "fig_km_ode_combined_exploratory.png"
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    logger.info(f"Saved: {out_path}")
+
+
+# =================================================================
 # Helper: save summary tables
 # =================================================================
 
@@ -1043,7 +1249,9 @@ def main() -> None:
     2. For each ODE score: threshold scan, PRIMARY tertile KM, EXPLORATORY
        optimal-cutpoint KM, histogram, BRCA boxplot, univariate Cox,
        multivariate Cox with PH assumption check.
-    3. After the per-score loop, draw two combined forest plots:
+    3. After the per-score loop, draw combined plots:
+       - fig_km_ode_combined_tertile.png  (all four scores in 2x2 grid)
+       - fig_km_ode_combined_exploratory.png (all four scores in 2x2 grid)
        - fig_forest_univariate_cox.png (all four scores, one row each)
        - fig_forest_multivariate_cox.png (all four scores × 2 covariates)
     4. Save threshold scan summary and univariate Cox comparison tables.
@@ -1123,6 +1331,12 @@ def main() -> None:
             "tertile_logrank_p": tertile_p,       # primary, valid for inference
             "exploratory_km_p":  exploratory_p,   # same caveat as scan_best_p
         })
+
+    # -----------------------------------------------------------------
+    # Combined KM grids (drawn once, across all four scores)
+    # -----------------------------------------------------------------
+    _plot_km_combined_tertile(analysis_df, SCORE_COLS, fig_dir)
+    _plot_km_combined_exploratory(analysis_df, best_cuts, SCORE_COLS, fig_dir)
 
     # -----------------------------------------------------------------
     # Combined distribution plots (drawn once, across all four scores)
