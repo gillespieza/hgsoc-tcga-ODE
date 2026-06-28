@@ -283,7 +283,7 @@ def main():
     plt.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
 
-    logger.success(f"[FILE] Saved figure: ./results/figures/ode_validation_trajectories.png")
+    logger.info(f"Saved: {out_path}")
 
 
 if __name__ == "__main__":

@@ -5,7 +5,7 @@ tags:
 created: 2026-06-22 17:53
 obsidianEditingMode: preview
 obsidianUIMode: source
-updated: 2026-06-28 11:44
+updated: 2026-06-28 12:15
 ---
 
 # HR-DDR ODE Survival Model - HGSOC TCGA
@@ -93,7 +93,7 @@ Top-left: patient attrition from raw download to final merged cohort.
 Top-centre: follow-up time distribution stratified by vital status.  
 Top-right: overall event rate (deceased vs. living/censored).  
 Bottom-left: Kaplan-Meier curve for the full cohort with median OS marked.  
-Bottom-right: BRCA1/2 germline mutation prevalence._
+Bottom-centre: BRCA1/2 germline mutation prevalence (bottom-right panel hidden for layout symmetry)._
 
 ### 3.2 Cohort Characteristics
 
@@ -112,26 +112,39 @@ Two representative patients (BRCA-mutant vs BRCA-wildtype) showed biologically p
 
 ![[ode_validation_trajectories.png]]
 
-**Figure 2:** 
+**Figure 2. Mechanistic trajectories of HR-DDR ODE model state variables for representative patients.** Simulation profiles of state variables over 120 hours following a transient carboplatin damage perturbation ($D_0 = 1.0$, half-life $\tau_{\text{drug}} = 6$ h). Low-BRCA patient (red, TCGA-29-1762, $\text{BRCA}_{\text{cap}} = 0.603$) represents homologous recombination deficiency, while High-BRCA patient (blue, TCGA-59-A5PD, $\text{BRCA}_{\text{cap}} = 2.369$) represents homologous recombination proficiency.  
+From left to right:
+- **D (DNA Damage)**: Spikes rapidly following drug entry. In the Low-BRCA patient, damage resolves more slowly due to reliance on slower/error-prone non-homologous end joining (NHEJ) repair. In the High-BRCA patient, damage is rapidly resolved.
+- **A (ATM/ATR activation)**: Sensed damage signal tracks with DNA damage load, showing sustained activation in the Low-BRCA patient.
+- **C (CHK signaling)**: Downstream kinase signaling cascade activated by ATM/ATR shows a corresponding high-amplitude, prolonged plateaus in the Low-BRCA patient.
+- **R (HR repair complex)**: Repair complex abundance starts at the zero-damage analytical steady state ($R(0) = \text{BRCA}_{\text{cap}}$) and undergoes depletion driven by checkpoint-mediated consumption. The Low-BRCA patient exhibits severe depletion and delayed recovery.
+- **X (Apoptosis)**: Apoptotic commitment accumulates under sustained checkpoint signaling. The Low-BRCA patient shows high apoptotic drive ($\text{AUC}_X = 443.710$), indicating high platinum sensitivity, whereas the High-BRCA patient suppresses apoptosis ($\text{AUC}_X = 111.880$) via rapid DNA repair and lower checkpoint activation.
 
 ### 4.2 ODE Score Distributions
 AUC_X was approximately log-normally distributed across the cohort (n = 420). BRCA-mutant patients showed significantly higher AUC_X than wildtype patients, validating the biological direction of the model.
 
-**Figure 3:** `results/figures/fig_boxplot_auc_x_brca.png`  
-**Figure 4:** `results/figures/fig_hist_auc_x.png`
+![[fig_boxplot_auc_x_brca.png]]
+
+**Figure 3:**
+
+![[fig_hist_auc_x.png]]
+
+**Figure 4:**
 
 ### 4.3 Univariate Cox Regression
 
-| ODE Score | HR | 95% CI | p-value | C-index |
-|---|---|---|---|---|
-| AUC_X | 0.793 | [0.658, 0.956] | **0.015** | 0.533 |
-| X_peak | 0.733 | [0.569, 0.942] | **0.015** | 0.532 |
-| T_repair | 0.010 | [<0.001, 26.4] | 0.252 | 0.505 |
-| D_resid | - | - | 0.802 | 0.482 |
+| ODE Score | HR    | 95% CI         | p-value   | C-index |
+| --------- | ----- | -------------- | --------- | ------- |
+| AUC_X     | 0.793 | [0.658, 0.956] | **0.015** | 0.533   |
+| X_peak    | 0.733 | [0.569, 0.942] | **0.015** | 0.532   |
+| T_repair  | 0.010 | [<0.001, 26.4] | 0.252     | 0.505   |
+| D_resid   | -     | -              | 0.802     | 0.482   |
 
 HR < 1 for AUC_X is biologically correct: higher apoptotic commitment → greater platinum sensitivity → better survival.
 
-**Figure 5:** `results/figures/fig_cox_hr_auc_x_multivariate.png`
+![[fig_cox_hr_auc_x_multivariate.png]]
+
+**Figure 5:**
 
 ### 4.4 Kaplan-Meier Stratification
 
@@ -143,21 +156,31 @@ Median split (log_AUC_X ≥ median):
 Optimal cutoff (AUC_X = 98.997, maximising log-rank statistic):
 - Log-rank p = **0.0077**
 
-**Figure 6:** `results/figures/fig_kaplan_meier_aucx.png` (median split)  
-**Figure 7:** `results/figures/fig_km_auc_x_best_cutoff.png` (optimal cutoff)
+![[fig_kaplan_meier_aucx.png]]
+
+**Figure 6:** (median split)  
+
+![[fig_km_auc_x_best_cutoff.png]]
+
+**Figure 7:** (optimal cutoff)
 
 ### 4.5 Model Comparison
 
 All three models achieved identical C-index = **0.533**, indicating that the zero-shot mechanistic ODE matches penalised regression and ensemble ML despite using no outcome data for calibration.
 
-| Model | C-index | 95% CI |
-|---|---|---|
-| HR-DDR ODE (AUC_X) | 0.533 | [0.426, 0.505] |
-| Cox LASSO | 0.533 ± 0.035 | [0.489, 0.563] |
+| Model                  | C-index       | 95% CI         |
+| ---------------------- | ------------- | -------------- |
+| HR-DDR ODE (AUC_X)     | 0.533         | [0.426, 0.505] |
+| Cox LASSO              | 0.533 ± 0.035 | [0.489, 0.563] |
 | Random Survival Forest | 0.533 ± 0.018 | [0.449, 0.528] |
 
-**Figure 8:** `results/figures/fig_ml_forest_plot.png`  
-**Figure 9:** `results/figures/fig_ml_bootstrap_distributions.png`
+![[fig_ml_forest_plot.png]]
+
+**Figure 8:**
+
+![[fig_ml_bootstrap_distributions.png]]
+
+**Figure 9:**
 
 ---
 

@@ -193,7 +193,7 @@ Log the start and end of every major operation, including counts. At minimum, al
 logger.info(f"Loaded clinical data: {clinical.shape[0]} rows")
 # ... processing ...
 logger.info(f"After filtering: {len(clinical_clean)} patients")
-logger.info(f"Saved: {out_path}")
+logger.success(f"[FILE] Saved: {file name}")
 ```
 
 ---
@@ -347,7 +347,7 @@ Construct all paths relative to `ROOT` using the `/` operator (pathlib). Never u
 # ✓
 out_path = ROOT / "data" / "processed" / "hgsoc_tcga_merged.csv"
 merged.to_csv(out_path, index=False)
-logger.info(f"Saved: {out_path}")
+logger.success(f"[FILE] Saved: {file name}")
 
 # ✗
 merged.to_csv("data/processed/hgsoc_tcga_merged.csv", index=False)
@@ -553,7 +553,7 @@ Before committing any script, verify:
 - [ ] Assumptions documented in comments at the point of decision
 - [ ] All paths constructed with `ROOT / ...`
 - [ ] Output directories created with `mkdir(parents=True, exist_ok=True)`
-- [ ] Every file write followed by `logger.info(f"Saved: {out_path}")`
+- [ ] Every file write followed by `logger.success(f"[FILE] Saved: {file name}")`
 - [ ] QC metrics (row counts, drop counts) logged at each filtering step
 - [ ] `ValueError` raised for critical validation failures
 - [ ] `logger.exception` used inside `except` blocks; exceptions re-raised
