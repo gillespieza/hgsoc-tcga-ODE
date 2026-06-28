@@ -273,6 +273,16 @@ We computed the permutation feature importance on the training data across 20 re
 
 **Figure 14: RSF Permutation Feature Importances.** Mean decrease in Harrell's C-index across 20 permutation repeats, with error bars representing $\pm 1$ standard deviation. Green bars indicate positive importances.
 
+#### 4.6.3 ODE Pathway Genes in the All-Genes LASSO
+
+A key question is whether the 14 HR-DDR pathway genes selected on biological grounds also emerge as top predictors in an unbiased genome-wide search. To answer this, we fitted the Cox LASSO on the full cohort using all 27,066 genes and extracted the percentile rank of each ODE gene within the genome-wide absolute coefficient distribution (Figure 15; rank 100 = top-ranked gene genome-wide).
+
+Genes with non-zero coefficients in the all-genes LASSO have been independently "selected" by a purely data-driven procedure from a search space of over 27,000 candidates, providing an unbiased cross-validation of the ODE's biological feature selection. Genes that are LASSO-zeroed in the all-genes context still carry survival information within the constrained ODE framework, but their contribution is superseded by other transcriptomic signals when the full genome is available for selection.
+
+![[fig_ode_gene_ranks_all_genes.png]]
+
+**Figure 15: ODE Pathway Genes — Rank in All-Genes Cox LASSO.** Each dot represents one of the 14 ODE pathway genes, positioned by its percentile rank among all 27,066 genes by absolute LASSO coefficient magnitude. Filled dots indicate genes with non-zero coefficients (independently selected from 27,066 candidates); faded dots are LASSO-zeroed. Colour encodes pathway role: blue = HR repair, green = DDR checkpoint, red = apoptosis. The dashed line marks the 90th percentile threshold.
+
 ---
 
 ## 5. Discussion
