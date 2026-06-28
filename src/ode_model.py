@@ -452,8 +452,12 @@ def compute_ode_scores(sim_result: dict) -> dict:
     #
     # Fallback 0.0: if R never dips below the threshold the checkpoint never
     # meaningfully impaired the HR complex — a valid and informative result.
-    depletion_thresh = 0.9 * R_ss
-    depleted = np.where(R < depletion_thresh)[0]
+    #
+    # Fractional depletion: how far below baseline is R, relative to baseline?
+    # This removes the BRCA_cap scaling confound — a 10% drop means the same
+    # thing regardless of whether R_ss is 0.5 or 2.0.
+    fractional_depletion = (R_ss - R) / (R_ss + 1e-9)
+    depleted = np.where(fractional_depletion > 0.10)[0]
     T_repair = float(t[depleted[-1]]) if len(depleted) > 0 else 0.0
 
     return {

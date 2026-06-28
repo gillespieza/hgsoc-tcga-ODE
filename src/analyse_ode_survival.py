@@ -403,124 +403,147 @@ def _km_exploratory(
 # Helpers: distribution plots
 # =================================================================
 
-def _plot_histogram(
+def _plot_combined_histogram(
     analysis_df: pd.DataFrame,
-    score_col: str,
-    best_cut: float,
+    score_cols: list[str],
+    best_cuts: dict[str, float],
     fig_dir: Path,
 ) -> None:
     """
-    Histogram of score distribution with tertile and scan boundaries marked.
+    Plot a 2x2 grid of cohort-wide distributions for all four ODE scores.
 
     Parameters
     ----------
     analysis_df : pd.DataFrame
-        Must contain score_col.
-    score_col : str
-        ODE score column to plot.
-    best_cut : float
-        Optimal cutpoint from threshold scan (shown as exploratory marker).
+        Must contain score columns.
+    score_cols : list[str]
+        List of score columns to plot.
+    best_cuts : dict[str, float]
+        Dictionary mapping score name to its optimal scan cutpoint.
     fig_dir : Path
         Destination directory for the figure.
     """
-    tertile_cuts = analysis_df[score_col].dropna().quantile([1 / 3, 2 / 3]).values
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    axes = axes.flatten()
 
-    fig, ax = plt.subplots(figsize=(7, 5))
-    ax.hist(
-        analysis_df[score_col].dropna(),
-        bins=30, edgecolor="black", color="#90CAF9",
+    for idx, score_col in enumerate(score_cols):
+        ax = axes[idx]
+        best_cut = best_cuts[score_col]
+        tertile_cuts = (
+            analysis_df[score_col].dropna().quantile([1 / 3, 2 / 3]).values
+        )
+
+        ax.hist(
+            analysis_df[score_col].dropna(),
+            bins=30,
+            edgecolor="black",
+            color="#90CAF9",
+        )
+        ax.axvline(
+            best_cut,
+            color="blue",
+            linestyle=":",
+            linewidth=1.5,
+            label=f"Best cutoff (exp.) = {best_cut:.3g}",
+        )
+        ax.axvline(
+            tertile_cuts[0],
+            color="black",
+            linestyle="--",
+            linewidth=1,
+            label="Tertile boundaries",
+        )
+        ax.axvline(tertile_cuts[1], color="black", linestyle="--", linewidth=1)
+
+        ax.set_xlabel(score_col, fontsize=10)
+        ax.set_ylabel("Count", fontsize=10)
+        ax.set_title(f"{score_col} distribution", fontsize=11)
+        ax.legend(fontsize=8, frameon=False)
+        ax.grid(alpha=0.2)
+
+    fig.suptitle(
+        "Cohort-wide Distributions of ODE Scores",
+        fontsize=13,
+        fontweight="bold",
     )
-    ax.axvline(
-        best_cut, color="blue", linestyle=":", linewidth=1.5,
-        label=f"Best cutoff (exploratory) = {best_cut:.3g}",
-    )
-    ax.axvline(
-        tertile_cuts[0], color="black", linestyle="--", linewidth=1,
-        label="Tertile boundaries (primary)",
-    )
-    ax.axvline(tertile_cuts[1], color="black", linestyle="--", linewidth=1)
-    ax.set_xlabel(score_col)
-    ax.set_ylabel("Count")
-    ax.set_title(f"{score_col} distribution")
-    ax.legend(fontsize=8, frameon=False)
     fig.tight_layout()
 
     fig_dir.mkdir(parents=True, exist_ok=True)
-    out_path = fig_dir / f"fig_hist_{score_col.lower()}.png"
+    out_path = fig_dir / "fig_hist_ode_scores.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_hist_{score_col.lower()}.png")
+    logger.success(f"[FILE] Saved: fig_hist_ode_scores.png")
 
 
-def _plot_boxplot(
+def _plot_combined_boxplot(
     analysis_df: pd.DataFrame,
-    score_col: str,
+    score_cols: list[str],
     fig_dir: Path,
 ) -> None:
     """
-    Boxplot of ODE score stratified by BRCA mutation status.
-
-    Groups are labelled "Wild type" (BRCA_MUTANT == 0) and "Mutant"
-    (BRCA_MUTANT == 1). Each box is drawn with a solid face colour so
-    that the two groups are immediately distinguishable without relying
-    on position alone.
+    Plot a 2x2 grid of boxplots of ODE scores stratified by BRCA mutation status.
 
     Parameters
     ----------
     analysis_df : pd.DataFrame
-        Must contain score_col and 'BRCA_MUTANT'.
-    score_col : str
-        ODE score column to plot.
+        Must contain score columns and 'BRCA_MUTANT'.
+    score_cols : list[str]
+        List of score columns to plot.
     fig_dir : Path
         Destination directory for the figure.
     """
-    # Map numeric mutation flag to readable labels for the x-axis.
-    label_map  = {0: "Wild type", 1: "Mutant"}
-    group_data = [
-        analysis_df.loc[analysis_df["BRCA_MUTANT"] == flag, score_col].dropna().values
-        for flag in (0, 1)
-    ]
-    group_labels = [label_map[0], label_map[1]]
-
-    # Solid fill colours: blue for wild type, red for mutant.
-    # These mirror the palette used in the KM plots so the two groups
-    # are visually consistent across all figures in the report.
+    label_map = {0: "Wild type", 1: "Mutant"}
     fill_colours = ["#1976D2", "#d32f2f"]
 
-    fig, ax = plt.subplots(figsize=(6, 5))
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    axes = axes.flatten()
 
-    bp = ax.boxplot(
-        group_data,
-        patch_artist=True,   # required to enable facecolor on the boxes
-        widths=0.5,
-        medianprops={"color": "white", "linewidth": 2},
-        whiskerprops={"linewidth": 1.2},
-        capprops={"linewidth": 1.2},
-        flierprops={"marker": "o", "markersize": 4, "alpha": 0.5},
+    for idx, score_col in enumerate(score_cols):
+        ax = axes[idx]
+        group_data = [
+            analysis_df.loc[
+                analysis_df["BRCA_MUTANT"] == flag, score_col
+            ].dropna().values
+            for flag in (0, 1)
+        ]
+
+        bp = ax.boxplot(
+            group_data,
+            patch_artist=True,
+            widths=0.5,
+            medianprops={"color": "white", "linewidth": 2},
+            whiskerprops={"linewidth": 1.2},
+            capprops={"linewidth": 1.2},
+            flierprops={"marker": "o", "markersize": 4, "alpha": 0.5},
+        )
+
+        for patch, colour in zip(bp["boxes"], fill_colours):
+            patch.set_facecolor(colour)
+            patch.set_alpha(0.85)
+
+        for flier, colour in zip(bp["fliers"], fill_colours):
+            flier.set_markerfacecolor(colour)
+            flier.set_markeredgecolor(colour)
+
+        ax.set_xticks([1, 2])
+        ax.set_xticklabels([label_map[0], label_map[1]], fontsize=10)
+        ax.set_xlabel("BRCA mutation status", fontsize=10)
+        ax.set_ylabel(score_col, fontsize=10)
+        ax.set_title(f"{score_col} by BRCA status", fontsize=11)
+        ax.grid(axis="y", alpha=0.3)
+
+    fig.suptitle(
+        "ODE Scores by BRCA Mutation Status",
+        fontsize=13,
+        fontweight="bold",
     )
-
-    for patch, colour in zip(bp["boxes"], fill_colours):
-        patch.set_facecolor(colour)
-        patch.set_alpha(0.85)
-
-    # Style the outlier markers to match each group's colour.
-    for flier, colour in zip(bp["fliers"], fill_colours):
-        flier.set_markerfacecolor(colour)
-        flier.set_markeredgecolor(colour)
-
-    ax.set_xticks([1, 2])
-    ax.set_xticklabels(group_labels, fontsize=11)
-    ax.set_xlabel("BRCA mutation status", fontsize=11)
-    ax.set_ylabel(score_col, fontsize=11)
-    ax.set_title(f"{score_col} by BRCA mutation status", fontsize=12)
-    ax.grid(axis="y", alpha=0.3)
     fig.tight_layout()
 
     fig_dir.mkdir(parents=True, exist_ok=True)
-    out_path = fig_dir / f"fig_boxplot_{score_col.lower()}_brca.png"
+    out_path = fig_dir / "fig_boxplot_ode_scores_brca.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_boxplot_{score_col.lower()}_brca.png")
+    logger.success(f"[FILE] Saved: fig_boxplot_ode_scores_brca.png")
 
 
 # =================================================================
@@ -536,6 +559,10 @@ def _run_cox_univariate(
 
     Uses the pre-computed log-transformed score (log_<score_col>) from
     survival_analysis_df.csv rather than re-transforming the raw score.
+
+    A post-fit validity check flags degenerate results where the solver
+    produced an infinite HR or a NaN confidence interval — both indicate
+    near-zero covariate variance causing Newton-Raphson divergence.
 
     The per-score figure is omitted intentionally; all four scores are
     combined into a single forest plot by _plot_cox_forest_univariate(),
@@ -566,23 +593,38 @@ def _run_cox_univariate(
     p       = float(s["p"])
     c_index = float(cph.concordance_index_)
 
-    expected        = EXPECTED_DIRECTION[score_col]
-    observed        = "HR < 1" if hr < 1 else "HR > 1"
-    direction_match = "✓" if expected == observed else "✗ unexpected"
+    # -----------------------------------------------------------------
+    # Post-fit validity check.
+    #
+    # An infinite HR or NaN confidence bound indicates that the covariate
+    # had near-zero variance across the cohort, causing the Newton-Raphson
+    # solver to diverge. This is a degenerate fit — direction_match must
+    # not be inferred from a numerically invalid HR.
+    # -----------------------------------------------------------------
+    is_degenerate = not np.isfinite(hr) or not np.isfinite(lo) or not np.isfinite(hi)
 
-    logger.info(
-        f"{score_col} univariate Cox — "
-        f"HR={hr:.3g} [{lo:.3g}, {hi:.3g}], "
-        f"p={p:.3g}, C-index={c_index:.4f}, {direction_match}"
-    )
+    if is_degenerate:
+        logger.warning(
+            f"{score_col} univariate Cox — DEGENERATE FIT: "
+            f"HR={hr}, CI=[{lo}, {hi}]. "
+            "Covariate likely has near-zero variance across the cohort. "
+            "direction_match set to 'degenerate'."
+        )
+        direction_match = "degenerate"
+    else:
+        expected        = EXPECTED_DIRECTION[score_col]
+        observed        = "HR < 1" if hr < 1 else "HR > 1"
+        direction_match = "✓" if expected == observed else "✗ unexpected"
 
-    # Per-score figure omitted intentionally.
-    # All four scores are combined into a single forest plot by
-    # _plot_cox_forest_univariate(), called once after the loop in main().
+        logger.info(
+            f"{score_col} univariate Cox — "
+            f"HR={hr:.3g} [{lo:.3g}, {hi:.3g}], "
+            f"p={p:.3g}, C-index={c_index:.4f}, {direction_match}"
+        )
 
     return {
         "score":              score_col,
-        "expected_direction": expected,
+        "expected_direction": EXPECTED_DIRECTION[score_col],
         "HR":                 hr,
         "CI_low":             lo,
         "CI_high":            hi,
@@ -590,7 +632,6 @@ def _run_cox_univariate(
         "C_index":            c_index,
         "direction_match":    direction_match,
     }
-
 
 # =================================================================
 # Helper: multivariate Cox
@@ -1035,6 +1076,7 @@ def main() -> None:
     scan_summary_rows: list[dict] = []
     cox_comparison_rows: list[dict] = []
     mv_comparison_rows: list[dict] = []
+    best_cuts: dict[str, float] = {}
 
     for score_col in SCORE_COLS:
         logger.info(f"Processing score: {score_col}")
@@ -1044,6 +1086,7 @@ def main() -> None:
         scan, best_cut, best_p = _run_threshold_scan(
             analysis_df, score_col, out_dir
         )
+        best_cuts[score_col] = best_cut
         _plot_threshold_scan(scan, score_col, best_cut, best_p, fig_dir)
 
         # PRIMARY KM: pre-specified tertile split
@@ -1063,10 +1106,6 @@ def main() -> None:
             f"{exploratory_p:.4g}"
         )
 
-        # Distribution plots
-        _plot_histogram(analysis_df, score_col, best_cut, fig_dir)
-        _plot_boxplot(analysis_df, score_col, fig_dir)
-
         # Univariate Cox — returns stats dict; combined plot drawn after loop
         cox_row = _run_cox_univariate(analysis_df, score_col)
         cox_comparison_rows.append(cox_row)
@@ -1084,6 +1123,12 @@ def main() -> None:
             "tertile_logrank_p": tertile_p,       # primary, valid for inference
             "exploratory_km_p":  exploratory_p,   # same caveat as scan_best_p
         })
+
+    # -----------------------------------------------------------------
+    # Combined distribution plots (drawn once, across all four scores)
+    # -----------------------------------------------------------------
+    _plot_combined_histogram(analysis_df, SCORE_COLS, best_cuts, fig_dir)
+    _plot_combined_boxplot(analysis_df, SCORE_COLS, fig_dir)
 
     # -----------------------------------------------------------------
     # Combined Cox forest plots (drawn once, across all four scores)

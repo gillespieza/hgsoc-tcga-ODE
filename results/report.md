@@ -93,7 +93,7 @@ The analysis cohort was drawn from the TCGA High-Grade Serous Ovarian Carcinoma 
 
 ![[fig_cohort_summary.png]]
 
-**Figure 1. Clinical cohort summary for the HGSOC TCGA dataset (n = 420).**  
+**Figure 2. Clinical cohort summary for the HGSOC TCGA dataset (n = 420).**  
 Top-left: patient attrition from raw download to final merged cohort.  
 Top-centre: follow-up time distribution stratified by vital status.  
 Top-right: overall event rate (deceased vs. living/censored).  
@@ -117,7 +117,7 @@ Two representative patients (BRCA-mutant vs BRCA-wildtype) showed biologically p
 
 ![[ode_validation_trajectories.png]]
 
-**Figure 2. Mechanistic trajectories of HR-DDR ODE model state variables for representative patients.** Simulation profiles of state variables over 120 hours following a transient carboplatin damage perturbation ($D_0 = 1.0$, half-life $\tau_{\text{drug}} = 6$ h). Low-BRCA patient (red, TCGA-29-1762, $\text{BRCA}_{\text{cap}} = 0.603$) represents homologous recombination deficiency, while High-BRCA patient (blue, TCGA-59-A5PD, $\text{BRCA}_{\text{cap}} = 2.369$) represents homologous recombination proficiency.  
+**Figure 3. Mechanistic trajectories of HR-DDR ODE model state variables for representative patients.** Simulation profiles of state variables over 120 hours following a transient carboplatin damage perturbation ($D_0 = 1.0$, half-life $\tau_{\text{drug}} = 6$ h). Low-BRCA patient (red, TCGA-29-1762, $\text{BRCA}_{\text{cap}} = 0.603$) represents homologous recombination deficiency, while High-BRCA patient (blue, TCGA-59-A5PD, $\text{BRCA}_{\text{cap}} = 2.369$) represents homologous recombination proficiency.  
 From left to right:
 - **D (DNA Damage)**: Spikes rapidly following drug entry. In the Low-BRCA patient, damage resolves more slowly due to reliance on slower/error-prone non-homologous end joining (NHEJ) repair. In the High-BRCA patient, damage is rapidly resolved.
 - **A (ATM/ATR activation)**: Sensed damage signal tracks with DNA damage load, showing sustained activation in the Low-BRCA patient.
@@ -130,48 +130,24 @@ From left to right:
 To validate the biological plausibility of the model outputs at the population level, we analyzed the distributions of the four ODE-derived scores across the entire cohort ($n = 420$) and stratified them by BRCA mutation status (wild type, $n = 403$ vs. mutant, $n = 17$).
 
 #### 4.2.1 Apoptotic Commitment (AUC_X)
-The area under the apoptotic commitment curve ($AUC_X$) is approximately log-normally distributed across the cohort (Figure 4). Consistent with the known clinical sensitivity of BRCA-deficient tumors to DNA-damaging platinum agents, BRCA-mutant patients exhibited a significantly higher median $AUC_X$ of **165.00** (mean $176.57 \pm 112.77$) compared to wild-type patients with a median of **107.61** (mean $136.56 \pm 107.35$), as shown in Figure 3. This confirms that the zero-shot mechanistic model successfully captures increased apoptotic drive in homologous recombination deficient (HRD) tumors without outcome-based parameter tuning.
-
-![[fig_boxplot_auc_x_brca.png]]
-
-**Figure 3: Apoptotic commitment (AUC_X) by BRCA mutation status.** Box plots showing the distribution of AUC_X in BRCA wild-type (blue, $n = 403$) vs. BRCA-mutant (red, $n = 17$) patients. Mutants exhibit elevated apoptotic commitment.
-
-![[fig_hist_auc_x.png]]
-
-**Figure 4: Cohort-wide distribution of AUC_X.** Histogram showing the log-normal-like distribution of AUC_X across the 420 patients, with pre-specified tertile boundaries (T1, T2, T3) and the optimal exploratory cutoff.
+The area under the apoptotic commitment curve ($AUC_X$) is approximately log-normally distributed across the cohort (Figure 5A). Consistent with the known clinical sensitivity of BRCA-deficient tumors to DNA-damaging platinum agents, BRCA-mutant patients exhibited a significantly higher median $AUC_X$ of **165.00** (mean $176.57 \pm 112.77$) compared to wild-type patients with a median of **107.61** (mean $136.56 \pm 107.35$), as shown in Figure 4A. This confirms that the zero-shot mechanistic model successfully captures increased apoptotic drive in homologous recombination deficient (HRD) tumors without outcome-based parameter tuning.
 
 #### 4.2.2 Peak Apoptotic Signal (X_peak)
-The peak level of the apoptotic commitment signal ($X_{peak}$) mirrors the trends seen with $AUC_X$. It is approximately log-normally distributed (Figure 6) and is elevated in the BRCA-mutant group (Figure 5). BRCA-mutant patients reached a higher median peak apoptotic signal of **5.85** (mean $6.11 \pm 3.56$) compared to **3.88** in wild-type patients (mean $4.88 \pm 3.49$). This suggests that HR-deficient cells not only undergo greater overall apoptosis but also achieve a higher maximum amplitude of apoptotic signaling.
-
-![[fig_boxplot_x_peak_brca.png]]
-
-**Figure 5: Peak apoptotic signal (X_peak) by BRCA mutation status.** Box plots illustrating higher peak apoptotic response in BRCA-mutant patients.
-
-![[fig_hist_x_peak.png]]
-
-**Figure 6: Cohort-wide distribution of X_peak.** Histogram of peak apoptotic signal values across the cohort with tertile and exploratory cutoff boundaries.
+The peak level of the apoptotic commitment signal ($X_{peak}$) mirrors the trends seen with $AUC_X$. It is approximately log-normally distributed (Figure 5B) and is elevated in the BRCA-mutant group (Figure 4B). BRCA-mutant patients reached a higher median peak apoptotic signal of **5.85** (mean $6.11 \pm 3.56$) compared to **3.88** in wild-type patients (mean $4.88 \pm 3.49$). This suggests that HR-deficient cells not only undergo greater overall apoptosis but also achieve a higher maximum amplitude of apoptotic signaling.
 
 #### 4.2.3 Time to DNA Repair (T_repair)
-Time to resolve DNA damage ($T_{repair}$) is a discrete variable representing the hour at which DNA damage falls below the repair threshold (Figure 8). The cohort-wide distribution is tightly grouped around a median of 61.0 hours. Interestingly, BRCA-mutant patients exhibit a slightly longer median repair time of **63.00 hours** (mean $62.12 \pm 3.74$ h) compared to **61.00 hours** for wild-type patients (mean $60.99 \pm 3.74$ h), as shown in Figure 7. This slower resolution of damage is a hallmark of homologous recombination deficiency, where cells must rely on slower or error-prone alternative repair mechanisms.
-
-![[fig_boxplot_t_repair_brca.png]]
-
-**Figure 7: Time to DNA repair (T_repair) by BRCA mutation status.** Box plots showing a slight shift toward longer repair times in BRCA-mutant patients.
-
-![[fig_hist_t_repair.png]]
-
-**Figure 8: Cohort-wide distribution of T_repair.** Histogram highlighting the discrete nature of the repair time variable and its population distribution.
+Time to resolve DNA damage ($T_{repair}$) is a discrete variable representing the hour at which DNA damage falls below the repair threshold (Figure 5C). The cohort-wide distribution is tightly grouped around a median of 61.0 hours. Interestingly, BRCA-mutant patients exhibit a slightly longer median repair time of **63.00 hours** (mean $62.12 \pm 3.74$ h) compared to **61.00 hours** for wild-type patients (mean $60.99 \pm 3.74$ h), as shown in Figure 4C. This slower resolution of damage is a hallmark of homologous recombination deficiency, where cells must rely on slower or error-prone alternative repair mechanisms.
 
 #### 4.2.4 Residual DNA Damage (D_resid)
-The residual DNA damage load ($D_{resid}$) at 120 hours represents the damage that could not be resolved by the end of the simulation. For nearly all patients, the residual damage was extremely small (in the range of $10^{-9}$), indicating that the damage was largely resolved (Figure 10). BRCA-mutant patients had a slightly higher median residual damage of **$7.75 \times 10^{-9}$** (mean $8.06 \times 10^{-9}$) compared to **$7.28 \times 10^{-9}$** in wild-type patients (mean $7.73 \times 10^{-9}$), as shown in Figure 9. Although the absolute difference is minimal, it reflects the slower and less efficient double-strand break repair in the mutant group.
+The residual DNA damage load ($D_{resid}$) at 120 hours represents the damage that could not be resolved by the end of the simulation. For nearly all patients, the residual damage was extremely small (in the range of $10^{-9}$), indicating that the damage was largely resolved (Figure 5D). BRCA-mutant patients had a slightly higher median residual damage of **$7.75 \times 10^{-9}$** (mean $8.06 \times 10^{-9}$) compared to **$7.28 \times 10^{-9}$** in wild-type patients (mean $7.73 \times 10^{-9}$), as shown in Figure 4D. Although the absolute difference is minimal, it reflects the slower and less efficient double-strand break repair in the mutant group.
 
-![[fig_boxplot_d_resid_brca.png]]
+![[fig_boxplot_ode_scores_brca.png]]
 
-**Figure 9: Residual DNA damage (D_resid) by BRCA mutation status.** Box plots illustrating the near-identical but slightly elevated residual damage in BRCA-mutant patients.
+**Figure 4: Distribution of ODE scores stratified by BRCA mutation status.** 2x2 grid of box plots showing (A) Apoptotic commitment ($AUC_X$), (B) Peak apoptotic signal ($X_{peak}$), (C) Time to DNA repair ($T_{repair}$), and (D) Residual DNA damage ($D_{resid}$) in BRCA wild-type (blue, $n = 403$) vs. BRCA-mutant (red, $n = 17$) patients. Mutants exhibit elevated apoptotic commitment (A, B), longer repair times (C), and slightly higher residual damage (D).
 
-![[fig_hist_d_resid.png]]
+![[fig_hist_ode_scores.png]]
 
-**Figure 10: Cohort-wide distribution of D_resid.** Histogram of residual DNA damage at 120 hours across the cohort.
+**Figure 5: Cohort-wide distribution of ODE scores.** 2x2 grid of histograms showing the population distributions of (A) Apoptotic commitment ($AUC_X$), (B) Peak apoptotic signal ($X_{peak}$), (C) Time to DNA repair ($T_{repair}$), and (D) Residual DNA damage ($D_{resid}$), with pre-specified tertile boundaries (dashed lines) and optimal exploratory cutoffs (dotted lines) marked.
 
 ### 4.3 Univariate Cox Regression
 
@@ -190,11 +166,11 @@ The residual DNA damage ($D_{resid}$) does not show a statistically significant 
 
 ![[fig_forest_univariate_cox.png]]
 
-**Figure 11: Univariate Cox proportional hazards forest plot.** Hazard ratios (with 95% confidence intervals) for the log-transformed versions of the four ODE-derived scores.
+**Figure 6: Univariate Cox proportional hazards forest plot.** Hazard ratios (with 95% confidence intervals) for the log-transformed versions of the four ODE-derived scores.
 
 ![[fig_forest_multivariate_cox.png]]
 
-**Figure 12: Multivariate Cox proportional hazards forest plot (adjusted for BRCA_MUTANT).** Hazard ratios for the log-transformed ODE scores and BRCA mutation status.
+**Figure 7: Multivariate Cox proportional hazards forest plot (adjusted for BRCA_MUTANT).** Hazard ratios for the log-transformed ODE scores and BRCA mutation status.
 
 ### 4.4 Kaplan-Meier Stratification
 
@@ -211,7 +187,7 @@ Although the median overall survival increases progressively from T1 to T3 (cons
 
 ![[fig_kaplan_meier_aucx_tertile.png]]
 
-**Figure 13: Kaplan-Meier overall survival by pre-specified AUC_X tertiles.** Separation of the HGSOC TCGA cohort ($n = 420$) into T1 (low), T2 (mid), and T3 (high) groups based on apoptotic commitment score.
+**Figure 8: Kaplan-Meier overall survival by pre-specified AUC_X tertiles.** Separation of the HGSOC TCGA cohort ($n = 420$) into T1 (low), T2 (mid), and T3 (high) groups based on apoptotic commitment score.
 
 #### 4.4.2 Exploratory Analysis: Median Split
 A standard binary split at the cohort median ($AUC_X = 108.27$) stratifies patients into two equal groups:
@@ -231,7 +207,7 @@ This optimized split maximizes the survival difference between the predicted hig
 
 ![[fig_km_auc_x_exploratory_cutoff.png]]
 
-**Figure 14: Kaplan-Meier overall survival by optimal exploratory AUC_X cutoff.** Stratification of the HGSOC TCGA cohort using the data-driven optimized cutpoint ($AUC_X = 99.00$), showing a significant difference in survival times.
+**Figure 9: Kaplan-Meier overall survival by optimal exploratory AUC_X cutoff.** Stratification of the HGSOC TCGA cohort using the data-driven optimized cutpoint ($AUC_X = 99.00$), showing a significant difference in survival times.
 
 ### 4.5 Model Comparison
 
@@ -245,11 +221,11 @@ All three models achieved identical C-index = **0.533**, indicating that the zer
 
 ![[fig_ml_forest_plot.png]]
 
-**Figure 15: Model comparison forest plot.** Comparison of Harrell's C-index between the zero-shot HR-DDR ODE model ($AUC_X$) and the data-trained Cox LASSO and Random Survival Forest models on the same 14-gene feature set.
+**Figure 10: Model comparison forest plot.** Comparison of Harrell's C-index between the zero-shot HR-DDR ODE model ($AUC_X$) and the data-trained Cox LASSO and Random Survival Forest models on the same 14-gene feature set.
 
 ![[fig_ml_bootstrap_distributions.png]]
 
-**Figure 16: Bootstrap distributions of C-index.** Bootstrap distribution of the C-index across 1000 resamples for the three models, showing the overlap and variability in predictive performance.
+**Figure 11: Bootstrap distributions of C-index.** Bootstrap distribution of the C-index across 1000 resamples for the three models, showing the overlap and variability in predictive performance.
 
 ---
 
