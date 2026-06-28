@@ -3,9 +3,10 @@ title:
 aliases: 
 tags: 
 created: 2026-06-22 17:53
+cssclasses: wide
 obsidianEditingMode: preview
 obsidianUIMode: source
-updated: 2026-06-28 12:15
+updated: 2026-06-28 12:30
 ---
 
 # HR-DDR ODE Survival Model - HGSOC TCGA
@@ -34,6 +35,10 @@ The central mediators of this response are well characterised. ATM and ATR kinas
 Conventional data-driven approaches to survival prediction - including Cox proportional hazards regression and ensemble methods such as Random Survival Forests - treat gene expression profiles as statistical inputs and optimise model parameters directly against observed outcomes. While powerful, these approaches require sufficiently large training cohorts to avoid overfitting, are sensitive to batch effects and platform heterogeneity, and produce predictions that are difficult to interpret mechanistically.
 
 Ordinary differential equation (ODE) models offer a complementary strategy. By encoding known biology as a system of coupled differential equations with literature-informed kinetic parameters, a mechanistic model can generate patient-specific predictions from steady-state gene expression alone, without fitting any outcome data. This "zero-shot" property means the model is not susceptible to overfitting and its parameters carry direct biological meaning. The canonical example is the p53 ODE model, which has been validated on neuroblastoma patient cohorts and shown to be prognostic of event-free survival using only pre-treatment expression data.
+
+![[hr_ddr_pathway.png]]
+
+**Figure 1. Mechanistic structure of the HR-DDR ODE model.** Carboplatin induces DNA double-strand breaks (DSBs) at rate φ(t) = D₀·e^(−t/τ), driving the damage state D(t). ATM/ATR kinases (A(t)) sense DSBs and activate CHK1/CHK2 effectors (C(t)), which simultaneously recruit the HR repair complex (R(t)) and drive apoptotic commitment (X(t)). Sustained checkpoint activity exhausts R(t) via BRCA1 hyperphosphorylation (k_load·C·R), reducing repair capacity and releasing apoptotic suppression. The mitochondrial BCL2/BAX balance scales the decay rate of X(t), modulating apoptotic resistance. Patient-specific ODE parameters (BRCA_cap, ATM_tot, CHK_tot, BCL2_ratio) are derived from pre-treatment RNA-seq expression of 14 pathway genes; global kinetic rate constants are fixed from literature values. The primary model output, AUC_X = ∫X(t) dt, quantifies cumulative apoptotic commitment and is used as the survival predictor in all downstream Cox and Kaplan-Meier analyses. Solid arrows indicate activation; dashed bars (⊣) indicate inhibition or suppression.
 
 ### 1.4 Aims
 
@@ -88,12 +93,12 @@ The analysis cohort was drawn from the TCGA High-Grade Serous Ovarian Carcinoma 
 
 ![[fig_cohort_summary.png]]
 
-_Figure 1. Clinical cohort summary for the HGSOC TCGA dataset (n = 420).  
+**Figure 1. Clinical cohort summary for the HGSOC TCGA dataset (n = 420).**  
 Top-left: patient attrition from raw download to final merged cohort.  
 Top-centre: follow-up time distribution stratified by vital status.  
 Top-right: overall event rate (deceased vs. living/censored).  
 Bottom-left: Kaplan-Meier curve for the full cohort with median OS marked.  
-Bottom-centre: BRCA1/2 germline mutation prevalence (bottom-right panel hidden for layout symmetry)._
+Bottom-centre: BRCA1/2 germline mutation prevalence (bottom-right panel hidden for layout symmetry).
 
 ### 3.2 Cohort Characteristics
 
