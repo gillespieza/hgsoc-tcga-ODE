@@ -6,7 +6,7 @@ created: 2026-06-22 17:53
 cssclasses: wide
 obsidianEditingMode: preview
 obsidianUIMode: source
-updated: 2026-06-28 12:30
+updated: 2026-06-28 14:46
 ---
 
 # HR-DDR ODE Survival Model - HGSOC TCGA
@@ -158,13 +158,12 @@ The residual DNA damage load ($D_{resid}$) at 120 hours represents the damage th
 | T_repair  | 0.856 | [0.756, 0.970] | **0.015** | 0.528   |
 | D_resid   | 1.017 | [0.894, 1.156] | 0.801     | 0.482   |
 
-To stabilize the regression models and make the hazard ratios directly comparable, the log-transformed scores were Z-score standardized (scaled to mean = 0, standard deviation = 1) across the cohort. Consequently, the Hazard Ratios (HR) in this table represent the change in patient hazard **per standard deviation increase** of each score. 
+To stabilize the regression models and make the hazard ratios directly comparable, the log-transformed scores were Z-score standardized (scaled to mean = 0, standard deviation = 1) across the cohort. Consequently, the Hazard Ratios (HR) in this table represent the change in patient hazard **per standard deviation increase** of each score.
 
 The standardized results show a clear and consistent biological signal:
 * **Apoptotic Commitment ($AUC_X$) and Peak Signal ($X_{\text{peak}}$):** Both show a statistically significant protective effect ($HR \approx 0.856$ and $0.855$, $p = 0.015$). Higher tumor cell commitment to apoptosis in response to DNA damage translates to a ~14.4% reduction in the hazard of patient death per 1-SD increase.
 * **Time to DNA Repair ($T_{\text{repair}}$):** Also shows a statistically significant protective effect ($HR = 0.856$, $p = 0.015$). Biologically, a longer repair time signifies homologous recombination deficiency (HRD). Tumors with HRD cannot resolve chemotherapy-induced double-strand breaks quickly, making them highly sensitive to platinum chemotherapy and leading to improved patient survival. Standardizing this variable resolved the previously inflated standard error ($\text{SE} = 1.050$), tightening the wide confidence interval from `[0.010, 0.607]` to a stable, interpretable range of `[0.756, 0.970]`.
 * **Residual DNA Damage ($D_{\text{resid}}$):** Previously, $D_{\text{resid}}$ suffered from a degenerate model fit ($HR = \infty$, $\text{CI} = [\text{NaN}, \infty]$) because its raw values were extremely small (in the order of $10^{-9}$), leading to near-zero variance. Z-score standardization scaled this variance to 1.0, enabling the Cox solver to converge successfully. The resulting hazard ratio of **1.017** ($95\%\text{ CI } = [0.894, 1.156]$, $p = 0.801$) confirms that residual damage has no statistically significant association with survival.
-
 
 ![[fig_forest_univariate_cox.png]]
 
@@ -194,7 +193,7 @@ The lack of significance in the tertile analysis is expected: the three-group om
 
 ![[fig_km_ode_combined_tertile.png]]
 
-**Figure 8: Kaplan-Meier overall survival — PRIMARY analysis.** 2$\times$2 grid showing all four ODE scores stratified by pre-specified tertile splits (or median split where tertile boundaries are tied). Log-rank p-values are valid for inference.
+**Figure 8: Kaplan-Meier overall survival — PRIMARY analysis.** 2 $\times$ 2 grid showing all four ODE scores stratified by pre-specified tertile splits (or median split where tertile boundaries are tied). Log-rank p-values are valid for inference.
 
 #### 4.4.2 Exploratory Analysis — Optimal Cutpoint Scans
 
@@ -209,7 +208,7 @@ These results confirm that survival signal exists within each ODE score's distri
 
 ![[fig_km_ode_combined_exploratory.png]]
 
-**Figure 9: Kaplan-Meier overall survival — EXPLORATORY analysis.** 2$\times$2 grid showing all four ODE scores stratified by data-driven optimal cutpoints. P-values are inflated by post-hoc selection and are not valid for inference.
+**Figure 9: Kaplan-Meier overall survival — EXPLORATORY analysis.** 2 $\times$ 2 grid showing all four ODE scores stratified by data-driven optimal cutpoints. P-values are inflated by post-hoc selection and are not valid for inference.
 
 #### 4.4.3 Model Comparison — KM Stratification Across All Five Models
 
@@ -275,13 +274,19 @@ We computed the permutation feature importance on the training data across 20 re
 
 #### 4.6.3 ODE Pathway Genes in the All-Genes LASSO
 
-A key question is whether the 14 HR-DDR pathway genes selected on biological grounds also emerge as top predictors in an unbiased genome-wide search. To answer this, we fitted the Cox LASSO on the full cohort using all 27,066 genes and extracted the percentile rank of each ODE gene within the genome-wide absolute coefficient distribution (Figure 15; rank 100 = top-ranked gene genome-wide).
+A key question is whether the 14 HR-DDR pathway genes selected on biological grounds also emerge as top predictors in an unbiased genome-wide search. To answer this, we fitted the Cox LASSO on the full cohort using all 27,066 genes ($\alpha = 0.1$, selected by 5-fold CV) and examined whether any of the 14 ODE pathway genes appeared among the selected predictors (Figure 15).
 
-Genes with non-zero coefficients in the all-genes LASSO have been independently "selected" by a purely data-driven procedure from a search space of over 27,000 candidates, providing an unbiased cross-validation of the ODE's biological feature selection. Genes that are LASSO-zeroed in the all-genes context still carry survival information within the constrained ODE framework, but their contribution is superseded by other transcriptomic signals when the full genome is available for selection.
+At $\alpha = 0.1$, the all-genes LASSO was highly selective, retaining only **54 out of 27,066 genes** ($< 0.2\%$) with non-zero coefficients. None of the 14 ODE pathway genes were among these 54 selected predictors. This result does not invalidate the ODE gene selection, but contextualises it in two important ways:
+
+* **Different signals dominate the unconstrained search.** The genome-wide LASSO identifies a small set of very strong transcriptomic predictors — unrelated to the HR-DDR pathway — that capture survival signal more efficiently than any individual pathway gene when all 27,066 candidates are available. This is consistent with the biology: HGSOC survival is influenced by many processes beyond DNA repair, including immune infiltration, proliferation rate, and stromal composition.
+
+* **The ODE pathway genes carry signal within their constrained context.** When the feature space is restricted to the 14 ODE genes (as in the 14-gene Cox LASSO at $\alpha = 0.001$), all 14 genes retain meaningful non-zero coefficients. This confirms that the HR-DDR pathway does contain survival-relevant information — it simply does not dominate the genome-wide landscape at the regularisation level where all-genes LASSO operates.
+
+Taken together, the all-genes and 14-gene analyses are complementary: the all-genes LASSO achieves the highest C-index by exploiting a wider biological signal space, while the ODE and 14-gene models extract mechanistically interpretable survival information from a hypothesis-driven, biologically constrained feature set.
 
 ![[fig_ode_gene_ranks_all_genes.png]]
 
-**Figure 15: ODE Pathway Genes — Rank in All-Genes Cox LASSO.** Each dot represents one of the 14 ODE pathway genes, positioned by its percentile rank among all 27,066 genes by absolute LASSO coefficient magnitude. Filled dots indicate genes with non-zero coefficients (independently selected from 27,066 candidates); faded dots are LASSO-zeroed. Colour encodes pathway role: blue = HR repair, green = DDR checkpoint, red = apoptosis. The dashed line marks the 90th percentile threshold.
+**Figure 15: ODE Pathway Genes vs All-Genes Cox LASSO.** *Left:* Horizontal bar chart of the top 20 genes selected by the all-genes LASSO ($\alpha = 0.1$; 54/27,066 non-zero); genes labelled by Entrez ID unless they are ODE pathway genes (★). *Right:* Selection status of each of the 14 ODE pathway genes — all 14 were zeroed by the all-genes LASSO (0/14 selected). Colour encodes pathway role: blue = HR repair, green = DDR checkpoint, red = apoptosis.
 
 ---
 

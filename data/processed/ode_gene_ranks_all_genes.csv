@@ -1,0 +1,15 @@
+gene,entrez_id,role,coef,in_nonzero,n_total,n_nonzero
+BRCA1,672,HR repair,0.0,False,27066,54
+BRCA2,675,HR repair,0.0,False,27066,54
+RAD51,5888,HR repair,0.0,False,27066,54
+PALB2,79728,HR repair,0.0,False,27066,54
+BRIP1,83990,HR repair,0.0,False,27066,54
+ATM,472,DDR checkpoint,0.0,False,27066,54
+ATR,545,DDR checkpoint,0.0,False,27066,54
+CHEK1,1111,DDR checkpoint,0.0,False,27066,54
+CHEK2,11200,DDR checkpoint,0.0,False,27066,54
+BCL2,596,Apoptosis,0.0,False,27066,54
+BCL2L1,598,Apoptosis,0.0,False,27066,54
+BAX,581,Apoptosis,0.0,False,27066,54
+BAD,572,Apoptosis,0.0,False,27066,54
+TP53,7157,Apoptosis,0.0,False,27066,54

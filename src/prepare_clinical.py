@@ -140,7 +140,7 @@ def main() -> None:
     out_path = ROOT / "data" / "processed" / "clinical_clean.csv"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     clinical_clean.to_csv(out_path, index=False)
-    logger.success("[FILE] Saved: clinical_clean.csv")
+    logger.success("[FILE] Saved: .data/processed/clinical_clean.csv")
 
 
 if __name__ == "__main__":

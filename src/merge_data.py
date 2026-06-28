@@ -315,7 +315,7 @@ def plot_cohort_summary(
     out_path = fig_dir / "fig_cohort_summary.png"
     fig.savefig(out_path, dpi=150, bbox_inches="tight")
     plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_cohort_summary.png")
+    logger.success(f"[FILE] Saved: .results/figures/fig_cohort_summary.png")
 
 
 # =================================================================
@@ -396,7 +396,7 @@ def main() -> None:
     out_path = ROOT / "data" / "processed" / "hgsoc_tcga_merged.csv"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     merged.to_csv(out_path, index=False)
-    logger.success("[FILE] Saved: hgsoc_tcga_merged.csv")
+    logger.success("[FILE] Saved: .data/processed/hgsoc_tcga_merged.csv")
 
     # -----------------------------------------------------------------
     # Cohort summary figure

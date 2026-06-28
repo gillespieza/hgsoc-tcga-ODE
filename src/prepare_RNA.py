@@ -187,7 +187,7 @@ def main():
 
     expr_ode.reset_index().to_csv(out_path, index=False)
 
-    logger.success(f"[FILE] Saved processed RNA matrix to ./data/processed/rna_clean.csv")
+    logger.success(f"[FILE] Saved ./data/processed/rna_clean.csv")
 
 
     # -----------------------------------------------------------------

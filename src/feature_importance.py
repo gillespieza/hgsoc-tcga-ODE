@@ -42,6 +42,7 @@ import sys
 import warnings
 from pathlib import Path
 
+import mygene
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -108,6 +109,73 @@ LASSO_ALPHAS = [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1.0]
 # The practical alpha_max for this dataset is ~0.15, so 0.05 is the smallest
 # useful candidate.
 LASSO_ALPHAS_ALL = [0.05, 0.1, 0.5, 1.0]
+
+# NCBI Entrez Gene IDs for the 14 ODE pathway genes.
+# Authoritative mapping produced by prepare_RNA.py via MyGeneInfo and saved
+# to gene_id_map.csv. These are stored here as int to match the int64 column
+# index used by load_all_genes_data (raw FPKM file).
+# NOTE: if prepare_RNA.py is re-run and IDs change, update this dict or
+# switch to loading from gene_id_map.csv at runtime.
+GENE_ENTREZ_IDS: dict[str, int] = {
+    "BRCA1":  672,
+    "BRCA2":  675,
+    "RAD51":  5888,
+    "PALB2":  79728,
+    "BRIP1":  83990,
+    "ATM":    472,
+    "ATR":    545,
+    "CHEK1":  1111,
+    "CHEK2":  11200,
+    "BCL2":   596,
+    "BCL2L1": 598,
+    "BAX":    581,
+    "BAD":    572,
+    "TP53":   7157,
+}
+
+
+def fetch_gene_symbols(entrez_ids: list[int]) -> dict[int, str]:
+    """
+    Map a list of Entrez Gene IDs to HUGO gene symbols via MyGeneInfo.
+
+    Used to produce human-readable y-axis labels for the top selected genes
+    in the all-genes LASSO plot. Genes that cannot be resolved are labelled
+    by their Entrez ID as a string fallback.
+
+    Parameters
+    ----------
+    entrez_ids : list[int]
+        Entrez Gene IDs to resolve.
+
+    Returns
+    -------
+    dict[int, str]
+        Mapping from Entrez ID to HUGO symbol (or str(entrez_id) on failure).
+    """
+    mg = mygene.MyGeneInfo()
+    results = mg.querymany(
+        entrez_ids,
+        scopes="entrezgene",
+        fields="symbol",
+        species="human",
+        as_dataframe=True,
+        verbose=False,
+    )
+    sym_map: dict[int, str] = {}
+    for eid in entrez_ids:
+        try:
+            sym = results.loc[str(eid), "symbol"]
+            # querymany may return a Series when multiple hits exist.
+            if hasattr(sym, "iloc"):
+                sym = sym.iloc[0]
+            sym_map[eid] = str(sym)
+        except (KeyError, TypeError):
+            sym_map[eid] = str(eid)
+    logger.info(
+        f"Resolved {sum(v != str(k) for k, v in sym_map.items())}/{len(entrez_ids)} "
+        "Entrez IDs to HUGO symbols via MyGeneInfo"
+    )
+    return sym_map
 
 
 # =================================================================
@@ -537,40 +605,33 @@ def ode_gene_ranks_in_all_genes(
     X: pd.DataFrame,
     X_all: pd.DataFrame,
     y: np.ndarray,
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, pd.Series]:
     """
-    Fit Cox LASSO on all genes and compute the percentile rank of the 14 ODE
-    genes within the genome-wide absolute coefficient distribution.
+    Fit Cox LASSO on all genes and report selection status of the 14 ODE genes.
 
-    This answers: are the HR-DDR genes selected by biological reasoning also
-    the genes that a purely data-driven genome-wide LASSO would pick?
+    The all-genes matrix uses int64 Entrez IDs as column names. Gene symbols
+    are mapped via GENE_ENTREZ_IDS (derived from gene_id_map.csv).
 
-    Steps
-    -----
-    1. Select alpha by 5-fold CV on the all-genes matrix.
-    2. Fit on the full cohort; extract non-zero coefficients.
-    3. For each of the 14 ODE genes, look up the coefficient and compute its
-       percentile rank among ALL genes by |coefficient| (not just non-zero).
+    Returns the per-gene summary DataFrame and the full non-zero coefficient
+    Series (indexed by Entrez ID) for downstream plotting.
 
     Parameters
     ----------
     X : pd.DataFrame
-        14-gene expression matrix (n_patients × 14), indexed by PATIENT_ID.
-        Used only to retrieve column names for the ODE genes — the all-genes
-        matrix already contains these columns.
+        14-gene expression matrix (n_patients x 14), indexed by PATIENT_ID.
     X_all : pd.DataFrame
-        All-genes expression matrix (n_patients × n_all_genes),
+        All-genes expression matrix (n_patients x n_all_genes),
         returned by load_all_genes_data.
     y : np.ndarray
         Structured survival array.
 
     Returns
     -------
-    pd.DataFrame
-        One row per ODE gene with columns:
-        gene, role, coef, abs_coef, rank (1 = highest abs coef),
-        percentile_rank (100 = top 1 gene), n_total, n_nonzero,
-        in_nonzero (bool).
+    ranks_df : pd.DataFrame
+        One row per ODE gene with selection status and coefficient.
+    nonzero_coefs : pd.Series
+        Non-zero Cox LASSO coefficients indexed by Entrez ID,
+        sorted by absolute value descending.
     """
     logger.info(
         f"Fitting all-genes Cox LASSO on full cohort "
@@ -594,7 +655,7 @@ def ode_gene_ranks_in_all_genes(
         pipe.fit(X_all.values, y)
 
     all_coefs = pipe.named_steps["cox"].coef_.flatten()
-    all_genes  = X_all.columns.tolist()
+    all_gene_ids = X_all.columns.tolist()
 
     n_total   = len(all_coefs)
     n_nonzero = int((all_coefs != 0).sum())
@@ -603,128 +664,193 @@ def ode_gene_ranks_in_all_genes(
         f"{n_nonzero}/{n_total} non-zero coefficients"
     )
 
-    # Rank all genes by absolute coefficient (rank 1 = largest abs coef).
-    abs_coefs = np.abs(all_coefs)
-    # argsort descending → rank array (1-indexed)
-    rank_array = abs_coefs.argsort()[::-1].argsort() + 1
-
-    coef_series = pd.Series(all_coefs, index=all_genes)
-    rank_series = pd.Series(rank_array, index=all_genes)
+    coef_series = pd.Series(all_coefs, index=all_gene_ids)
+    # Non-zero coefficients sorted by absolute value descending.
+    nonzero_coefs = (
+        coef_series[coef_series != 0]
+        .reindex(coef_series[coef_series != 0].abs().sort_values(ascending=False).index)
+    )
 
     rows = []
     for gene in GENE_COLS:
-        if gene not in coef_series.index:
+        entrez_id = GENE_ENTREZ_IDS.get(gene)
+        if entrez_id is None or entrez_id not in coef_series.index:
             logger.warning(
-                f"ODE gene {gene!r} not found in all-genes matrix; skipping."
+                f"ODE gene {gene!r} (Entrez ID {entrez_id}) not found "
+                f"in all-genes matrix; skipping."
             )
             continue
-        coef = float(coef_series[gene])
-        rank = int(rank_series[gene])
-        # Percentile rank: 100 = best (rank 1), 0 = worst (rank n_total).
-        pct  = round(100.0 * (n_total - rank) / (n_total - 1), 2)
+        coef = float(coef_series[entrez_id])
         rows.append({
-            "gene":            gene,
-            "role":            GENE_ROLES[gene],
-            "coef":            coef,
-            "abs_coef":        abs(coef),
-            "rank":            rank,
-            "percentile_rank": pct,
-            "n_total":         n_total,
-            "n_nonzero":       n_nonzero,
-            "in_nonzero":      coef != 0,
+            "gene":       gene,
+            "entrez_id":  entrez_id,
+            "role":       GENE_ROLES[gene],
+            "coef":       coef,
+            "in_nonzero": coef != 0,
+            "n_total":    n_total,
+            "n_nonzero":  n_nonzero,
         })
 
-    ranks_df = pd.DataFrame(rows).sort_values("rank")
+    if not rows:
+        raise ValueError(
+            "No ODE genes found in all-genes matrix. "
+            "Check that GENE_ENTREZ_IDS Entrez IDs match the FPKM file index. "
+            f"Expected IDs: {list(GENE_ENTREZ_IDS.values())}; "
+            f"Sample matrix columns: {coef_series.index[:10].tolist()}"
+        )
+
+    ranks_df = pd.DataFrame(rows)
+    n_selected = int(ranks_df["in_nonzero"].sum())
     logger.info(
-        f"ODE gene ranks in all-genes LASSO:\n"
-        + ranks_df[["gene", "coef", "rank", "percentile_rank", "in_nonzero"]]
-          .to_string(index=False)
+        f"{n_selected}/14 ODE genes selected by all-genes LASSO:"
     )
-    return ranks_df
+    logger.info(
+        ranks_df[["gene", "coef", "in_nonzero"]].to_string(index=False)
+    )
+    return ranks_df, nonzero_coefs
 
 
-def plot_ode_gene_ranks(ranks_df: pd.DataFrame) -> None:
+def plot_ode_gene_ranks(
+    ranks_df: pd.DataFrame,
+    nonzero_coefs: pd.Series,
+    symbol_map: dict[int, str] | None = None,
+) -> None:
     """
-    Dot-plot showing each ODE gene's percentile rank in the all-genes LASSO.
+    Two-panel figure summarising ODE gene selection in the all-genes LASSO.
 
-    Each dot represents one of the 14 ODE genes. Percentile rank is plotted
-    on the x-axis (100 = top-ranked gene genome-wide). Filled markers indicate
-    genes with non-zero LASSO coefficients; hollow markers indicate LASSO-zeroed
-    genes. Colour encodes the ODE pathway role.
+    Left panel: horizontal bar chart of the top 20 genes selected by the
+    all-genes LASSO (non-zero coefficients), labelled with HUGO gene symbols
+    where available (via symbol_map), falling back to Entrez IDs.
 
-    A reference line at the 90th percentile marks the threshold commonly used
-    to define "high-ranking" predictors in a genome-wide search.
+    Right panel: dot chart showing each ODE gene's selection status
+    (selected = filled coloured dot; zeroed = hollow grey dot).
 
     Parameters
     ----------
     ranks_df : pd.DataFrame
-        Output of ode_gene_ranks_in_all_genes().
+        Output of ode_gene_ranks_in_all_genes() — one row per ODE gene.
+    nonzero_coefs : pd.Series
+        Non-zero LASSO coefficients indexed by Entrez ID, sorted by
+        absolute value descending.
+    symbol_map : dict[int, str] or None
+        Mapping from Entrez ID to HUGO symbol for labelling the left panel.
+        If None, Entrez IDs are used as labels.
     """
     n_total   = int(ranks_df["n_total"].iloc[0])
     n_nonzero = int(ranks_df["n_nonzero"].iloc[0])
+    n_selected_ode = int(ranks_df["in_nonzero"].sum())
 
-    # Sort by percentile rank descending (best-ranked at top).
-    df = ranks_df.sort_values("percentile_rank", ascending=True).copy()
+    # ODE gene Entrez IDs for membership testing in the bar-label loop.
+    ode_entrez = set(GENE_ENTREZ_IDS.values())
+    # entrez_to_sym: ODE-only reverse map (symbol → Entrez for 14 pathway genes).
+    entrez_to_sym = {v: k for k, v in GENE_ENTREZ_IDS.items()}
 
-    fig, ax = plt.subplots(figsize=(9, 6))
+    top20 = nonzero_coefs.head(20)
 
-    y_positions = range(len(df))
-
-    for i, (_, row) in enumerate(df.iterrows()):
-        color  = ROLE_COLOURS[row["role"]]
-        marker = "o" if row["in_nonzero"] else "o"
-        alpha  = 1.0 if row["in_nonzero"] else 0.35
-        zorder = 3 if row["in_nonzero"] else 2
-
-        ax.scatter(
-            row["percentile_rank"], i,
-            color=color, s=90, marker=marker,
-            alpha=alpha, zorder=zorder,
-            edgecolors=color, linewidths=1.2,
-        )
-
-        # Coefficient label to the right of the dot.
-        coef_str = f"{row['coef']:+.4f}" if row["in_nonzero"] else "zeroed"
-        ax.text(
-            row["percentile_rank"] + 0.5, i, coef_str,
-            va="center", ha="left", fontsize=7.5, color="#444444",
-        )
-
-    # 90th-percentile reference line.
-    ax.axvline(
-        90, color="#888888", linestyle="--",
-        linewidth=1, alpha=0.7, label="90th percentile",
+    fig, (ax_left, ax_right) = plt.subplots(
+        1, 2, figsize=(13, 7),
+        gridspec_kw={"width_ratios": [1.6, 1]},
     )
 
-    ax.set_yticks(list(y_positions))
-    ax.set_yticklabels(df["gene"].tolist(), fontsize=10)
-    ax.set_xlabel(
-        "Percentile rank by |coefficient| (100 = top-ranked gene genome-wide)",
+    # -----------------------------------------------------------------
+    # Left panel: top 20 selected genes
+    # -----------------------------------------------------------------
+    bar_labels = []
+    for eid in top20.index:
+        if eid in ode_entrez:
+            # ODE gene — mark with star and use HUGO symbol.
+            bar_labels.append(f"{entrez_to_sym[eid]} \u2605")
+        else:
+            # Non-ODE gene — use fetched HUGO symbol if available.
+            label = symbol_map.get(eid, str(eid)) if symbol_map else str(eid)
+            bar_labels.append(label)
+
+    bar_vals = top20.values
+    y_pos    = range(len(bar_vals))
+    bar_cols = ["#d32f2f" if v > 0 else "#1976D2" for v in bar_vals]
+    # Override bar colour with pathway colour for any selected ODE genes.
+    for i, eid in enumerate(top20.index):
+        if eid in ode_entrez:
+            bar_cols[i] = ROLE_COLOURS[GENE_ROLES[entrez_to_sym[eid]]]
+
+    ax_left.barh(
+        y_pos, bar_vals,
+        color=bar_cols, edgecolor="white", height=0.65,
+    )
+    ax_left.set_yticks(list(y_pos))
+    ax_left.set_yticklabels(bar_labels, fontsize=9)
+    ax_left.axvline(0, color="black", linewidth=0.8)
+    ax_left.set_xlabel("Cox LASSO coefficient (standardised)", fontsize=9)
+    ax_left.set_title(
+        f"Top {len(top20)} selected genes\n"
+        f"({n_nonzero:,}/{n_total:,} non-zero, \u2605 = ODE gene)",
         fontsize=10,
     )
-    ax.set_xlim(-2, 105)
-    ax.set_title(
-        "ODE Pathway Genes — Rank in All-Genes Cox LASSO\n"
-        f"({n_total:,} genes total, {n_nonzero:,} non-zero after LASSO)",
-        fontsize=11,
-    )
-    ax.grid(axis="x", alpha=0.25)
+    ax_left.grid(axis="x", alpha=0.25)
 
-    # Legend: pathway roles + reference line.
+    # -----------------------------------------------------------------
+    # Right panel: ODE gene selection status
+    # -----------------------------------------------------------------
+    df = ranks_df.copy()
+    y_pos_r = range(len(df))
+
+    for i, (_, row) in enumerate(df.iterrows()):
+        if row["in_nonzero"]:
+            ax_right.scatter(
+                1, i, s=110,
+                color=ROLE_COLOURS[row["role"]],
+                zorder=3, marker="o",
+            )
+            ax_right.text(
+                1.05, i, f"{row['coef']:+.4f}",
+                va="center", ha="left", fontsize=8,
+            )
+        else:
+            ax_right.scatter(
+                0, i, s=80,
+                color="#BDBDBD", zorder=2,
+                marker="o", edgecolors="#757575", linewidths=1,
+            )
+
+    ax_right.set_yticks(list(y_pos_r))
+    ax_right.set_yticklabels(df["gene"].tolist(), fontsize=9)
+    ax_right.set_xticks([0, 1])
+    ax_right.set_xticklabels(["Not selected", "Selected"], fontsize=9)
+    ax_right.set_xlim(-0.5, 1.8)
+    ax_right.set_title(
+        f"ODE gene selection\n"
+        f"({n_selected_ode}/14 selected by all-genes LASSO)",
+        fontsize=10,
+    )
+    ax_right.grid(axis="y", alpha=0.2)
+
     import matplotlib.patches as mpatches
-    handles = [
-        mpatches.Patch(color=c, label=r)
-        for r, c in ROLE_COLOURS.items()
-    ]
-    handles.append(
-        plt.Line2D([0], [0], color="#888888", linestyle="--",
-                   linewidth=1, label="90th percentile threshold")
-    )
-    ax.legend(
-        handles=handles, fontsize=8,
-        loc="lower right", framealpha=0.85,
+
+    # Left panel legend: coefficient direction only.
+    # The bars are coloured by sign, not by pathway role, so showing
+    # pathway colours here would be misleading.
+    ax_left.legend(
+        handles=[
+            mpatches.Patch(color="#d32f2f", label="Positive coef (↑ hazard)"),
+            mpatches.Patch(color="#1976D2", label="Negative coef (protective)"),
+        ],
+        fontsize=8, loc="lower right", framealpha=0.85,
     )
 
+    # Right panel legend: pathway roles (relevant when ODE genes are selected).
+    ax_right.legend(
+        handles=[
+            mpatches.Patch(color=c, label=r)
+            for r, c in ROLE_COLOURS.items()
+        ] + [mpatches.Patch(color="#BDBDBD", label="Not selected")],
+        fontsize=8, loc="lower right", framealpha=0.85,
+    )
+
+    fig.suptitle(
+        "ODE Pathway Genes vs All-Genes Cox LASSO\n"
+        f"(alpha=0.1 CV-selected, full-data fit, interpretation only)",
+        fontsize=11, y=1.01,
+    )
     fig.tight_layout()
 
     fig_dir = ROOT / "results" / "figures"
@@ -803,14 +929,19 @@ def main() -> None:
         "(full-data fit, interpretation only)"
     )
     X_all = load_all_genes_data(X.index)
-    ranks_df = ode_gene_ranks_in_all_genes(X, X_all, y)
+    ranks_df, nonzero_coefs = ode_gene_ranks_in_all_genes(X, X_all, y)
 
     ranks_path = ROOT / "data" / "processed" / "ode_gene_ranks_all_genes.csv"
     ranks_path.parent.mkdir(parents=True, exist_ok=True)
     ranks_df.to_csv(ranks_path, index=False)
     logger.info(f"Saved: {ranks_path}")
 
-    plot_ode_gene_ranks(ranks_df)
+    # Fetch HUGO symbols for the top 20 selected genes so the figure uses
+    # human-readable labels rather than numeric Entrez IDs.
+    top_entrez = nonzero_coefs.head(20).index.tolist()
+    symbol_map = fetch_gene_symbols(top_entrez)
+
+    plot_ode_gene_ranks(ranks_df, nonzero_coefs, symbol_map=symbol_map)
 
 
 if __name__ == "__main__":

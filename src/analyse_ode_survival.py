@@ -185,9 +185,9 @@ def km_tertile_split(
     ax.grid(alpha=0.2)
     fig.tight_layout()
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_path, dpi=300, bbox_inches="tight")
+    # fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.success(f"[FILE] Saved: KM plot")
+    # logger.success(f"[FILE] Saved: KM plot")
 
     return p_val
 
@@ -253,7 +253,7 @@ def _run_threshold_scan(
     csv_path = out_dir / f"{score_col.lower()}_threshold_scan.csv"
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     scan.to_csv(csv_path, index=False)
-    logger.success(f"[FILE] Saved: {score_col.lower()}_threshold_scan.csv")
+    logger.success(f"[FILE] Saved: ./data/processed/{score_col.lower()}_threshold_scan.csv")
 
     # NOTE: selecting the cutpoint by minimising log-rank p invalidates that
     # p-value for inference. This result is retained as exploratory only.
@@ -316,7 +316,7 @@ def _plot_threshold_scan(
     out_path = fig_dir / f"fig_threshold_scan_{score_col.lower()}.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_threshold_scan_{score_col.lower()}.png")
+    logger.success(f"[FILE] Saved: ./results/figures/fig_threshold_scan_{score_col.lower()}.png")
 
 
 # =================================================================
@@ -391,10 +391,10 @@ def _km_exploratory(
     fig.tight_layout()
 
     fig_dir.mkdir(parents=True, exist_ok=True)
-    out_path = fig_dir / f"fig_km_{score_col.lower()}_exploratory_cutoff.png"
-    fig.savefig(out_path, dpi=300, bbox_inches="tight")
+    # out_path = fig_dir / f"fig_km_{score_col.lower()}_exploratory_cutoff.png"
+    # fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.success(f"[FILE] Saved: fig_km_{score_col.lower()}_exploratory_cutoff.png")
+    # logger.success(f"[FILE] Saved: fig_km_{score_col.lower()}_exploratory_cutoff.png")
 
     return float(km_res.p_value)
 
@@ -1070,7 +1070,7 @@ def _plot_km_combined_tertile(
     out_path = fig_dir / "fig_km_ode_combined_tertile.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./results/figures/fig_km_ode_combined_tertile.png")
 
 
 def _plot_km_combined_exploratory(
@@ -1166,7 +1166,7 @@ def _plot_km_combined_exploratory(
     out_path = fig_dir / "fig_km_ode_combined_exploratory.png"
     fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    logger.info(f"Saved: {out_path}")
+    logger.success(f"[FILE] Saved: ./results/figures/fig_km_ode_combined_exploratory.png")
 
 
 # =================================================================
@@ -1197,7 +1197,7 @@ def _save_tables(
     scan_path = out_dir / "threshold_scan_summary.csv"
     scan_path.parent.mkdir(parents=True, exist_ok=True)
     scan_df.to_csv(scan_path, index=False)
-    logger.success(f"[FILE] Saved: threshold_scan_summary.csv")
+    logger.success(f"[FILE] Saved: ./data/processed/threshold_scan_summary.csv")
 
     logger.info(
         "Threshold scan summary\n"
@@ -1217,7 +1217,7 @@ def _save_tables(
 
     cox_path = out_dir / "univariate_cox_comparison.csv"
     cox_df.to_csv(cox_path, index=False)
-    logger.success(f"[FILE] Saved: univariate_cox_comparison.csv")
+    logger.success(f"[FILE] Saved: .data/processed/univariate_cox_comparison.csv")
 
     display_cols = [
         "score", "expected_direction", "HR", "95% CI",
