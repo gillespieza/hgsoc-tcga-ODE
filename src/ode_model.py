@@ -445,14 +445,6 @@ def compute_ode_scores(sim_result: dict) -> dict:
 
     # T_repair: duration the HR complex remains significantly depleted.
     #
-    # Threshold at 0.9 * R_ss: a 10% depletion from baseline is the smallest
-    # perturbation considered biologically meaningful. Tighter thresholds
-    # (e.g. 0.5) only fire for very low BRCA_cap patients; looser ones
-    # (e.g. 0.95) risk firing from numerical noise.
-    #
-    # Fallback 0.0: if R never dips below the threshold the checkpoint never
-    # meaningfully impaired the HR complex — a valid and informative result.
-    #
     # Fractional depletion: how far below baseline is R, relative to baseline?
     # This removes the BRCA_cap scaling confound — a 10% drop means the same
     # thing regardless of whether R_ss is 0.5 or 2.0.

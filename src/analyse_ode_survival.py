@@ -780,9 +780,9 @@ def _plot_cox_forest_univariate(
     ax.set_xscale("log")
     ax.set_xlabel("Hazard ratio (log scale)", fontsize=11)
 
-    # y-axis: score name + direction match tick
+    # y-axis: score name only (no direction match or check/cross marks)
     y_labels = [
-        f"log_{r['score']}  {r['direction_match']}"
+        f"log_{r['score']}"
         for r in cox_rows
     ]
     ax.set_yticks(range(n))
@@ -802,7 +802,7 @@ def _plot_cox_forest_univariate(
         mpatches.Patch(color="#1976D2", label="Expected HR < 1 (protective)"),
         mpatches.Patch(color="#d32f2f", label="Expected HR > 1 (deleterious)"),
     ]
-    ax.legend(handles=patches, fontsize=8, loc="lower right", framealpha=0.8)
+    ax.legend(handles=patches, fontsize=8, loc="lower left", framealpha=0.8)
 
     fig.tight_layout()
     fig_dir.mkdir(parents=True, exist_ok=True)
