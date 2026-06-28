@@ -850,10 +850,10 @@ def _plot_cox_forest_multivariate(
 
     # Colour convention: ODE score rows → score-specific; BRCA → grey.
     score_colours = {
-        "AUC_X":    "#1976D2",
-        "X_peak":   "#0288D1",
-        "T_repair": "#d32f2f",
-        "D_resid":  "#C62828",
+        "AUC_X":    "#6A1B9A",  # Deep Purple
+        "X_peak":   "#00695C",  # Teal
+        "T_repair": "#EF6C00",  # Dark Orange
+        "D_resid":  "#2E7D32",  # Forest Green
     }
     brca_colour = "#757575"
 
@@ -947,13 +947,13 @@ def _plot_cox_forest_multivariate(
 
     import matplotlib.patches as mpatches
     patches = [
-        mpatches.Patch(color="#1976D2", label="AUC_X"),
-        mpatches.Patch(color="#0288D1", label="X_peak"),
-        mpatches.Patch(color="#d32f2f", label="T_repair"),
-        mpatches.Patch(color="#C62828", label="D_resid"),
+        mpatches.Patch(color="#6A1B9A", label="AUC_X"),
+        mpatches.Patch(color="#00695C", label="X_peak"),
+        mpatches.Patch(color="#EF6C00", label="T_repair"),
+        mpatches.Patch(color="#2E7D32", label="D_resid"),
         mpatches.Patch(color="#757575", label="BRCA_MUTANT (adj.)"),
     ]
-    ax.legend(handles=patches, fontsize=8, loc="lower right", framealpha=0.8)
+    ax.legend(handles=patches, fontsize=8, loc="lower left", framealpha=0.8)
 
     fig.tight_layout()
     fig_dir.mkdir(parents=True, exist_ok=True)
