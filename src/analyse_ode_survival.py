@@ -778,11 +778,11 @@ def _plot_cox_forest_univariate(
 
     ax.axvline(1, color="black", linestyle="--", linewidth=1, alpha=0.7)
     ax.set_xscale("log")
-    ax.set_xlabel("Hazard ratio (log scale)", fontsize=11)
+    ax.set_xlabel("Hazard ratio per SD (log scale)", fontsize=11)
 
-    # y-axis: score name only (no direction match or check/cross marks)
+    # y-axis: score name formatted as z-log(Score)
     y_labels = [
-        f"log_{r['score']}"
+        f"z-log({r['score']})"
         for r in cox_rows
     ]
     ax.set_yticks(range(n))
@@ -866,7 +866,7 @@ def _plot_cox_forest_multivariate(
 
         # ODE score row
         y_positions.append(y_cursor)
-        y_labels.append(f"log_{score}")
+        y_labels.append(f"z-log({score})")
         hrs.append(row["hr_score"])
         los.append(row["lo_score"])
         his.append(row["hi_score"])
@@ -933,7 +933,7 @@ def _plot_cox_forest_multivariate(
 
     ax.axvline(1, color="black", linestyle="--", linewidth=1, alpha=0.7)
     ax.set_xscale("log")
-    ax.set_xlabel("Hazard ratio (log scale)", fontsize=11)
+    ax.set_xlabel("Hazard ratio per SD (log scale)", fontsize=11)
     ax.set_yticks(y_positions)
     ax.set_yticklabels(y_labels, fontsize=9)
     ax.set_ylim(-0.6, max(y_positions) + 0.7)
