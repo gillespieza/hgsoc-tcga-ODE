@@ -226,7 +226,9 @@ def main():
     #
     # Using log1p rather than log avoids problems when x = 0.
     for col in ["AUC_X", "X_peak", "T_repair", "D_resid"]:
-        analysis_df[f"log_{col}"] = np.log1p(analysis_df[col])
+        log_vals = np.log1p(analysis_df[col])
+        # Z-score standardize (standard deviation division scales variance to 1.0)
+        analysis_df[f"log_{col}"] = (log_vals - log_vals.mean()) / log_vals.std()
 
     # -----------------------------------------------------------------
     # Save analysis-ready cohort
