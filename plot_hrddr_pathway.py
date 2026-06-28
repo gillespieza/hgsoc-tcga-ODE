@@ -27,7 +27,6 @@ from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
-import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
@@ -806,8 +805,8 @@ def main() -> None:
     # BCL2/BAX → X(t)
     arrow(
         ax,                     # Matplotlib Axes object to draw onto
-        0.675, 0.167,           # Start point (x1, y1)
-        0.530, 0.100,           # End point (x2, y2)
+        0.775, 0.167,           # Start point (x1, y1)
+        0.730, 0.150,           # End point (x2, y2)
         color=C["bcl"],         # Arrow colour
         lw=1.3,                 # Line width
         label="buffers X\n(d_x·BCL2)",   # Label displayed near the arrow
@@ -894,8 +893,8 @@ def main() -> None:
     # clear of the mitochondrion background and the arrows above the node.
     bcl_box_right  = 0.905   # right edge of the BCL2/BAX node (centre 0.775 + w/2 0.13)
     bcl_box_bottom = 0.1675  # bottom edge of the BCL2/BAX node (centre 0.200 - h/2 0.0325)
-    bcl_label_y    = 0.129   # elbow y-level: below the box, clear of the node border
-    bcl_label_x    = 0.87    # right-margin label column, consistent with other annotations
+    bcl_label_y    = 0.130   # elbow y-level: below the box, clear of the node border
+    bcl_label_x    = 0.97    # right-margin label column, consistent with other annotations
 
     # Vertical leg: drops from the bottom-right corner of the box down to the elbow.
     ax.plot(
@@ -1059,7 +1058,7 @@ def main() -> None:
         facecolor=C["bg"], edgecolor="none",
     )
     plt.close(fig)
-    logger.info(f"[FILE] Saved: hr_ddr_pathway.png")
+    logger.info(f"Saved: {out_path}")
 
 
 if __name__ == "__main__":
