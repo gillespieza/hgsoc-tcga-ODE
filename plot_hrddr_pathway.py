@@ -644,8 +644,8 @@ def main() -> None:
     # A(t) — ATM/ATR
     draw_box(
         ax,                     # Matplotlib Axes object to draw onto
-        0.55,                   # x-coordinate of the box centre
-        0.640,                  # y-coordinate of the box centre
+        0.58,                   # x-coordinate of the box centre
+        0.650,                  # y-coordinate of the box centre
         0.32,                   # Width of the node
         0.065,                  # Height of the node
         C["atm"],               # Border colour
@@ -742,7 +742,7 @@ def main() -> None:
         lw=1.2,                 # Line width
         dashed=True,            # Draw as a dashed line
         label="loads HR complex",   # Label displayed near the arrow
-        label_offset=(0, 0.028) # Vertical offset for the label
+        label_offset=(0, 0.0210) # Vertical offset for the label
     )
 
     # C(t) → R(t) curved: CHK exhausts HR (inhibition)
@@ -805,8 +805,8 @@ def main() -> None:
     # BCL2/BAX → X(t)
     arrow(
         ax,                     # Matplotlib Axes object to draw onto
-        0.775, 0.167,           # Start point (x1, y1)
-        0.730, 0.150,           # End point (x2, y2)
+        0.675, 0.167,           # Start point (x1, y1)
+        0.545, 0.120,           # End point (x2, y2)
         color=C["bcl"],         # Arrow colour
         lw=1.3,                 # Line width
         label="buffers X\n(d_x·BCL2)",   # Label displayed near the arrow
@@ -894,7 +894,7 @@ def main() -> None:
     bcl_box_right  = 0.905   # right edge of the BCL2/BAX node (centre 0.775 + w/2 0.13)
     bcl_box_bottom = 0.1675  # bottom edge of the BCL2/BAX node (centre 0.200 - h/2 0.0325)
     bcl_label_y    = 0.130   # elbow y-level: below the box, clear of the node border
-    bcl_label_x    = 0.97    # right-margin label column, consistent with other annotations
+    bcl_label_x    = 0.87    # right-margin label column, consistent with other annotations
 
     # Vertical leg: drops from the bottom-right corner of the box down to the elbow.
     ax.plot(
@@ -1028,7 +1028,7 @@ def main() -> None:
     # -----------------------------------------------------------------
 
     fig.text(
-        0.5, 0.975,
+        0.5, 0.905,
         "HR-DDR ODE Model — Pathway Diagram",
         ha="center",              # horizontal alignment: centered on x-position
         va="top",                 # vertical alignment: align top of text to y-position
@@ -1038,7 +1038,7 @@ def main() -> None:
     )
 
     fig.text(
-        0.5, 0.958,
+        0.5, 0.880,
         "HGSOC · Carboplatin chemotherapy · Five-variable mechanistic model",
         ha="center",              # horizontally centered under main title
         va="top",                 # vertically aligned to top anchor point
